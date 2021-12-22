@@ -1,3 +1,4 @@
+
 export default class Component {
 
     constructor(width, height, color, x, y, ctx, type) {
@@ -21,6 +22,10 @@ export default class Component {
         } else if (this.type == "image") {
             this.image = new Image();
             this.image.src = this.color;
+            this.ctx.drawImage(this.image,
+                this.x,
+                this.y,
+                this.width, this.height);
         } else {
             this.ctx.fillStyle = this.color;
             this.ctx.fillRect(this.x, this.y, this.width, this.height);

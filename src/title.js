@@ -1,8 +1,8 @@
 import Component from './title_component'
 import Background from './../images/title_screen.png'
-import BeginRed from './../images/title_screen.png'
-import BeginBlue from './../images/title_screen.png'
-import BeginYellow from './../images/title_screen.png'
+import BeginRed from './../images/begin_red.png'
+import BeginBlue from './../images/begin_blue.png'
+import BeginYellow from './../images/begin_yellow.png'
 
 export default class Title {
 
@@ -12,9 +12,9 @@ export default class Title {
         this.ctx = canvas.getContext("2d");
         this.ctx.scale(4,4)
         this.dimensions = { width: canvas.width, height: canvas.height };
-        this.btn = new Component(80, 20, "red", 110, 110, this.ctx, "button")
+        this.btn = new Component(80, 20, BeginRed, 110, 110, this.ctx, "image")
         this.mousePos = new Component("9px", "Consolas", "black", 220, 10, this.ctx, "text");
-        this.myBackground = new Component(100, 100, Background, 0, 0, this.ctx, "image");
+        this.myBackground = new Component(300, 150, Background, 0, 0, this.ctx, "image");
         this.titleWords = new Component("16px", "TitleScreen", "black", 10, 15, this.ctx, "text")
         this.titleWords2 = new Component("16px", "TitleScreen", "black", 10, 30, this.ctx, "text")
         this.registerEvents();
@@ -37,12 +37,12 @@ export default class Title {
         this.gx = (e.clientX - rect.left) / (rect.right - rect.left) * this.canvas.width;
         this.gy =  (e.clientY - rect.top) / (rect.bottom - rect.top) * this.canvas.height;
         if (this.btn.clicked(this.gx, this.gy) && this.mouseState !== "down") {
-            this.btn.color = "blue"
+            this.btn.color = BeginBlue
         } else if (!this.btn.clicked(this.gx, this.gy)) {
-            this.btn.color = "red"
+            this.btn.color = BeginRed
         }
         if (this.btn.clicked(this.gx, this.gy) && this.mouseState === "down") {
-            this.btn.color = "yellow"
+            this.btn.color = BeginYellow
         } 
     }
 
@@ -52,13 +52,13 @@ export default class Title {
         this.gy =  (e.clientY - rect.top) / (rect.bottom - rect.top) * this.canvas.height;
         if (e.type == "mousedown" && this.btn.clicked(this.gx, this.gy)) {
             this.mouseState = "down"
-            this.btn.color = "yellow"
+            this.btn.color = BeginYellow
         } else if (e.type == "mouseup" && this.btn.clicked(this.gx, this.gy)) {
-            this.btn.color = "red"
+            this.btn.color = BeginRed
             this.mouseState = "up"
         } else if (e.type == "mouseup" && !this.btn.clicked(this.gx, this.gy)) {
             this.mouseState = "up"
-            this.btn.color = "red"
+            this.btn.color = BeginRed
         }
         
     }
@@ -67,7 +67,6 @@ export default class Title {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.myBackground.newPos();
         this.myBackground.update();
-        this.ctx.drawImage(this.myBackground.image,0,0, 300, 150); 
         this.btn.newPos();
         this.btn.update();
         this.mousePos.text = `${this.gx.toFixed()}, ${this.gy.toFixed()}`
