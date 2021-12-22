@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import './../stylesheets/style.css';
-import Title from './title'
+import TowerOfDreams from './game.js'
 
 function component() {
     const outerDiv = document.createElement('div')
@@ -10,10 +10,8 @@ function component() {
     outerDiv.classList.add('outerDiv');
     canvas.classList.add('canvas');
     outerDiv.appendChild(canvas);
-    
     return [outerDiv, canvas];
   }
   let arr = component()
-  console.log(arr)
   document.body.appendChild(arr[0]);
-  new Title(arr[1])
+  new TowerOfDreams(arr[1])
