@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'TitleScreen';
+    src: url('./../fonts/titleScreen/TitleScreen.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+  }
+
+
+.canvas {
+  /* image-rendering: pixelated; */
+  width: calc(1vw + 1vh + 150vmin);
+  height: calc(1vw + 1vh + 95vmin); 
+  background-color: rgb(105, 102, 104);
+  }
+
+.outerDiv {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+body {
+  background-color: rgb(27, 27, 27);
+}
+
+.title_text {
+  font-family: 'TitleScreen';
+}

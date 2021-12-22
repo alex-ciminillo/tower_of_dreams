@@ -1,11 +1,19 @@
 import _ from 'lodash';
+import './../stylesheets/style.css';
+import Title from './title'
+
 function component() {
-    const element = document.createElement('div');
-  
-    // Lodash, now imported by this script
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-  
-    return element;
+    const outerDiv = document.createElement('div')
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200
+    canvas.height = 600
+    outerDiv.classList.add('outerDiv');
+    canvas.classList.add('canvas');
+    outerDiv.appendChild(canvas);
+    
+    return [outerDiv, canvas];
   }
-  
-  document.body.appendChild(component());
+  let arr = component()
+  console.log(arr)
+  document.body.appendChild(arr[0]);
+  new Title(arr[1])
