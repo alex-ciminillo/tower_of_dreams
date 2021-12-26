@@ -1,18 +1,46 @@
 import Title from './title.js'
+import BlackScreen from './blackScreen.js'
+import Home from './home.js'
+import AvatarChooserScreen from './avatarChooser.js'
 import BeginRed from './../images/begin_red.png'
 import BeginBlue from './../images/begin_blue.png'
 import BeginYellow from './../images/begin_yellow.png'
+import Sound from './sound'
+import TitleTheme from './../sounds/hope.mp3'
+import SoundButton from './../images/sound.png'
+import SoundMuteButton from './../images/sound-mute.png'
+import MusicButton from './../images/music.png'
+import MusicMuteButton from './../images/music_slash.png'
+import StartButton from './../images/buttons.png'
+import StartButtonPressed from './../images/buttonsPressed.png'
 
 export default class TowerOfDreams {
     constructor(canvas) {
+        this.alpha = 0.99;
+        this.delta = 0.01;
+        this.mouseOnBegin = false;
         this.canvas = canvas
         this.ctx = canvas.getContext("2d");
         this.ctx.scale(4,4)
         this.dimensions = { width: canvas.width, height: canvas.height };
         this.title = new Title(this.canvas, this.ctx, this.dimensions);
+        this.blackScreen = new BlackScreen(this.canvas, this.ctx, this.dimensions);
+        this.home = new Home(this.canvas, this.ctx, this.dimensions);
         this.registerEvents();
         this.animate();
-        this.titleScreen = true;
+        // //real code
+        // this.currentScreen = "Title"
+        // //end real code
+        this.beginSound = new Sound(TitleTheme, 0.2);
+        this.themeMusic = false;
+        this.allSounds = true;
+        this.fadeScreen = false;
+
+        //test code for home screen
+        this.currentScreen = "Home"
+
+        
+        
     }
 
     registerEvents() {
@@ -31,52 +59,152 @@ export default class TowerOfDreams {
 
     hover(e) {
         this.updateGxGy(e);
-        if (this.titleScreen === true) { this.titleHover(e) }
+        if (this.currentScreen === "Title") { this.titleHover(e) }
+        else if (this.currentScreen === "Home") { this.homeHover(e) }
         
     }
 
     click(e) {
+        if (this.themeMusic === false) {
+            this.beginSound.play()
+            this.themeMusic = true;
+        }
         this.updateGxGy(e);
-        if (this.titleScreen === true) { this.titleClick(e) }
+        if (this.currentScreen === "Title") { this.titleClick(e) }
+        if (this.currentScreen === "Avatar Chooser") { this.avatarChooserClick(e) }
+        if (this.currentScreen === "Home") { this.homeClick(e) }
+    }
+
+    avatarChooserClick(e) {
+        if (e.type == "mouseup" && this.avatarChooserScreen.btn.clicked(this.gx, this.gy)) {
+            this.avatarChooserScreen.changeColor();
+        } else if (e.type == "mouseup" && this.avatarChooserScreen.nextBtn.clicked(this.gx, this.gy)) {
+            this.fadeScreen = true;
+            this.nextScreen = "Title"
+        }
     }
 
     titleClick(e) {
         if (e.type == "mousedown" && this.title.btn.clicked(this.gx, this.gy)) {
             this.mouseState = "down"
-            this.title.btn.color = BeginYellow
+            this.title.btn.color = StartButtonPressed
         } else if (e.type == "mouseup" && this.title.btn.clicked(this.gx, this.gy)) {
-            this.title.btn.color = BeginRed
+            this.title.btn.color = StartButton
             this.mouseState = "up"
             this.beginGame();
         } else if (e.type == "mouseup" && !this.title.btn.clicked(this.gx, this.gy)) {
             this.mouseState = "up"
-            this.title.btn.color = BeginRed
+            this.title.btn.color = StartButton
+        }
+        if (e.type == "mouseup" && this.title.soundImage.clicked(this.gx, this.gy)) {
+            if (this.title.soundImage.color === SoundButton ) {
+                this.title.soundImage.color = SoundMuteButton;
+                this.allSounds = false;
+            } else {
+                this.title.soundImage.color = SoundButton;
+                this.allSounds = true;
+            }
+        }
+        if (e.type == "mouseup" && this.title.musicImage.clicked(this.gx, this.gy)) {
+            if (this.title.musicImage.color === MusicButton ) {
+                this.title.musicImage.color = MusicMuteButton;
+                this.beginSound.stop();
+            } else {
+                this.title.musicImage.color = MusicButton;
+                this.beginSound.play();
+            }
         }
     }
 
     titleHover(e) {
+        this.title.gx = this.gx;
+        this.title.gy = this.gy;
         if (this.title.btn.clicked(this.gx, this.gy) && this.mouseState !== "down") {
-            this.title.btn.color = BeginBlue
+            this.title.btn.color = StartButtonPressed
+            if (this.mouseOnBegin === false) { 
+                if (this.allSounds === true) { this.title.beginSound.play(); }
+                this.mouseOnBegin = true;
+            }
         } else if (!this.title.btn.clicked(this.gx, this.gy)) {
-            this.title.btn.color = BeginRed
+            this.title.btn.color = StartButton
+            if (this.mouseOnBegin === true) { 
+                if (this.allSounds === true) {  this.title.beginSound.play(); }
+                this.mouseOnBegin = false;
+            }
         }
         if (this.title.btn.clicked(this.gx, this.gy) && this.mouseState === "down") {
-            this.title.btn.color = BeginYellow
+            this.title.btn.color = StartButtonPressed
         } 
     }
 
+    homeHover(e) {
+        this.home.gx = this.gx;
+        this.home.gy = this.gy;
+        this.home.hover(e)
+    }
+
+    homeClick(e) {
+        this.home.click(e)
+    }
+
+
+
     beginGame() {
-        this.titleScreen = false;
+        // this.avatarChooserScreen = new AvatarChooserScreen(this.canvas, this.ctx, this.dimiensions)
+        // this.fadeScreen = true;
+        // this.nextScreen = "Avatar Chooser"
+        this.title.move = false;
+        this.title.initMove(5, 1, "runLeft")
+        this.title.adventureGuy.speedX = -2
+        this.fadeScreen = true;
+        this.fadeUp = false;
+        this.nextScreen = "Black Screen"
+        setTimeout(()=>{
+            this.currentScreen = "Home"
+        }, 7000)
+    }
+
+    showHouse() {
+
+    }
+
+
+
+    fadeOut() {
+        if (this.fadeUp) {
+            this.alpha += this.delta;
+        } else {
+            this.alpha -= this.delta;
+        }
+        if (this.alpha <= 0) { 
+            this.fadeUp = true;
+            this.currentScreen = this.nextScreen;
+        } else if (this.alpha >= 1) {
+            this.fadeUp = false;
+            this.fadeScreen = false;
+        }
     }
 
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        if (this.titleScreen === true) {
-            this.title.animate();
-        }
-            
         
-        
+        if (this.fadeScreen) { this.fadeOut() }
+
+        // // real code
+        // if (this.currentScreen === "Title") {
+        //     this.title.animate(); 
+        // } else if (this.currentScreen === "Black Screen") {
+        //     this.blackScreen.animate();
+        // } else if (this.currentScreen === "Home") {
+        //     this.home.animate();
+        // }
+        // this.ctx.globalAlpha = this.alpha;
+        // // real code end
+
+        // test code to show home
+        this.home.animate();
+
+
         requestAnimationFrame(this.animate.bind(this));
     }
 

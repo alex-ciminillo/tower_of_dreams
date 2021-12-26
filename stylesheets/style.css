@@ -10,7 +10,7 @@
   /* image-rendering: pixelated; */
   width: calc(1vw + 1vh + 150vmin);
   height: calc(1vw + 1vh + 95vmin); 
-  background-color: rgb(105, 102, 104);
+  background-color: rgb(0, 0, 0);
   }
 
 .outerDiv {
@@ -27,4 +27,13 @@ body {
 
 .title_text {
   font-family: 'TitleScreen';
+}
+
+
+.left_adventure {
+  -moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+  filter: FlipH;
 }
