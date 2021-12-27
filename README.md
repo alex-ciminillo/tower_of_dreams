@@ -24,7 +24,7 @@ In Addition, this project will include:
 
 ## Wireframe
 
-![This is my wireframe](https://ibb.co/cNqvHdp)
+![This is my wireframe](https://i.ibb.co/NLR3Pzk/wireframe.png)
 
 ## Technologies
 
