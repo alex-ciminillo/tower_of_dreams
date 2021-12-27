@@ -2,6 +2,30 @@
 
 Fight waves of enemies and defeat floor bosses to make it to the top of the tower! The one that makes it to the top will have their greatest desire fulfilled! But how can someone become strong enough to make it to the top? By learning japanese! Each enemy, obstacle, and floor tests your japanese vocab and grammar to make sure you are strong enough to move forward!
 
+## Functionality & MVPs
+
+With the Tower of Dreams, users will be able to: 
+
+* Start a new game
+
+* Turn off sound and music
+
+* Study Japanese
+
+* Test their Japanese by fighting enemies
+
+* Buy equipment for their avatar with in game money from beating enemies
+
+
+In Addition, this project will include:
+
+* An **about** modal describing the background and rules of the game
+* A production README
+
+## Wireframe
+
+![This is my wireframe](https://ibb.co/cNqvHdp)
+
 ## Technologies
 
 * JavaScript
