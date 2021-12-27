@@ -2,13 +2,65 @@
 
 Fight waves of enemies and defeat floor bosses to make it to the top of the tower! The one that makes it to the top will have their greatest desire fulfilled! But how can someone become strong enough to make it to the top? By learning japanese! Each enemy, obstacle, and floor tests your japanese vocab and grammar to make sure you are strong enough to move forward!
 
-## Technologies
+## Functionality & MVPs
+
+With the Tower of Dreams, users will be able to: 
+
+* Start a new game
+
+* Turn off sound and music
+
+* Study Japanese
+
+* Test their Japanese by fighting enemies
+
+* Buy equipment for their avatar with in game money from beating enemies
+
+
+In Addition, this project will include:
+
+* An **about** modal describing the background and rules of the game
+* A production README
+
+## Wireframe
+
+![This is my wireframe](https://i.ibb.co/NLR3Pzk/wireframe.png)
+
+* A question is desplayed to test knowledge
+
+* The user has for choices (one of them is correct)
+
+* On a correct choice, the avatar hits the enemy
+
+* On an incorrect choice, the enemy hits the avatar
+
+## Technologies, Libraries, APIs
+
+This project will be implenmented with the following technologies:
 
 * JavaScript
 
 * HTML5
 
 * CSS3
+
+* Canvas API
+
+* Webpack
+
+* NPM
+
+## Implementation Timeline
+
+* Friday Afternoon & Weekend: Setup project, including getting webpack up and running. Get canvas to show up on the screen, and spend time getting comfortable with the Canvas API. Create Title page and some main game classes. Get some components rendered on the screen.
+
+* Monday: Dedicate this day toward implementing the underlying logic of Conway's Game of Life. Ensure that I can ask questions, a user can answer questions, and that responses are saved. If time, make sure this is all rendered correctly on the canvas.
+
+* Tuesday: If I didn't get to it already, make sure the UI for questions is rendered correctly. Make sure they rerender correctly when I advance the question changes. Render the avatar and enemy animation.
+
+* Wednesday: Focus on styling. If time, add a money system. 
+
+* Thursday Morning: Deploy to GitHub pages. If time, rewrite this proposal as a production README.
 
 ## About
 
