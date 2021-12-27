@@ -10,6 +10,7 @@ function component() {
     outerDiv.classList.add('outerDiv');
     canvas.classList.add('canvas');
     outerDiv.appendChild(canvas);
+    
     return [outerDiv, canvas];
   }
   let arr = component()

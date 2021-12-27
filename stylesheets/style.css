@@ -11,6 +11,7 @@
   width: calc(1vw + 1vh + 150vmin);
   height: calc(1vw + 1vh + 95vmin); 
   background-color: rgb(0, 0, 0);
+  	
   }
 
 .outerDiv {
@@ -23,6 +24,7 @@
 
 body {
   background-color: rgb(27, 27, 27);
+  cursor: url('./../images/newCursor.png'), auto;
 }
 
 .title_text {

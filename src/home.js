@@ -3,6 +3,8 @@ import Component from "./component"
 import MainCharacter from './../images/adventure.png'
 import MainCharacterReversed from './../images/adventureReversed.png'
 import Map from './../images/map.png'
+import TrainingBox from './../images/simpleYesNoHomeBox.png'
+
 
 
 export default class Home {
@@ -11,17 +13,16 @@ export default class Home {
         this.canvas = canvas;
         this.ctx = ctx;
         this.dimensions = dimensions;
-        this.mousePos = new Component("9px", "Consolas", "black", 200, 30, this.ctx, "text");
         this.myBackground = new Component(300, 150, "black", 0, 0, this.ctx, "other");
         this.myHouse = new Component(300, 150, House, 0, 0, this.ctx, "image");
         this.adventureGuy = new Component(48, 35, MainCharacter, 85, 60, this.ctx, "sprite", 5, 3, 50, 37);
         this.myMap = new Component(19, 13, Map, 140, 59, this.ctx, "image");
         this.myTraining = new Component(22, 15, "invisible", 88, 16, this.ctx, "other");
         this.move = true;
+        this.askIfTrainingBox = false;
         this.anime = "idleRight";
         this.frame = 0;
-        this.gy = 0;
-        this.gx = 0;
+        
     }
 
     initMove(start, row, anime) {
@@ -70,10 +71,13 @@ export default class Home {
         }
     }
 
+    
+
     click(e) {
         if (e.type === "mouseup") {
             this.clickedSpotx = this.gx;
             this.clickedSpoty = this.gy; 
+            
             
             if (this.adventureGuy.dir(this.gx, this.gy) === "left") {
                 this.move = false;
@@ -85,17 +89,19 @@ export default class Home {
             }    
             this.adventureGuy.moveToMouse(this.gx, this.gy, 0.8)
             this.checkSpeed();
-            if (this.myTraining.clicked(this.gx, this.gy)) {
-                this.checkIfMovedToSpot();
-            }
+            this.checkIfMovedToSpot();
         }
         
     }
 
     checkIfMovedToSpot() {
-        while (this.adventureGuy.speedX > 0 || this.adventureGuy.speedY > 0) {
-            console.log(this.myTraining.intersecting(this.adventureGuy))
+        if (this.myTraining.intersecting(this.adventureGuy)) {
+            this.askIfTrainingBox = true;
         }
+    }
+
+    askIfTraining() {
+        this.trainingBoxImage = new Component(87, 13, TrainingBox, 140, 59, this.ctx, "image");
     }
 
     checkSpeed() {
@@ -140,6 +146,7 @@ export default class Home {
     animate() {
         this.boundaries();
         this.checkSpeed();
+        this.checkIfMovedToSpot();
         this.adventureGuy.checkIfStillMoving(this.clickedSpotx, this.clickedSpoty);
         this.myBackground.update();
         this.myHouse.update();
@@ -147,9 +154,9 @@ export default class Home {
         this.myTraining.update();
         this.adventureGuy.newPos();
         this.adventureGuy.update();
+        if (this.askIfTrainingBox === true) { this.askIfTraining(); }
         
-        this.mousePos.text = `${this.gx.toFixed()/4}, ${this.gy.toFixed()/4}`
-        this.mousePos.update();
+        
         
         this.frame++
         if (this.move) {

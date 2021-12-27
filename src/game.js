@@ -1,10 +1,6 @@
 import Title from './title.js'
 import BlackScreen from './blackScreen.js'
 import Home from './home.js'
-import AvatarChooserScreen from './avatarChooser.js'
-import BeginRed from './../images/begin_red.png'
-import BeginBlue from './../images/begin_blue.png'
-import BeginYellow from './../images/begin_yellow.png'
 import Sound from './sound'
 import TitleTheme from './../sounds/hope.mp3'
 import SoundButton from './../images/sound.png'
@@ -13,6 +9,9 @@ import MusicButton from './../images/music.png'
 import MusicMuteButton from './../images/music_slash.png'
 import StartButton from './../images/buttons.png'
 import StartButtonPressed from './../images/buttonsPressed.png'
+import Component from "./component"
+
+
 
 export default class TowerOfDreams {
     constructor(canvas) {
@@ -26,6 +25,22 @@ export default class TowerOfDreams {
         this.title = new Title(this.canvas, this.ctx, this.dimensions);
         this.blackScreen = new BlackScreen(this.canvas, this.ctx, this.dimensions);
         this.home = new Home(this.canvas, this.ctx, this.dimensions);
+        this.mousePos = new Component("9px", "Consolas", "white", 200, 10, this.ctx, "text");
+        this.mouseClick1 = new Component("9px", "Consolas", "white", 200, 40, this.ctx, "text");
+        this.mouseClick2 = new Component("9px", "Consolas", "white", 200, 50, this.ctx, "text");
+        this.mouseClickDiff = new Component("9px", "Consolas", "white", 200, 60, this.ctx, "text");
+        
+        this.firstClick = [0,0]
+        this.secondClick = [0,0]
+        this.clickDiff = [0,0]
+        this.clickNum = 1;
+        this.gy = 0;
+        this.gx = 0;
+        this.drawDummy = false;
+        this.firstImagePos = 0;
+        this.imagesArr = this.loadAllImages()
+        
+
         this.registerEvents();
         this.animate();
         // //real code
@@ -35,12 +50,37 @@ export default class TowerOfDreams {
         this.themeMusic = false;
         this.allSounds = true;
         this.fadeScreen = false;
-
+        this.dummyImageArr = [];
+        this.mouseClicksArr = [];
+        this.mouseClickXYArr = [];
+        this.mouseClickPosIncrement = 20;
         //test code for home screen
         this.currentScreen = "Home"
+        //end test code for homescreen
+        this.colors = ["white", "blue", "yellow", "green", "red", "orange", "purple"]
+        
+    }
 
-        
-        
+    images () {
+        const path = require.context("./../images", false, /\.png$/)
+        return path.keys().map(path)
+    }
+
+    createMouseClick() {
+        this.newClick = new Component("9px", "Consolas", this.colors[this.dummyImageArr.length - 1], 200, this.mouseClicksY, this.ctx, "text");
+        this.mouseClicksArr.push(this.newClick)
+    }
+
+
+
+    loadAllImages() {
+        let images = this.images();
+        let imageArr = []
+        for (let i = 0; i < images.length; i++) {
+            imageArr.push(new Component(20, 5, images[i], 0, this.firstImagePos, this.ctx, "image"));
+            this.firstImagePos += 5;
+        }
+        return imageArr
     }
 
     registerEvents() {
@@ -64,12 +104,67 @@ export default class TowerOfDreams {
         
     }
 
+    saveClicks(gx, gy) {
+        if (this.clickNum === 1) {
+            // this.drawDummy = false;
+            this.secondClick = [0,0]
+            this.clickDiff = [0,0]
+            this.firstClick = [gx.toFixed()/4, gy.toFixed()/4]
+            this.createMouseClick();
+            this.mouseClickXYArr.push([gx.toFixed()/4, gy.toFixed()/4])  
+            this.clickNum++
+        } else {
+            this.secondClick = [gx.toFixed()/4, gy.toFixed()/4]
+            this.createMouseClick();
+            this.mouseClickXYArr.push([gx.toFixed()/4, gy.toFixed()/4])
+            this.clickNum--
+            this.clickDiff = [Math.abs(this.secondClick[0] - this.firstClick[0]), Math.abs(this.secondClick[1] - this.firstClick[1])]
+            if (this.firstClick[0] !== this.secondClick[0] && this.firstClick[1] !== this.secondClick[1]) { 
+                this.createDummyComponent()
+                this.drawDummy = true; 
+            } else {
+                this.imageFound = false;
+                if (this.imageSelectorClicked() === false && this.dummyImageClicked() === false) {
+                    this.drawDummy = false;
+                    this.imageSelection = undefined;
+                    this.dummyImageArr = [];
+                    this.mouseClicksArr = [];
+                }
+            }
+        }
+    }
+
+    imageSelectorClicked() {
+        for (let i = 0; i < this.imagesArr.length; i++) {
+            if (this.imagesArr[i].clicked(this.gx, this.gy)) {
+                this.imageSelection = this.imagesArr[i]
+                this.imageFound = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    dummyImageClicked() {
+        for (let i = this.dummyImageArr.length - 1; i > 0; i--) {
+            if (this.dummyImageArr[i].clicked(this.gx, this.gy)) {
+               this.dummyImageArr.splice(i, 1)
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     click(e) {
+        
         if (this.themeMusic === false) {
             this.beginSound.play()
             this.themeMusic = true;
         }
         this.updateGxGy(e);
+        this.saveClicks(this.gx, this.gy);
         if (this.currentScreen === "Title") { this.titleClick(e) }
         if (this.currentScreen === "Avatar Chooser") { this.avatarChooserClick(e) }
         if (this.currentScreen === "Home") { this.homeClick(e) }
@@ -82,6 +177,29 @@ export default class TowerOfDreams {
             this.fadeScreen = true;
             this.nextScreen = "Title"
         }
+    }
+
+    createDummyComponent() {
+        if (this.imageSelection === undefined) {
+            this.dummy = new Component(this.clickDiff[0], this.clickDiff[1], "red", this.firstClick[0], this.firstClick[1], this.ctx, "other");
+        } else {
+            this.dummy = new Component(this.clickDiff[0], this.clickDiff[1], this.imageSelection.color, this.firstClick[0], this.firstClick[1], this.ctx, "image");
+        }
+        this.dummyImageArr.push(this.dummy)
+    }
+
+    drawDummyComponent() {
+        for (let i = 0; i < this.dummyImageArr.length; i++) {
+            this.dummyImageArr[i].update();
+        };
+    }
+    drawMouseClicksComponent() {
+        for (let i = 0; i < this.dummyImageArr.length; i++) {
+            this.mouseClicksArr[i*2].text = `${this.mouseClickXYArr[i*2][0]}, ${this.mouseClickXYArr[i*2][1]}`
+            this.mouseClicksArr[i*2].update();
+            this.mouseClicksArr[i*2 + 1].text = `${this.mouseClickXYArr[i*2 + 1][0]}, ${this.mouseClickXYArr[i*2 + 1][1]}`
+            this.mouseClicksArr[i*2 + 1].update();
+        };
     }
 
     titleClick(e) {
@@ -164,10 +282,7 @@ export default class TowerOfDreams {
         }, 7000)
     }
 
-    showHouse() {
-
-    }
-
+  
 
 
     fadeOut() {
@@ -203,6 +318,22 @@ export default class TowerOfDreams {
 
         // test code to show home
         this.home.animate();
+        if (this.drawDummy) { 
+            this.drawDummyComponent(); 
+            this.drawMouseClicksComponent()
+        }
+        for (let i = 0; i < this.imagesArr.length; i++) {
+            this.imagesArr[i].update();
+        }
+        this.mousePos.text = `${this.gx.toFixed()/4}, ${this.gy.toFixed()/4}`
+        this.mousePos.update();
+        this.mouseClick1.text = `${this.firstClick[0]}, ${this.firstClick[1]}`
+        this.mouseClick1.update();
+        this.mouseClick2.text = `${this.secondClick[0]}, ${this.secondClick[1]}`
+        this.mouseClick2.update();
+        this.mouseClickDiff.text = `${this.clickDiff[0]}, ${this.clickDiff[1]}`
+        this.mouseClickDiff.update();
+        
 
 
         requestAnimationFrame(this.animate.bind(this));
