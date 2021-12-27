@@ -3,14 +3,7 @@ import Sound from './sound'
 import Background1 from './../images/background1.png'
 import Background2 from './../images/background2.png'
 import Background from './../images/background3.png'
-import SoundButton from './../images/sound.png'
-import SoundMuteButton from './../images/sound-mute.png'
-import MusicButton from './../images/music.png'
-import MusicMuteButton from './../images/music_slash.png'
-import StartButton from './../images/buttons.png'
-import StartButtonPressed from './../images/buttonsPressed.png'
 import ButtonHover from './../sounds/button_hover.mp3'
-import ButtonClick from './../sounds/begin_click.mp3'
 import Cliff from './../images/cliffTitle.png'
 import Tower from './../images/castleTitle.png'
 import MainCharacter from './../images/adventure.png'
@@ -23,6 +16,14 @@ import Cloud5 from './../images/cloud5.png'
 import Cloud6 from './../images/cloud6.png'
 import Cloud7 from './../images/cloud7.png'
 import Cloud8 from './../images/cloud8.png'
+import SoundButton from './../images/sound.png'
+import SoundMuteButton from './../images/sound-mute.png'
+import MusicButton from './../images/music.png'
+import MusicMuteButton from './../images/music_slash.png'
+import StartButton from './../images/buttons.png'
+import StartButtonPressed from './../images/buttonsPressed.png'
+import TitleTheme from './../sounds/hope.mp3'
+
 
 export default class Title {
 
@@ -31,10 +32,9 @@ export default class Title {
         this.ctx = ctx;
         this.ctx.imageSmoothingEnabled = false;
         this.dimensions = dimensions;
+        this.mouseOnBegin = false;
         this.beginSound = new Sound(ButtonHover);
-        this.beginClickSound = new Sound(ButtonClick, 1);
         this.btn = new Component(80, 30, StartButton, 110, 110, this.ctx, "image");
-        this.mousePos = new Component("9px", "Consolas", "black", 220, 10, this.ctx, "text");
         this.myBackground = new Component(300, 150, Background, 0, 0, this.ctx, "image");
         this.myBackground1 = new Component(300, 150, Background1, 0, 0, this.ctx, "image");
         this.myBackground2 = new Component(300, 150, Background2, 0, 0, this.ctx, "image");
@@ -53,6 +53,11 @@ export default class Title {
         this.move = true;
         this.cloudArr = []
         this.generateCloud(55, this.ctx)
+
+        this.beginTheme = new Sound(TitleTheme, 0.2);
+        this.themeMusic = false;
+        
+        this.allSounds = true;
         
     }
 
@@ -101,11 +106,72 @@ export default class Title {
     createNewClouds() {
         for (let i = 0; i < this.cloudArr.length; i++) {
             if (this.cloudArr[i].x < 0 - this.cloudArr[i].width) {
-                console.log("hi")
                 this.cloudArr.splice(i, 1);
                 this.generateCloud(1, this.ctx, 400)
             }
         }
+    }
+
+    titleClick(e) {
+        if (this.themeMusic === false) {
+            this.beginTheme.play()
+            this.themeMusic = true;
+        }
+        if (e.type == "mousedown" && this.btn.clicked(this.gx, this.gy)) {
+            this.mouseState = "down"
+            this.btn.color = StartButtonPressed
+        } else if (e.type == "mouseup" && this.btn.clicked(this.gx, this.gy)) {
+            this.btn.color = StartButton
+            this.mouseState = "up"
+            this.beginTheGame();
+        } else if (e.type == "mouseup" && !this.btn.clicked(this.gx, this.gy)) {
+            this.mouseState = "up"
+            this.btn.color = StartButton
+        }
+        if (e.type == "mouseup" && this.soundImage.clicked(this.gx, this.gy)) {
+            if (this.soundImage.color === SoundButton ) {
+                this.soundImage.color = SoundMuteButton;
+                this.allSounds = false;
+            } else {
+                this.soundImage.color = SoundButton;
+                this.allSounds = true;
+            }
+        }
+        if (e.type == "mouseup" && this.musicImage.clicked(this.gx, this.gy)) {
+            if (this.musicImage.color === MusicButton ) {
+                this.musicImage.color = MusicMuteButton;
+                this.beginSound.stop();
+            } else {
+                this.musicImage.color = MusicButton;
+                this.beginSound.play();
+            }
+        }
+    }
+
+    beginTheGame() {
+        this.beginGame = true;
+        this.move = false;
+        this.initMove(5, 1, "runLeft")
+        this.adventureGuy.speedX = -2
+    }
+
+    titleHover(e) {
+        if (this.btn.clicked(this.gx, this.gy) && this.mouseState !== "down") {
+            this.btn.color = StartButtonPressed
+            if (this.mouseOnBegin === false) { 
+                if (this.allSounds === true) { this.beginSound.play(); }
+                this.mouseOnBegin = true;
+            }
+        } else if (!this.btn.clicked(this.gx, this.gy)) {
+            this.btn.color = StartButton
+            if (this.mouseOnBegin === true) { 
+                if (this.allSounds === true) {  this.beginSound.play(); }
+                this.mouseOnBegin = false;
+            }
+        }
+        if (this.btn.clicked(this.gx, this.gy) && this.mouseState === "down") {
+            this.btn.color = StartButtonPressed
+        } 
     }
 
    
@@ -139,8 +205,6 @@ export default class Title {
         this.soundImage.update();
         this.musicImage.newPos();
         this.musicImage.update();
-        this.mousePos.text = `${this.gx.toFixed()}, ${this.gy.toFixed()}`
-        this.mousePos.update();
         this.titleWords.text = "Tower"
         this.titleWords.update();
         this.titleWords2.text = "of Dreams"
