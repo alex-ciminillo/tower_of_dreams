@@ -29,15 +29,15 @@ export default class TowerOfDreams {
 
         this.registerEvents();
         this.animate();
-        //real code
-        this.currentScreen = "Title"
-        //end real code
+        // //real code
+        // this.currentScreen = "Title"
+        // //end real code
         
         this.fadeScreen = false;
         
-        // //test code for home screen
-        // this.currentScreen = "Home"
-        // //end test code for homescreen
+        //test code for home screen
+        this.currentScreen = "Home"
+        //end test code for homescreen
     }
 
     registerEvents() {
@@ -62,10 +62,11 @@ export default class TowerOfDreams {
     }
 
     click(e) {
-        this.editScreen.saveClicks(this.gx, this.gy);
-        if (this.currentScreen === "Title") { this.titleClick(e) }
-        if (this.currentScreen === "Avatar Chooser") { this.avatarChooserClick(e) }
-        if (this.currentScreen === "Home") { this.homeClick(e) }
+            this.editScreen.saveClicks(this.gx, this.gy, e);
+            if (this.editScreen.isEditMode() === false) {
+                if (this.currentScreen === "Title") { this.titleClick(e) }
+                if (this.currentScreen === "Home") { this.homeClick(e) }
+            }
     }
 
     
@@ -121,16 +122,16 @@ export default class TowerOfDreams {
         
         if (this.fadeScreen) { this.fadeOut() }
 
-        // real code
-        if (this.currentScreen === "Title") { this.title.animate(); } 
-        else if (this.currentScreen === "Black Screen") { this.blackScreen.animate(); } 
-        else if (this.currentScreen === "Home") { this.home.animate(); }
-        this.ctx.globalAlpha = this.alpha;
-        // real code end
+        // // real code
+        // if (this.currentScreen === "Title") { this.title.animate(); } 
+        // else if (this.currentScreen === "Black Screen") { this.blackScreen.animate(); } 
+        // else if (this.currentScreen === "Home") { this.home.animate(); }
+        // this.ctx.globalAlpha = this.alpha;
+        // // real code end
 
-        // // test code to show home
-        // this.home.animate();
-        // // test code end
+        // test code to show home
+        this.home.animate();
+        // test code end
 
         if (this.editMode === true) { this.editScreen.animate(this.gx, this.gy) }
         

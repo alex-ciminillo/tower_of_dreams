@@ -39,12 +39,17 @@ export default class Component {
             this.column * this.frameWidth, this.row * this.frameHeight, 
             this.frameWidth, this.frameHeight, this.x, this.y, 
             this.width, this.height);
-            
         } else {
             if (this.color === "invisible") {
                 this.ctx.fillStyle = 'rgba(0,0,0,0)'
+            } else if (this.color === "transparent") {
+                this.ctx.fillStyle = 'rgba(255,255,255, 0.5)'
             } else {
                 this.ctx.fillStyle = this.color;
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = "black";
+                this.ctx.fill();
+                this.ctx.stroke();
             }
             
             this.ctx.fillRect(this.x, this.y, this.width, this.height);
