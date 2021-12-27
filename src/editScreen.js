@@ -18,7 +18,7 @@ export default class EditScreen {
         this.drawDummy = false;
         this.firstImagePos = 0;
         this.imagesArr = this.loadAllImages();
-
+        this.tempDummyArr = [];
         this.dummyImageArr = [];
         this.mouseClicksArr = [];
         this.mouseClickXYArr = [];
@@ -51,15 +51,19 @@ export default class EditScreen {
 
     saveClicks(gx, gy, e) {
         if (this.clickNum === 1) {
+            this.temp = true;
             this.drawDummy = true;
             // this.drawDummy = false;
             this.secondClick = [0,0]
             this.clickDiff = [0,0]
             this.firstClick = [(gx/4).toFixed(2), (gy/4).toFixed(2)]
+            
             this.createMouseClick();
             this.mouseClickXYArr.push([(gx/4).toFixed(2), (gy/4).toFixed(2)])  
             this.clickNum++
         } else {
+            this.temp = false;
+            this.tempDummyArr = [];
             this.secondClick = [(gx/4).toFixed(2), (gy/4).toFixed(2)]
             this.createMouseClick();
             this.mouseClickXYArr.push([(gx/4).toFixed(2), (gy/4).toFixed(2)])
@@ -68,6 +72,7 @@ export default class EditScreen {
             this.createMouseClick();
             this.mouseClickXYArr.push(this.clickDiff)
             if (this.firstClick[0] !== this.secondClick[0] && this.firstClick[1] !== this.secondClick[1] && this.moveImage === false) { 
+                
                 this.makingImage = true;
                 this.createDummyComponent()
                 this.drawDummy = true; 
@@ -116,7 +121,7 @@ export default class EditScreen {
         this.testSelection.width = Math.abs(this.testSelectionX - this.gx/4)
         this.testSelection.y = this.gy/4
         if (this.testSelection.y < this.testSelectionY) {
-            this.testSelection.height = Math.abs(this.testSelectionHeight + Math.abs(this.testSelectionY - this.testSelection.y))
+            this.testSelection.height = Number(this.testSelectionHeight) + Number(Math.abs(this.testSelectionY - this.gy/4));
         } else {
             this.testSelection.height = Math.abs(this.testSelectionHeight - Math.abs(this.testSelectionY - this.testSelection.y))
         }
@@ -126,7 +131,7 @@ export default class EditScreen {
     redrawBottomAndLeft() {
         this.testSelection.x = this.gx/4
         if (this.testSelection.x < this.testSelectionX) {
-            this.testSelection.width = Math.abs(this.testSelectionWidth + Math.abs(this.testSelectionX - this.testSelection.x))
+            this.testSelection.width = Number(this.testSelectionWidth) + Number(Math.abs(this.testSelectionX - this.testSelection.x))
         } else {
             this.testSelection.width = Math.abs(this.testSelectionWidth - Math.abs(this.testSelectionX - this.testSelection.x))
         }
@@ -136,8 +141,8 @@ export default class EditScreen {
     redrawTop() {
         this.testSelection.y = this.gy/4
         if (this.testSelection.y < this.testSelectionY) {
-            console.log("hello")
-            this.testSelection.height = this.testSelectionHeight + Math.abs(this.testSelectionY - this.testSelection.y)
+            // this.testSelection.height = this.testSelectionHeight + Math.abs(this.testSelectionY - this.gy/4)
+            this.testSelection.height = Number(this.testSelectionHeight) + Number(Math.abs(this.testSelectionY - this.gy/4));
         } else {
             this.testSelection.height = Math.abs(this.testSelectionHeight - Math.abs(this.testSelectionY - this.testSelection.y))
         }
@@ -154,7 +159,7 @@ export default class EditScreen {
     redrawLeft() {
             this.testSelection.x = this.gx/4
             if (this.testSelection.x < this.testSelectionX) {
-                this.testSelection.width = Math.abs(this.testSelectionWidth + Math.abs(this.testSelectionX - this.testSelection.x))
+                this.testSelection.width = Number(this.testSelectionWidth) + Number(Math.abs(this.testSelectionX - this.testSelection.x))
             } else {
                 this.testSelection.width = Math.abs(this.testSelectionWidth - Math.abs(this.testSelectionX - this.testSelection.x))
             }
@@ -165,25 +170,66 @@ export default class EditScreen {
         this.testSelection.y = this.gy/4 - Math.abs(this.gyNow/4 - this.testSelectionY);
     }
 
-    redrawImage() {
-        if (this.gx/4 < this.testSelection.x + this.testSelection.width * 0.1 && this.gy/4 < this.testSelection.y + this.testSelection.height * 0.1) {
+    drawNow() {
+        if (this.redrawTopAndLeftDir === true) {
             this.redrawTopAndLeft();
-        } else if (this.gx/4 > this.testSelection.x + this.testSelection.width * 0.9 && this.gy/4 > this.testSelection.y + this.testSelection.height * 0.9) {
+        } else if (this.redrawBottomAndRightDir === true) {
             this.redrawBottomAndRight();
-        } else if (this.gx/4 > this.testSelection.x + this.testSelection.width * 0.9 && this.gy/4 < this.testSelection.y + this.testSelection.height * 0.1) {
+        } else if (this.redrawTopAndRightDir === true) {
             this.redrawTopAndRight();
-        } else if (this.gx/4 < this.testSelection.x + this.testSelection.width * 0.1 && this.gy/4 > this.testSelection.y + this.testSelection.height * 0.9) {
+        } else if (this.redrawBottomAndLeftDir === true) {
             this.redrawBottomAndLeft();
-        } else if (this.gx/4 > this.testSelection.x + this.testSelection.width * 0.9) {
+        } else if (this.redrawRightDir === true) {
             this.redrawRight();
-        } else if (this.gx/4 < this.testSelection.x + this.testSelection.width * 0.1) {
+        } else if (this.redrawLeftDir === true) {
             this.redrawLeft();
-        } else if (this.gy/4 < this.testSelection.y + this.testSelection.height * 0.1) {
+        } else if (this.redrawTopDir === true) {
             this.redrawTop();
-        } else if (this.gy/4 > this.testSelection.y + this.testSelection.height * 0.9) {
+        } else if (this.redrawBottomDir === true) {
             this.redrawBottom();
-        } else {
+        } else if (this.redrawWholeDir === true) {
             this.redrawWhole();
+        }
+    }
+
+    redrawImage() {
+        this.redrawTopAndLeftDir = false;
+        this.redrawBottomAndRightDir = false;
+        this.redrawTopAndRightDir = false;
+        this.redrawBottomAndLeftDir = false;
+        this.redrawRightDir = false;
+        this.redrawLeftDir = false;
+        this.redrawTopDir = false;
+        this.redrawBottomDir = false;
+        this.redrawWholeDir = false;
+
+        if (this.gx/4 < this.testSelection.x + this.testSelection.width * 0.1 && this.gy/4 < this.testSelection.y + this.testSelection.height * 0.1) {
+            this.redrawTopAndLeftDir = true;
+            this.chooseDir = false;
+        } else if (this.gx/4 > this.testSelection.x + this.testSelection.width * 0.9 && this.gy/4 > this.testSelection.y + this.testSelection.height * 0.9) {
+            this.redrawBottomAndRightDir = true;
+            this.chooseDir = false;
+        } else if (this.gx/4 > this.testSelection.x + this.testSelection.width * 0.9 && this.gy/4 < this.testSelection.y + this.testSelection.height * 0.1) {
+            this.redrawTopAndRightDir = true;
+            this.chooseDir = false;
+        } else if (this.gx/4 < this.testSelection.x + this.testSelection.width * 0.1 && this.gy/4 > this.testSelection.y + this.testSelection.height * 0.9) {
+            this.redrawBottomAndLeftDir = true;
+            this.chooseDir = false;
+        } else if (this.gx/4 > this.testSelection.x + this.testSelection.width * 0.9) {
+            this.redrawRightDir = true;
+            this.chooseDir = false;
+        } else if (this.gx/4 < this.testSelection.x + this.testSelection.width * 0.1) {
+            this.redrawLeftDir = true;
+            this.chooseDir = false;
+        } else if (this.gy/4 < this.testSelection.y + this.testSelection.height * 0.1) {
+            this.redrawTopDir = true;
+            this.chooseDir = false;
+        } else if (this.gy/4 > this.testSelection.y + this.testSelection.height * 0.9) {
+            this.redrawBottomDir = true;
+            this.chooseDir = false;
+        } else {
+            this.redrawWholeDir = true;
+            this.chooseDir = false;
         }
         let tempComponent = new Component(this.testSelection.width, this.testSelection.height, "transparent", this.testSelection.x, this.testSelection.y, this.ctx, "other");
         tempComponent.update();
@@ -217,6 +263,7 @@ export default class EditScreen {
             let y = this.gy;
             setTimeout(() => {
                 if (x === this.gx && y === this.gy && this.e.type === "mousedown") {
+                    this.temp = false;
                     this.testSelectionX = this.testSelection.x ;
                     this.testSelectionY = this.testSelection.y;
                     this.testSelectionWidth = this.testSelection.width;
@@ -305,12 +352,22 @@ export default class EditScreen {
 
 
     createDummyComponent() {
+        if (this.temp === true) {
+            this.clickDiff = [Math.abs(this.gx/4 - this.firstClick[0]).toFixed(2), Math.abs(this.gy/4 - this.firstClick[1]).toFixed(2)]
+        }
         if (this.imageSelection === undefined) {
             this.dummy = new Component(this.clickDiff[0], this.clickDiff[1], "red", this.firstClick[0], this.firstClick[1], this.ctx, "other");
         } else {
             this.dummy = new Component(this.clickDiff[0], this.clickDiff[1], this.imageSelection.color, this.firstClick[0], this.firstClick[1], this.ctx, "image");
         }
-        this.dummyImageArr.push(this.dummy)
+        if (this.temp === false) {
+            this.dummyImageArr.push(this.dummy)
+        }
+        
+    }
+
+    drawTempDummy() {
+        this.dummy.update();
     }
 
     drawDummyComponent() {
@@ -335,11 +392,22 @@ export default class EditScreen {
     animate(gx, gy) {
         this.gx = gx;
         this.gy = gy;
+        if (this.temp === true) { 
+            this.createDummyComponent();
+            this.drawTempDummy(); 
+        }
         if (this.drawDummy) { 
             this.drawDummyComponent(); 
             this.drawMouseClicksComponent();
         }
-        if (this.moveImage === true) { this.redrawImage(); }
+        if (this.moveImage === true) { 
+            if (this.chooseDir === true) {
+                this.redrawImage(); 
+            } else {
+                this.drawNow();
+            }
+                
+        }
         for (let i = 0; i < this.imagesArr.length; i++) {
             this.imagesArr[i].update();
         }
