@@ -190,6 +190,8 @@ export default class EditScreen {
         } else if (this.redrawWholeDir === true) {
             this.redrawWhole();
         }
+        let tempComponent = new Component(this.testSelection.width, this.testSelection.height, "transparent", this.testSelection.x, this.testSelection.y, this.ctx, "other");
+        tempComponent.update();
     }
 
     redrawImage() {
@@ -231,8 +233,6 @@ export default class EditScreen {
             this.redrawWholeDir = true;
             this.chooseDir = false;
         }
-        let tempComponent = new Component(this.testSelection.width, this.testSelection.height, "transparent", this.testSelection.x, this.testSelection.y, this.ctx, "other");
-        tempComponent.update();
     }
 
     checkIfEditingImage(e) {
@@ -271,6 +271,7 @@ export default class EditScreen {
                     this.gxNow = this.gx;
                     this.gyNow = this.gy;
                     this.moveImage = true;
+                    this.chooseDir = true;
                 }
             }, 250)
         }

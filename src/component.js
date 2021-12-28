@@ -43,7 +43,7 @@ export default class Component {
             if (this.color === "invisible") {
                 this.ctx.fillStyle = 'rgba(0,0,0,0)'
             } else if (this.color === "transparent") {
-                this.ctx.fillStyle = 'rgba(255,255,255, 0.5)'
+                this.ctx.fillStyle = 'rgba(255,255,255, 0.1)'
             } else {
                 this.ctx.fillStyle = this.color;
                 this.ctx.lineWidth = 5;

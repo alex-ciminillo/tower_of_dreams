@@ -15,7 +15,7 @@ export default class Home {
         this.dimensions = dimensions;
         this.myBackground = new Component(300, 150, "black", 0, 0, this.ctx, "other");
         this.myHouse = new Component(300, 150, House, 0, 0, this.ctx, "image");
-        this.adventureGuy = new Component(48, 35, MainCharacter, 85, 60, this.ctx, "sprite", 5, 3, 50, 37);
+        this.adventureGuy = new Component(53, 35, MainCharacter, 85, 60, this.ctx, "sprite", 5, 3, 50, 37);
         this.myMap = new Component(21, 10, Map, 139, 60, this.ctx, "image");
         this.myTraining = new Component(22, 15, "invisible", 88, 16, this.ctx, "other");
         this.move = true;
