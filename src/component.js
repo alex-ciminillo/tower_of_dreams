@@ -44,6 +44,8 @@ export default class Component {
                 this.ctx.fillStyle = 'rgba(0,0,0,0)'
             } else if (this.color === "transparent") {
                 this.ctx.fillStyle = 'rgba(255,255,255, 0.1)'
+            } else if (this.color === "transparent2") {
+                this.ctx.fillStyle = 'rgba(255,255,255, 0.4)'
             } else {
                 this.ctx.fillStyle = this.color;
                 this.ctx.lineWidth = 5;
@@ -74,14 +76,14 @@ export default class Component {
     }
 
     intersecting = (object) => {
-        var myleft = this.x;
-        var myright = this.x + (this.width);
-        var mytop = this.y;
-        var mybottom = this.y + (this.height);
-        var otherleft = object.x;
-        var otherright = object.x + (object.width);
-        var othertop = object.y;
-        var otherbottom = object.y + (object.height);
+        var myleft = Number(this.x);
+        var myright = Number(this.x) + (this.width);
+        var mytop = Number(this.y);
+        var mybottom = Number(this.y) + (this.height);
+        var otherleft = Number(object.x);
+        var otherright = Number(object.x) + (object.width);
+        var othertop = Number(object.y);
+        var otherbottom = Number(object.y) + (object.height);
         var intersect = true;
         if ((mybottom < othertop) ||
         (mytop > otherbottom) ||

@@ -1,3 +1,4 @@
+import { update } from "lodash";
 import Component from "./component";
 
 
@@ -23,6 +24,9 @@ export default class EditScreen {
         this.mouseClicksArr = [];
         this.mouseClickXYArr = [];
         this.mouseClickPosIncrement = 11;
+        this.tempComponentSelectionArr = [];
+        this.currentlySelectedArr = [];
+        this.selectionCoverComponentsArr = [];
 
         this.colors = ["white", "blue", "yellow", "green", "red", "orange", "purple", "cyan"]
     }
@@ -51,7 +55,7 @@ export default class EditScreen {
 
     saveClicks(gx, gy, e) {
         if (this.clickNum === 1) {
-            this.temp = true;
+            if (this.groupingImages === false) { this.temp = true; }
             this.drawDummy = true;
             // this.drawDummy = false;
             this.secondClick = [0,0]
@@ -62,6 +66,7 @@ export default class EditScreen {
             this.mouseClickXYArr.push([(gx/4).toFixed(2), (gy/4).toFixed(2)])  
             this.clickNum++
         } else {
+            
             this.temp = false;
             this.tempDummyArr = [];
             this.secondClick = [(gx/4).toFixed(2), (gy/4).toFixed(2)]
@@ -71,7 +76,7 @@ export default class EditScreen {
             this.clickDiff = [Math.abs(this.secondClick[0] - this.firstClick[0]).toFixed(2), Math.abs(this.secondClick[1] - this.firstClick[1]).toFixed(2)]
             this.createMouseClick();
             this.mouseClickXYArr.push(this.clickDiff)
-            if (this.firstClick[0] !== this.secondClick[0] && this.firstClick[1] !== this.secondClick[1] && this.moveImage === false) { 
+            if (this.firstClick[0] !== this.secondClick[0] && this.firstClick[1] !== this.secondClick[1] && this.moveImage === false && this.groupingImages === false) { 
                 
                 this.makingImage = true;
                 this.createDummyComponent()
@@ -81,7 +86,7 @@ export default class EditScreen {
                 this.imageFound = false;
                 this.imageSelectorWasClicked = this.imageSelectorClicked();
                 if (this.moveImage === false) { this.dummyImageWasClicked = this.dummyImageClicked(); }
-                if (this.imageSelectorWasClicked === false && this.dummyImageWasClicked === false && this.moveImage === false) {
+                if (this.imageSelectorWasClicked === false && this.dummyImageWasClicked === false && this.moveImage === false && this.groupingImages === false) {
                     this.drawDummy = false;
                     this.imageSelection = undefined;
                     this.dummyImageArr = [];
@@ -91,8 +96,13 @@ export default class EditScreen {
                 }
                 this.removeMouseClicksPos(this.dummyImageArr.length) 
             }
+            this.groupingImages = false;
+            this.tempComponentSelectionArr = [];
+            this.currentlySelectedArr = [];
+            this.selectionCoverComponentsArr = [];
         }
         this.checkIfEditingImage(e);
+        this.checkIfGroupingImages(e);
     }
 
     redrawTopAndLeft() {
@@ -236,10 +246,10 @@ export default class EditScreen {
     }
 
     checkIfEditingImage(e) {
-        let imageClicked = this.wasDummyImageClicked();
-        if (imageClicked === true) {
+        this.imageClicked = this.wasDummyImageClicked();
+        if (this.imageClicked === true) {
             this.wasDummyImage = true;
-        } else if (e.type === "mousedown" && imageClicked === false) {
+        } else if (e.type === "mousedown" && this.imageClicked === false) {
             this.wasDummyImage = false;
         }
         this.e = e;
@@ -258,7 +268,7 @@ export default class EditScreen {
             
         
         this.moveImage = false; 
-        if (imageClicked === true) {
+        if (this.imageClicked === true) {
             let x = this.gx;
             let y = this.gy;
             setTimeout(() => {
@@ -275,6 +285,63 @@ export default class EditScreen {
                 }
             }, 250)
         }
+    }
+
+    checkIfGroupingImages(e) {
+        if (this.imageClicked === false) {
+            let x = this.gx;
+            let y = this.gy;
+            setTimeout(() => {
+                
+                if (x === this.gx && y === this.gy && this.e.type === "mousedown") {
+                    this.groupingImages = true;
+                    this.temp = false;
+                }
+            }, 250)
+        } 
+    }
+
+    checkIfImagesAreInSelection() {
+        for (let i = 0; i < this.dummyImageArr.length; i++) {
+            for (let j = 0; j < this.tempComponentSelectionArr.length; j++) {
+                this.intersection = this.dummyImageArr[i].intersecting(this.tempComponentSelectionArr[j])
+                if (this.intersection === true) { 
+                    let l = this.currentlySelectedArr.indexOf(this.dummyImageArr[i])
+                    if (l === -1) {
+                        this.createSelectionCoverComponent(this.dummyImageArr[i])
+                    } 
+                    l = this.currentlySelectedArr.indexOf(this.dummyImageArr[i])
+                    this.drawAllSelectionsBoxes(l); 
+                    break; 
+                } 
+            }
+            if (this.intersection === false) {
+                if (this.currentlySelectedArr.indexOf(this.dummyImageArr[i]) > -1) {
+                    console.log("hello")
+                    let k = this.currentlySelectedArr.indexOf(this.dummyImageArr[i])
+                    this.currentlySelectedArr.splice(k, 1)
+                    this.selectionCoverComponentsArr.splice(k, 1)
+                } 
+            }
+        }
+        
+    }
+
+    drawAllSelectionsBoxes(l) {
+        this.selectionCoverComponentsArr[l].update();
+    }
+
+    createSelectionCoverComponent(selection) {
+        let tempComponent = new Component(selection.width, selection.height, "transparent2", selection.x, selection.y, this.ctx, "other");
+        this.selectionCoverComponentsArr.push(tempComponent);
+        this.currentlySelectedArr.push(selection);
+    }
+
+    drawGroupImageSelector(gx, gy) {
+        let tempComponent = new Component(Math.abs(this.firstClick[0] - gx/4), Math.abs(this.firstClick[1] - gy/4), "transparent", this.firstClick[0], this.firstClick[1], this.ctx, "other");
+        tempComponent.update();
+        this.tempComponentSelectionArr.push(tempComponent)
+        this.checkIfImagesAreInSelection();
     }
 
     isEditMode() {
@@ -390,13 +457,10 @@ export default class EditScreen {
 
 
 
+
     animate(gx, gy) {
         this.gx = gx;
         this.gy = gy;
-        if (this.temp === true) { 
-            this.createDummyComponent();
-            this.drawTempDummy(); 
-        }
         if (this.drawDummy) { 
             this.drawDummyComponent(); 
             this.drawMouseClicksComponent();
@@ -412,6 +476,11 @@ export default class EditScreen {
         for (let i = 0; i < this.imagesArr.length; i++) {
             this.imagesArr[i].update();
         }
+        if (this.temp === true) { 
+            this.createDummyComponent();
+            this.drawTempDummy(); 
+        }
+        if (this.groupingImages === true) { this.drawGroupImageSelector(gx, gy); }
         this.mousePos.text = `${(gx/4).toFixed(2)}, ${(gy/4).toFixed(2)}`
         this.mousePos.update();
     }
