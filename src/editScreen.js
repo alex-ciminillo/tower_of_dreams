@@ -32,7 +32,7 @@ export default class EditScreen {
         this.largestBottom = 0;
         this.largestRight = 0;
         this.largestLeft = 0;
-        this.testSelection = new Component(0, 0, "transparent2", 0, 0, this.ctx, "other");
+        this.changingAllImage = false;
         this.colors = ["white", "blue", "yellow", "green", "red", "orange", "purple", "cyan"]
     }
 
@@ -59,10 +59,10 @@ export default class EditScreen {
 
 
     saveClicks(gx, gy, e) {
+        
         if (this.clickNum === 1) {
             if (this.groupingImages === false) { this.temp = true; }
             this.drawDummy = true;
-            // this.drawDummy = false;
             this.secondClick = [0,0]
             this.clickDiff = [0,0]
             this.firstClick = [(gx/4).toFixed(2), (gy/4).toFixed(2)]
@@ -92,11 +92,13 @@ export default class EditScreen {
                 this.imageSelectorWasClicked = this.imageSelectorClicked();
                 if (this.moveImage === false) { this.dummyImageWasClicked = this.dummyImageClicked(); }
                 if (this.imageSelectorWasClicked === false && this.dummyImageWasClicked === false && this.moveImage === false && this.groupingImages === false) {
+                    
                     if (this.changingAllImage === true) {
                         this.currentlySelectedArr = [];
                         this.selectionCoverComponentsArr = [];
                         this.changingAllImage = false;
                     } else {
+                        
                         this.drawDummy = false;
                         this.imageSelection = undefined;
                         this.dummyImageArr = [];
@@ -105,12 +107,16 @@ export default class EditScreen {
                         this.mouseClickPosIncrement = 11;
                     }
                     
+                    
                 }
+                
                 this.removeMouseClicksPos(this.dummyImageArr.length) 
             }
+            
             this.groupingImages = false;
             if (this.currentlySelectedArr.length > 0) {
                 this.changingAllImage = true;
+                this.settingTestSelectionVariables = true;
             }
         }
         this.checkIfEditingImage(e);
@@ -118,50 +124,90 @@ export default class EditScreen {
     }
 
     redrawTopAndLeft() {
-        this.testSelection.x = this.gx/4
+        this.testSelection.x = this.gx/4 - Math.abs(this.gxNow/4 - this.testSelectionX);
         if (this.testSelection.x < this.testSelectionX) {
-            this.testSelection.width = Math.abs(this.testSelectionWidth + Math.abs(this.testSelectionX - this.testSelection.x))
+            this.testSelection.width = Number(this.testSelectionWidth) + Number(Math.abs(this.testSelectionX - this.testSelection.x))
+           
         } else {
             this.testSelection.width = Math.abs(this.testSelectionWidth - Math.abs(this.testSelectionX - this.testSelection.x))
+            
         }
 
-        this.testSelection.y = this.gy/4
-        if (this.testSelection.y < this.testSelectionY) {
-            this.testSelection.height = Math.abs(this.testSelectionHeight + Math.abs(this.testSelectionY - this.testSelection.y))
-        } else {
-            this.testSelection.height = Math.abs(this.testSelectionHeight - Math.abs(this.testSelectionY - this.testSelection.y))
-        }
-    }
-
-    redrawBottomAndRight() {
-        this.testSelection.width = Math.abs(this.testSelectionX - this.gx/4)
-        this.testSelection.height = Math.abs(this.testSelectionY - this.gy/4)
-        
-    }
-
-    redrawTopAndRight() {
-        this.testSelection.width = Math.abs(this.testSelectionX - this.gx/4)
-        this.testSelection.y = this.gy/4
+        this.testSelection.y = this.gy/4 - Math.abs(this.gyNow/4 - this.testSelectionY);
         if (this.testSelection.y < this.testSelectionY) {
             this.testSelection.height = Number(this.testSelectionHeight) + Number(Math.abs(this.testSelectionY - this.gy/4));
         } else {
             this.testSelection.height = Math.abs(this.testSelectionHeight - Math.abs(this.testSelectionY - this.testSelection.y))
         }
+     }
+
+    redrawBottomAndRight() {
+
+        if (this.changingAllImage === true) {
+            let percentEntireWidthChange = Math.abs(this.testSelection.width - this.testSelectionWidth) / this.testSelectionWidth
+            let percentEntireHeightChange = Math.abs(this.testSelection.height - this.testSelectionHeight) / this.testSelectionHeight
+            for (let i = 0; i < this.currentlySelectedArr.length; i++) {
+                if (this.gxNow/4 > Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2])) {
+                    this.currentlySelectedArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) - Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
+                    this.currentlySelectedArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
+                    this.selectionCoverComponentsArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) - Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
+                    this.selectionCoverComponentsArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
+                } else if (this.gyNow/4 > Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3])) {
+                    this.currentlySelectedArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
+                    this.currentlySelectedArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
+                    this.selectionCoverComponentsArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
+                    this.selectionCoverComponentsArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
+                } else {
+                    this.currentlySelectedArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
+                    this.currentlySelectedArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  + Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
+                    this.selectionCoverComponentsArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
+                    this.selectionCoverComponentsArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  + Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
+                }
+
+                this.currentlySelectedArr[i].width = this.allSelectionStaticInfoArr[i*4 + 2] - (this.testSelectionWidth * percentEntireWidthChange)
+                this.currentlySelectedArr[i].width = this.allSelectionStaticInfoArr[i*4 + 3] - (this.testSelectionHeight * percentEntireHeightChange)
+            
+            if (this.currentlySelectedArr[i].x > this.testSelectionX) {
+                this.currentlySelectedArr[i].x = this.allSelectionStaticInfoArr[i*4] - (this.testSelectionWidth * percentEntireWidthChange)
+                this.selectionCoverComponentsArr[i].x = this.allSelectionStaticInfoArr[i*4] - (this.testSelectionWidth * percentEntireWidthChange)
+            }
+            if (this.currentlySelectedArr[i].y > this.testSelectionY) {
+                this.currentlySelectedArr[i].y = this.allSelectionStaticInfoArr[i*4 + 1] - (this.testSelectionHeight * percentEntireHeightChange)
+                this.selectionCoverComponentsArr[i].y = this.allSelectionStaticInfoArr[i*4 + 1] - (this.testSelectionHeight * percentEntireHeightChange)
+            }
+                
+            }
+        } else {
+            this.testSelection.width = Math.abs(this.testSelectionX - this.gx/4) + Math.abs(this.testSelectionX + Number(this.testSelectionWidth) - this.gxNow/4)
+            this.testSelection.height = Math.abs(this.testSelectionY - this.gy/4)  + Math.abs(this.testSelectionY + Number(this.testSelectionHeight) - this.gyNow/4)
+        }
+
+       }
+
+    redrawTopAndRight() {
         
+        this.testSelection.width = Math.abs(this.testSelectionX - this.gx/4) + Math.abs(this.testSelectionX + Number(this.testSelectionWidth) - this.gxNow/4)
+        this.testSelection.y = this.gy/4 - Math.abs(this.gyNow/4 - this.testSelectionY);
+        if (this.testSelection.y < this.testSelectionY) {
+            this.testSelection.height = Number(this.testSelectionHeight) + Number(Math.abs(this.testSelectionY - this.gy/4));
+        } else {
+            this.testSelection.height = Math.abs(this.testSelectionHeight - Math.abs(this.testSelectionY - this.testSelection.y))
+        }
+     
     }
 
     redrawBottomAndLeft() {
-        this.testSelection.x = this.gx/4
+        this.testSelection.x = this.gx/4 - Math.abs(this.gxNow/4 - this.testSelectionX);
         if (this.testSelection.x < this.testSelectionX) {
             this.testSelection.width = Number(this.testSelectionWidth) + Number(Math.abs(this.testSelectionX - this.testSelection.x))
         } else {
             this.testSelection.width = Math.abs(this.testSelectionWidth - Math.abs(this.testSelectionX - this.testSelection.x))
         }
-        this.testSelection.height = Math.abs(this.testSelectionY - this.gy/4)
+        this.testSelection.height = Math.abs(this.testSelectionY - this.gy/4)  + Math.abs(this.testSelectionY + Number(this.testSelectionHeight) - this.gyNow/4)
     }
     
     redrawTop() {
-        this.testSelection.y = this.gy/4
+        this.testSelection.y = this.gy/4 - Math.abs(this.gyNow/4 - this.testSelectionY);
         if (this.testSelection.y < this.testSelectionY) {
             this.testSelection.height = Number(this.testSelectionHeight) + Number(Math.abs(this.testSelectionY - this.gy/4));
         } else {
@@ -170,25 +216,33 @@ export default class EditScreen {
     }
 
     redrawBottom() {
-        this.testSelection.height = Math.abs(this.testSelectionY - this.gy/4)
+        this.testSelection.height = Math.abs(this.testSelectionY - this.gy/4)  + Math.abs(this.testSelectionY + Number(this.testSelectionHeight) - this.gyNow/4)
     }
 
     redrawRight() {
-        this.testSelection.width = Math.abs(this.testSelectionX - this.gx/4)
+        
+        this.testSelection.width = Math.abs(this.testSelectionX - this.gx/4) + Math.abs(this.testSelectionX + Number(this.testSelectionWidth) - this.gxNow/4)
     }
 
     redrawLeft() {
-            this.testSelection.x = this.gx/4
+
+        if (this.changingAllImage === true) {
+
+
+        } else {
+            this.testSelection.x = this.gx/4 - Math.abs(this.gxNow/4 - this.testSelectionX);
             if (this.testSelection.x < this.testSelectionX) {
                 this.testSelection.width = Number(this.testSelectionWidth) + Number(Math.abs(this.testSelectionX - this.testSelection.x))
             } else {
                 this.testSelection.width = Math.abs(this.testSelectionWidth - Math.abs(this.testSelectionX - this.testSelection.x))
             }
+        }
+
+            
     }
 
     redrawWhole() {
         if (this.changingAllImage === true) {
-            console.log("helllo")
             for (let i = 0; i < this.currentlySelectedArr.length; i++) {
                 this.currentlySelectedArr[i].x = this.gx/4 - Math.abs(this.gxNow/4 - this.allSelectionStaticInfoArr[i*4]);
                 this.currentlySelectedArr[i].y = this.gy/4 - Math.abs(this.gyNow/4 - this.allSelectionStaticInfoArr[i*4 + 1]);
@@ -203,6 +257,7 @@ export default class EditScreen {
     }
 
     drawNow() {
+        this.settingTestSelectionVariables = false;
         if (this.redrawTopAndLeftDir === true) {
             this.redrawTopAndLeft();
         } else if (this.redrawBottomAndRightDir === true) {
@@ -303,6 +358,9 @@ export default class EditScreen {
                         this.moveImage = true;
                         this.chooseDir = true;
                     } else {
+                        if (this.testSelection === undefined) {
+                            this.testSelection = new Component(this.dummyImageArr[0].width, this.dummyImageArr[0].height, "transparent2", this.dummyImageArr[0].x, this.dummyImageArr[0].y, this.ctx, "other");
+                        }
                         this.testSelectionX = this.testSelection.x ;
                         this.testSelectionY = this.testSelection.y;
                         this.testSelectionWidth = this.testSelection.width;
@@ -329,17 +387,20 @@ export default class EditScreen {
         }
         this.gxNow = this.gx;
         this.gyNow = this.gy;
+        
     }
 
     checkIfGroupingImages(e) {
         if (this.imageClicked === false) {
             let x = this.gx;
             let y = this.gy;
+            
             setTimeout(() => {
                 
                 if (x === this.gx && y === this.gy && this.e.type === "mousedown") {
                     this.groupingImages = true;
                     this.temp = false;
+                    
                 }
             }, 250)
         } 
@@ -395,10 +456,15 @@ export default class EditScreen {
             this.largeSelectionBox.y = this.largestTop;
             this.largeSelectionBox.height = Math.abs(this.largestTop - this.largestBottom)
             this.testSelection = this.largeSelectionBox;
-            this.testSelectionX = this.testSelection.x ;
-            this.testSelectionY = this.testSelection.y;
-            this.testSelectionWidth = this.testSelection.width;
-            this.testSelectionHeight = this.testSelection.height;
+            if (this.settingTestSelectionVariables === true) {
+                this.testSelectionX = this.testSelection.x ;
+                this.testSelectionY = this.testSelection.y;
+                console.log("chaing")
+                this.testSelectionWidth = this.testSelection.width;
+                this.testSelectionHeight = this.testSelection.height;
+            }
+            
+            
             this.testSelection.update();
         } else {
             this.selectionCoverComponentsArr[l].update();
@@ -465,6 +531,9 @@ export default class EditScreen {
                 return true;
             }
         }
+        if (this.testSelection === undefined) {
+            return false;
+        }
         return this.testSelection.clicked(this.gx, this.gy)
         
     }
@@ -489,7 +558,9 @@ export default class EditScreen {
         let i = this.currentlySelectedArr.indexOf(selection)
         this.currentlySelectedArr.splice(i)
         this.selectionCoverComponentsArr.splice(i)
-        if (this.currentlySelectedArr.length < 1) { this.changingAllImage = false; }
+        if (this.currentlySelectedArr.length < 1) { 
+            this.changingAllImage = false; 
+        }
     }
 
 
@@ -569,8 +640,12 @@ export default class EditScreen {
             this.createDummyComponent();
             this.drawTempDummy(); 
         }
-        if (this.groupingImages === true) { this.drawGroupImageSelector(gx, gy); }
-        if (this.changingAllImage === true) { this.drawAllSelectionsBoxes("all"); }
+        if (this.groupingImages === true) { 
+            this.drawGroupImageSelector(gx, gy); 
+        }
+        if (this.changingAllImage === true) { 
+            this.drawAllSelectionsBoxes("all"); 
+        }
         this.mousePos.text = `${(gx/4).toFixed(2)}, ${(gy/4).toFixed(2)}`
         this.mousePos.update();
     }

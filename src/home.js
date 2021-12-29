@@ -102,6 +102,7 @@ export default class Home {
 
     askIfTraining() {
         this.trainingBoxImage = new Component(87, 13, TrainingBox, 140, 59, this.ctx, "image");
+        
     }
 
     checkSpeed() {
