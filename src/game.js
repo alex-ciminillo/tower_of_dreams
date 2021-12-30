@@ -43,6 +43,7 @@ export default class TowerOfDreams {
     registerEvents() {
         this.boundClickHandler = this.click.bind(this);
         this.boundHoverHandler = this.hover.bind(this);
+        this.ctx.canvas.addEventListener("mousemove", this.boundHoverHandler);  
         this.ctx.canvas.addEventListener("mousedown", this.boundClickHandler);
         this.ctx.canvas.addEventListener("mouseup", this.boundClickHandler); 
         this.ctx.canvas.addEventListener("mousemove", this.boundHoverHandler);  

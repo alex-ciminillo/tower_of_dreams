@@ -1,6 +1,4 @@
-import { update } from "lodash";
 import Component from "./component";
-
 
 
 export default class EditScreen {
@@ -36,12 +34,14 @@ export default class EditScreen {
         this.colors = ["white", "blue", "yellow", "green", "red", "orange", "purple", "cyan"]
     }
 
+    
     images () {
         const path = require.context("./../images", false, /\.png$/)
         return path.keys().map(path)
     }
 
     createMouseClick() {
+        
         this.newClick = new Component("7px", "Consolas", this.colors[Math.floor(this.mouseClicksArr.length/3)], 245, (this.mouseClickPosIncrement + 6*this.mouseClicksArr.length), this.ctx, "text");
         this.mouseClicksArr.push(this.newClick)
     }
@@ -51,6 +51,7 @@ export default class EditScreen {
         let images = this.images();
         let imageArr = []
         for (let i = 0; i < images.length; i++) {
+            
             imageArr.push(new Component(20, 5, images[i], 0, this.firstImagePos, this.ctx, "image"));
             this.firstImagePos += 5;
         }
@@ -90,15 +91,17 @@ export default class EditScreen {
                 this.makingImage = false;
                 this.imageFound = false;
                 this.imageSelectorWasClicked = this.imageSelectorClicked();
-                if (this.moveImage === false) { this.dummyImageWasClicked = this.dummyImageClicked(); }
+                if (this.moveImage === false) { 
+                    this.dummyImageWasClicked = this.dummyImageClicked(); 
+                }
                 if (this.imageSelectorWasClicked === false && this.dummyImageWasClicked === false && this.moveImage === false && this.groupingImages === false) {
                     
                     if (this.changingAllImage === true) {
                         this.currentlySelectedArr = [];
                         this.selectionCoverComponentsArr = [];
                         this.changingAllImage = false;
-                    } else {
                         
+                    } else {
                         this.drawDummy = false;
                         this.imageSelection = undefined;
                         this.dummyImageArr = [];
@@ -121,6 +124,34 @@ export default class EditScreen {
         }
         this.checkIfEditingImage(e);
         this.checkIfGroupingImages(e);
+        this.checkIfMovingLayer(e);
+    }
+
+    checkIfMovingLayer(e) {
+        if (e.type === "mousedown" && this.wasDummyImageClicked()) {
+            this.moveLayerOnMouseUp = false;
+            let x = e.x
+            let y = e.y
+            this.el = e
+            setTimeout(() => {
+                if (x === this.el.x && y === this.el.y) {
+                    this.moveLayerOnMouseUp = true;
+                    this.elx = x;
+                    this.ely = y;
+                }
+            }, 150)
+        } else {
+            if (this.moveLayerOnMouseUp === true && e.type === "mouseup" && this.elx === e.x && this.ely === e.y) {
+                let dummyImage = this.getDummyImage(this.el.x, this.el.y);
+                let i = this.dummyImageArr.indexOf(dummyImage)
+                if (i !== 0) {
+                    let dummyImage2 = this.dummyImageArr[i - 1]
+                    this.dummyImageArr[i - 1] = dummyImage;
+                    this.dummyImageArr[i] = dummyImage2
+                }
+                
+            }
+        }
     }
 
     redrawTopAndLeft() {
@@ -175,8 +206,7 @@ export default class EditScreen {
                         this.currentlySelectedArr[i].y = Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(Math.abs(this.allSelectionStaticInfoArr[i*4 + 1] - this.testSelectionY) * percentEntireHeightChange)
                         this.selectionCoverComponentsArr[i].y = this.currentlySelectedArr[i].y
                     }
-                    console.log(this.currentlySelectedArr[i].x)
-                    console.log(this.currentlySelectedArr[i].y)
+                  
 
                 }
                 
@@ -247,12 +277,27 @@ export default class EditScreen {
     }
 
     redrawWhole() {
+        
         if (this.changingAllImage === true) {
+            this.testSelection.width = 0
+            this.testSelection.height = 0
             for (let i = 0; i < this.currentlySelectedArr.length; i++) {
-                this.currentlySelectedArr[i].x = this.gx/4 - Math.abs(this.gxNow/4 - this.allSelectionStaticInfoArr[i*4]);
-                this.currentlySelectedArr[i].y = this.gy/4 - Math.abs(this.gyNow/4 - this.allSelectionStaticInfoArr[i*4 + 1]);
-                this.selectionCoverComponentsArr[i].x = this.gx/4 - Math.abs(this.gxNow/4 - this.allSelectionStaticInfoArr[i*4]);
-                this.selectionCoverComponentsArr[i].y = this.gy/4 - Math.abs(this.gyNow/4 - this.allSelectionStaticInfoArr[i*4 + 1]);
+                if (this.currentlySelectedArr[i].x < this.gx/4) {
+                    this.currentlySelectedArr[i].x = this.gx/4 - Math.abs(this.gxNow/4 - this.allSelectionStaticInfoArr[i*4]);
+                    this.selectionCoverComponentsArr[i].x = this.gx/4 - Math.abs(this.gxNow/4 - this.allSelectionStaticInfoArr[i*4]);
+                } else {
+                    this.currentlySelectedArr[i].x = this.gx/4 + Math.abs(this.gxNow/4 - this.allSelectionStaticInfoArr[i*4]);
+                    this.selectionCoverComponentsArr[i].x = this.currentlySelectedArr[i].x
+                }
+                if (this.currentlySelectedArr[i].y < this.gy/4) {
+                    this.currentlySelectedArr[i].y = this.gy/4 - Math.abs(this.gyNow/4 - this.allSelectionStaticInfoArr[i*4 + 1]);
+                    this.selectionCoverComponentsArr[i].y = this.gy/4 - Math.abs(this.gyNow/4 - this.allSelectionStaticInfoArr[i*4 + 1]);
+                } else {
+                    this.currentlySelectedArr[i].y = this.gy/4 + Math.abs(this.gyNow/4 - this.allSelectionStaticInfoArr[i*4 + 1]);
+                    this.selectionCoverComponentsArr[i].y = this.currentlySelectedArr[i].y
+                }
+                
+
             }
         } else {
             this.testSelection.x = this.gx/4 - Math.abs(this.gxNow/4 - this.testSelectionX);
@@ -372,7 +417,7 @@ export default class EditScreen {
                         if (this.testSelection === undefined) {
                             this.testSelection = new Component(this.dummyImageArr[0].width, this.dummyImageArr[0].height, "transparent2", this.dummyImageArr[0].x, this.dummyImageArr[0].y, this.ctx, "other");
                         }
-                        this.testSelectionX = this.testSelection.x ;
+                        this.testSelectionX = this.testSelection.x;
                         this.testSelectionY = this.testSelection.y;
                         this.testSelectionWidth = this.testSelection.width;
                         this.testSelectionHeight = this.testSelection.height;
@@ -384,7 +429,7 @@ export default class EditScreen {
                     
                     
                 }
-            }, 250)
+            }, 150)
         }
     }
 
@@ -413,7 +458,7 @@ export default class EditScreen {
                     this.temp = false;
                     
                 }
-            }, 250)
+            }, 150)
         } 
     }
 
@@ -536,6 +581,14 @@ export default class EditScreen {
         return false;
     }
 
+    getDummyImage(x,y) {
+        for (let i = this.dummyImageArr.length - 1; i > -1; i--) {
+            if (this.dummyImageArr[i].clicked(this.gx, this.gy)) {
+                return this.dummyImageArr[i];
+            }
+        }
+    }
+
     wasDummyImageClicked() {
         for (let i = this.dummyImageArr.length - 1; i > -1; i--) {
             if (this.dummyImageArr[i].clicked(this.gx, this.gy)) {
@@ -643,7 +696,6 @@ export default class EditScreen {
             } else {
                 this.drawNow();
             }
-                
         }
         for (let i = 0; i < this.imagesArr.length; i++) {
             this.imagesArr[i].update();

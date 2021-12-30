@@ -22,7 +22,17 @@ export default class Home {
         this.askIfTrainingBox = false;
         this.anime = "idleRight";
         this.frame = 0;
+        this.instaElements = [];
+        this.createInstaElements();
         
+    }
+
+    createInstaElements() {
+
+    }
+
+    drawInstaElements() {
+
     }
 
     initMove(start, row, anime) {
@@ -153,6 +163,7 @@ export default class Home {
         this.myHouse.update();
         this.myMap.update();
         this.myTraining.update();
+        this.drawInstaElements();
         this.adventureGuy.newPos();
         this.adventureGuy.update();
         if (this.askIfTrainingBox === true) { this.askIfTraining(); }
