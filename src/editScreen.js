@@ -146,54 +146,39 @@ export default class EditScreen {
         if (this.changingAllImage === true) {
             let percentEntireWidthChange = Math.abs(this.testSelection.width - this.testSelectionWidth) / this.testSelectionWidth
             let percentEntireHeightChange = Math.abs(this.testSelection.height - this.testSelectionHeight) / this.testSelectionHeight
-            console.log(percentEntireWidthChange)
             for (let i = 0; i < this.currentlySelectedArr.length; i++) {
-                // if (this.gxNow/4 > Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2])) {
-                //     this.currentlySelectedArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) - Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
-                //     this.currentlySelectedArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
-                //     this.selectionCoverComponentsArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) - Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
-                //     this.selectionCoverComponentsArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
-                // } else if (this.gyNow/4 > Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3])) {
-                //     this.currentlySelectedArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
-                //     this.currentlySelectedArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
-                //     this.selectionCoverComponentsArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
-                //     this.selectionCoverComponentsArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  - Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
-                // } else {
-                //     this.currentlySelectedArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
-                //     this.currentlySelectedArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  + Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
-                //     this.selectionCoverComponentsArr[i].width = Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) - this.gx/4) + Math.abs(Number(this.allSelectionStaticInfoArr[i*4]) + Number(this.allSelectionStaticInfoArr[i*4 + 2]) - this.gxNow/4)
-                //     this.selectionCoverComponentsArr[i].height = Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) - this.gy/4)  + Math.abs(Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(this.allSelectionStaticInfoArr[i*4 + 3]) - this.gyNow/4)
-                // }
-            if (this.gxNow > this.gx) {
-                this.currentlySelectedArr[i].width = this.allSelectionStaticInfoArr[i*4 + 2] - (this.allSelectionStaticInfoArr[i*4 + 2] * percentEntireWidthChange)
-                this.currentlySelectedArr[i].height = this.allSelectionStaticInfoArr[i*4 + 3] - (this.allSelectionStaticInfoArr[i*4 + 3] * percentEntireHeightChange)
-                this.selectionCoverComponentsArr[i].width = this.currentlySelectedArr[i].width;
-                this.selectionCoverComponentsArr[i].height = this.currentlySelectedArr[i].height;
+    
+                if (this.gxNow >= this.gx) {
+                    this.currentlySelectedArr[i].width = this.allSelectionStaticInfoArr[i*4 + 2] - (this.allSelectionStaticInfoArr[i*4 + 2] * percentEntireWidthChange)
+                    this.currentlySelectedArr[i].height = this.allSelectionStaticInfoArr[i*4 + 3] - (this.allSelectionStaticInfoArr[i*4 + 3] * percentEntireHeightChange)
+                    this.selectionCoverComponentsArr[i].width = this.currentlySelectedArr[i].width;
+                    this.selectionCoverComponentsArr[i].height = this.currentlySelectedArr[i].height;
 
-                if (this.currentlySelectedArr[i].x > this.testSelectionX) {
-                    this.currentlySelectedArr[i].x = this.allSelectionStaticInfoArr[i*4] - (Math.abs(this.allSelectionStaticInfoArr[i*4] - this.testSelectionX) * percentEntireWidthChange)
-                    this.selectionCoverComponentsArr[i].x = this.currentlySelectedArr[i].x
-                }
-                if (this.currentlySelectedArr[i].y > this.testSelectionY) {
-                    this.currentlySelectedArr[i].y = this.allSelectionStaticInfoArr[i*4 + 1] - (Math.abs(this.allSelectionStaticInfoArr[i*4 + 1] - this.testSelectionY) * percentEntireHeightChange)
-                    this.selectionCoverComponentsArr[i].y = this.currentlySelectedArr[i].y
-                }
-            } else {
-                // scaling works without this if statement, but only for shrinking.
-                this.currentlySelectedArr[i].width = this.allSelectionStaticInfoArr[i*4 + 2] + (this.allSelectionStaticInfoArr[i*4 + 2] * percentEntireWidthChange)
-                this.currentlySelectedArr[i].height = this.allSelectionStaticInfoArr[i*4 + 3] + (this.allSelectionStaticInfoArr[i*4 + 3] * percentEntireHeightChange)
-                this.selectionCoverComponentsArr[i].width = this.currentlySelectedArr[i].width;
-                this.selectionCoverComponentsArr[i].height = this.currentlySelectedArr[i].height;
-                if (this.currentlySelectedArr[i].x > this.testSelectionX) {
-                    this.currentlySelectedArr[i].x = this.allSelectionStaticInfoArr[i*4] + (Math.abs(this.allSelectionStaticInfoArr[i*4] - this.testSelectionX) * percentEntireWidthChange)
-                    this.selectionCoverComponentsArr[i].x = this.currentlySelectedArr[i].x
-                }
-                if (this.currentlySelectedArr[i].y > this.testSelectionY) {
-                    this.currentlySelectedArr[i].y = this.allSelectionStaticInfoArr[i*4 + 1] + (Math.abs(this.allSelectionStaticInfoArr[i*4 + 1] - this.testSelectionY) * percentEntireHeightChange)
-                    this.selectionCoverComponentsArr[i].y = this.currentlySelectedArr[i].y
-                }
+                    if (this.currentlySelectedArr[i].x > this.testSelectionX) {
+                        this.currentlySelectedArr[i].x = this.allSelectionStaticInfoArr[i*4] - (Math.abs(this.allSelectionStaticInfoArr[i*4] - this.testSelectionX) * percentEntireWidthChange)
+                        this.selectionCoverComponentsArr[i].x = this.currentlySelectedArr[i].x
+                    }
+                    if (this.currentlySelectedArr[i].y > this.testSelectionY) {
+                        this.currentlySelectedArr[i].y = this.allSelectionStaticInfoArr[i*4 + 1] - (Math.abs(this.allSelectionStaticInfoArr[i*4 + 1] - this.testSelectionY) * percentEntireHeightChange)
+                        this.selectionCoverComponentsArr[i].y = this.currentlySelectedArr[i].y
+                    }
+                } else {
+                    this.currentlySelectedArr[i].width = Number(this.allSelectionStaticInfoArr[i*4 + 2]) + Number(this.allSelectionStaticInfoArr[i*4 + 2] * percentEntireWidthChange)
+                    this.currentlySelectedArr[i].height = Number(this.allSelectionStaticInfoArr[i*4 + 3]) + Number(this.allSelectionStaticInfoArr[i*4 + 3] * percentEntireHeightChange)
+                    this.selectionCoverComponentsArr[i].width = this.currentlySelectedArr[i].width;
+                    this.selectionCoverComponentsArr[i].height = this.currentlySelectedArr[i].height;
+                    if (this.currentlySelectedArr[i].x > this.testSelectionX) {
+                        this.currentlySelectedArr[i].x = Number(this.allSelectionStaticInfoArr[i*4]) + Number(Math.abs(this.allSelectionStaticInfoArr[i*4] - this.testSelectionX) * percentEntireWidthChange)
+                        this.selectionCoverComponentsArr[i].x = this.currentlySelectedArr[i].x
+                    }
+                    if (this.currentlySelectedArr[i].y > this.testSelectionY) {
+                        this.currentlySelectedArr[i].y = Number(this.allSelectionStaticInfoArr[i*4 + 1]) + Number(Math.abs(this.allSelectionStaticInfoArr[i*4 + 1] - this.testSelectionY) * percentEntireHeightChange)
+                        this.selectionCoverComponentsArr[i].y = this.currentlySelectedArr[i].y
+                    }
+                    console.log(this.currentlySelectedArr[i].x)
+                    console.log(this.currentlySelectedArr[i].y)
 
-            }
+                }
                 
                 
             }
@@ -487,7 +472,6 @@ export default class EditScreen {
                 this.testSelection = this.largeSelectionBox;
                 this.testSelectionX = this.testSelection.x ;
                 this.testSelectionY = this.testSelection.y;
-                console.log("chaing")
                 this.testSelectionWidth = this.testSelection.width;
                 this.testSelectionHeight = this.testSelection.height;
             }
