@@ -3,12 +3,15 @@ import Component from "./component";
 
 export default class EditScreen {
 
-    constructor(canvas, ctx, dimensions) {
+    constructor(canvas, ctx, dimensions, game) {
+        this.game = game;
         this.canvas = canvas;
         this.ctx = ctx;
         this.dimensions = dimensions;
         this.groupingImages = false;
         this.mousePos = new Component("7px", "Consolas", "white", 245, 5, this.ctx, "text");
+        this.printButton = new Component("7px", "Consolas", "white", 280, 150, this.ctx, "text");
+        this.printButtonButton = new Component(20.67, 6.21, "invisible", 278.51, 143.57, this.ctx, "other");
         this.largeSelectionBox = new Component(0, 0, "transparent2", 0, 0, this.ctx, "other");
         this.firstClick = [0,0]
         this.secondClick = [0,0]
@@ -37,6 +40,7 @@ export default class EditScreen {
     
     images () {
         const path = require.context("./../images", false, /\.png$/)
+        this.pathkeys = path.keys()
         return path.keys().map(path)
     }
 
@@ -50,11 +54,13 @@ export default class EditScreen {
     loadAllImages() {
         let images = this.images();
         let imageArr = []
+        this.pathKeysHash = {};
         for (let i = 0; i < images.length; i++) {
-            
+            this.pathKeysHash[images[i]] = this.pathkeys[i];
             imageArr.push(new Component(20, 5, images[i], 0, this.firstImagePos, this.ctx, "image"));
             this.firstImagePos += 5;
         }
+        console.log(this.pathKeysHash)
         return imageArr
     }
 
@@ -125,6 +131,13 @@ export default class EditScreen {
         this.checkIfEditingImage(e);
         this.checkIfGroupingImages(e);
         this.checkIfMovingLayer(e);
+        this.checkIfPrintClicked(e);
+    }
+
+    checkIfPrintClicked(e) {
+        if (this.printButtonButton.clicked(this.gx, this.gy) && e.type === "mouseup") {
+            this.printComponentsAndImports(); 
+        }
     }
 
     checkIfMovingLayer(e) {
@@ -680,6 +693,21 @@ export default class EditScreen {
     }
 
 
+    printComponentsAndImports(){
+        for (let i = 0; i < this.dummyImageArr.length; i++) {
+            if (this.game.currentScreen === "Home") {
+                console.log(this.dummyImageArr[i].color)
+            } 
+        }
+    }
+
+    showPrintButton() {
+        if (this.currentlySelectedArr.length > 0) {
+            this.printButton.text = 'Print'
+            this.printButton.update();
+            this.printButtonButton.update();
+        }
+    }
 
 
 
@@ -712,6 +740,8 @@ export default class EditScreen {
         }
         this.mousePos.text = `${(gx/4).toFixed(2)}, ${(gy/4).toFixed(2)}`
         this.mousePos.update();
+        this.showPrintButton();
+        
     }
 
 

@@ -24,6 +24,7 @@ export default class Home {
         this.frame = 0;
         this.instaElements = [];
         this.createInstaElements();
+        this.currentImports = ['./home.png', './component', './adventure.png', '/adventureReversed.png', '/map.png', '/simpleYesNoHomeBox.png']
         
     }
 

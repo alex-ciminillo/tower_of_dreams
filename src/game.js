@@ -18,7 +18,7 @@ export default class TowerOfDreams {
         this.title = new Title(this.canvas, this.ctx, this.dimensions);
         this.blackScreen = new BlackScreen(this.canvas, this.ctx, this.dimensions);
         this.home = new Home(this.canvas, this.ctx, this.dimensions);
-        this.editScreen = new EditScreen(this.canvas, this.ctx, this.dimensions);
+        this.editScreen = new EditScreen(this.canvas, this.ctx, this.dimensions, this);
         this.editMode = true;
         this.eventListener = new EventListener(this.canvas, this.ctx, this.dimensions);
         
