@@ -121,6 +121,54 @@ export default class Component {
         
     }
 
+    startNewAnime(newAnime, nextAnime, playNum) {
+        this.frame = 0;
+        this.anime = newAnime;
+        this.firstAnimation = true;
+        this.nextAnime = nextAnime;
+        this.playNum = playNum;
+    }
+
+    spriteAnimation(start, stop, speed, row, colDir) {
+        if (this.firstAnimation === true) { 
+            this.row = row;
+            this.column = start;
+            this.firstAnimation = false;
+        }
+        if (this.frame >= speed) {
+            if (this.column === stop - 1 + colDir && this.row === row) {
+                this.playNum -= 1;
+                if (this.playNum === 0) {
+                    this.playNum -= 1;
+                    this.anime = this.nextAnime;
+                    this.firstAnimation = true;
+                    this.frame = 0;
+                    return;
+                }
+                this.column = start - 1;
+                this.row = row;
+            } else if (this.row > row) {
+                if (this.column === stop - 1 - this.columnLength) {
+                    this.playNum -= 1;
+                    if (this.playNum === 0) {
+                        this.playNum -= 1;
+                        this.anime = this.nextAnime;
+                        this.firstAnimation = true;
+                        this.frame = 0;
+                        return;
+                    }
+                    this.column = start - 1;
+                    this.row = row;
+                }
+            } else if (this.column === this.columnLength) {
+                this.row += 1;
+                this.column = -1;
+            }
+            this.column += colDir;
+            this.frame = 0;
+        }
+        
+    }
 
 
     moveToMouse = (gx, gy, speed) => {
