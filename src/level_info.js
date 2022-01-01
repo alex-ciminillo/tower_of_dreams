@@ -1,4 +1,4 @@
-const level_info = [
+export let level_info = [
 
     {
         'id': 1,

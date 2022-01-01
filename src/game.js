@@ -5,39 +5,45 @@ import Component from "./component"
 import EditScreen from "./editScreen"
 import EventListener from './eventListener.js'
 
+import Training from './training.js'
+
 
 
 export default class TowerOfDreams {
-    constructor(canvas) {
+    constructor(canvas, canvas2) {
         this.alpha = 0.99;
         this.delta = 0.01;
         this.canvas = canvas
+        this.canvas2 = canvas2
         this.ctx = canvas.getContext("2d");
         this.ctx.scale(4,4)
+        this.ctx2 = canvas2.getContext("2d");
+        this.ctx2.scale(4,4)
         this.dimensions = { width: canvas.width, height: canvas.height };
         this.title = new Title(this.canvas, this.ctx, this.dimensions);
         this.blackScreen = new BlackScreen(this.canvas, this.ctx, this.dimensions);
         this.home = new Home(this.canvas, this.ctx, this.dimensions);
-        this.editScreen = new EditScreen(this.canvas, this.ctx, this.dimensions, this);
-        this.editMode = true;
-        this.eventListener = new EventListener(this.canvas, this.ctx, this.dimensions);
-        
+        this.editScreen = new EditScreen(this.canvas, this.ctx, this.dimensions, this, this.canvas2, this.ctx2);
+        this.eventListener = new EventListener(this.canvas, this.ctx, this.dimensions, this.canvas2);
+        this.editButton = new Component(20.67, 6.21, "invisible", 278.51, 143.57, this.ctx, "other");
         this.gy = 0;
         this.gx = 0;
-        
+        this.editMode = false;
+        this.showEditButton = false;
+        this.training = new Training(this.ctx)
         
 
         this.registerEvents();
         this.animate();
         // //real code
         // this.currentScreen = "Title"
-        // //end real code
+        // // //end real code
         
         this.fadeScreen = false;
         
-        //test code for home screen
-        this.currentScreen = "Home"
-        //end test code for homescreen
+        //test code for training screen
+        this.currentScreen = "Training"
+        //end test code for training
     }
 
     registerEvents() {
@@ -47,30 +53,54 @@ export default class TowerOfDreams {
         this.ctx.canvas.addEventListener("mousedown", this.boundClickHandler);
         this.ctx.canvas.addEventListener("mouseup", this.boundClickHandler); 
         this.ctx.canvas.addEventListener("mousemove", this.boundHoverHandler);  
+        this.ctx2.canvas.addEventListener("mouseup", this.boundClickHandler);
+        this.ctx2.canvas.addEventListener("mousedown", this.boundClickHandler);
+        this.ctx2.canvas.addEventListener("mousemove", this.boundHoverHandler);
     }
 
     updateGxGy(e) {
         this.gxgyArr = this.eventListener.updateGxGy(e);
+        
         this.gx = this.gxgyArr[0]
         this.gy = this.gxgyArr[1]
+        
+    }
+
+    updateGxGy2(e) {
+        this.gxgyArr2 = this.eventListener.updateGxGy2(e);
+        this.gx2 = this.gxgyArr2[0]
+        this.gy2 = this.gxgyArr2[1]
     }
 
 
     hover(e) {
         this.updateGxGy(e)
+        this.updateGxGy2(e)
         if (this.currentScreen === "Title") { this.titleHover(e) }
         else if (this.currentScreen === "Home") { this.homeHover(e) }
+        else if (this.currentScreen === "Training") { this.trainingHover(e) }
     }
 
     click(e) {
-            this.editScreen.saveClicks(this.gx, this.gy, e);
-            if (this.editScreen.isEditMode() === false) {
+            this.checkForEditModeEnabling(e);
+            if (this.showEditButton === true) { this.enableEditMode(e)  }
+            if (this.editMode === true) {
+                this.editScreen.saveClicks(this.gx, this.gy, e);
+            } else {
                 if (this.currentScreen === "Title") { this.titleClick(e) }
                 if (this.currentScreen === "Home") { this.homeClick(e) }
+                if (this.currentScreen === "Training") { this.trainingClick(e) }
             }
     }
 
-    
+    trainingClick(e) {
+        this.training.click(e);
+    }
+
+    trainingHover(e) {
+        this.training.hover(e);
+    }
+
     titleHover(e) {
         this.title.gx = this.gx;
         this.title.gy = this.gy;
@@ -90,9 +120,12 @@ export default class TowerOfDreams {
 
     homeClick(e) {
         this.home.click(e)
+        if (this.home.beginTraining === true) { this.beginTraining(); }
     }
 
-
+    beginTraining() {
+        this.currentScreen = "Training"
+    }
 
     beginGame() {
         this.fadeScreen = true;
@@ -118,6 +151,39 @@ export default class TowerOfDreams {
         }
     }
 
+    checkForEditModeEnabling(e) {
+        this.mousePos = e.type
+        if (e.type === "mousedown") {
+            let x = this.gx;
+            let y = this.gy;
+            setTimeout(()=>{ 
+                if (x === this.gx && y === this.gy && this.mousePos === "mousedown") {
+                    this.showEditButton = true;
+                }
+            }, 1000)
+        } else {
+            setTimeout(()=>{
+                this.showEditButton = false;
+            }, 1000)
+        }
+
+    }
+
+
+    enableEditMode(e) {
+        if (this.editButton.clicked(this.gx, this.gy) && e.type === "mousedown") {
+            if (this.editMode === true) {
+                this.editMode = false
+                this.canvas2.classList.add('canvas3');
+                this.canvas2.classList.remove('canvas2');
+            } else {
+                this.editMode = true;
+                this.canvas2.classList.add('canvas2');
+                this.canvas2.classList.remove('canvas3');
+            } 
+        }
+    }
+
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
@@ -127,14 +193,15 @@ export default class TowerOfDreams {
         // if (this.currentScreen === "Title") { this.title.animate(); } 
         // else if (this.currentScreen === "Black Screen") { this.blackScreen.animate(); } 
         // else if (this.currentScreen === "Home") { this.home.animate(); }
+        // else if (this.currentScreen === "Training") { this.training.animate(this.gx, this.gy); }
         // this.ctx.globalAlpha = this.alpha;
         // // real code end
 
-        // test code to show home
-        this.home.animate();
+        // test code to show training
+        this.training.animate(this.gx, this.gy);
         // test code end
-
-        if (this.editMode === true) { this.editScreen.animate(this.gx, this.gy) }
+        if (this.showEditButton === true) { this.editButton.update(); }
+        if (this.editMode === true) { this.editScreen.animate(this.gx, this.gy, this.gx2, this.gy2) }
         
         requestAnimationFrame(this.animate.bind(this));
     }

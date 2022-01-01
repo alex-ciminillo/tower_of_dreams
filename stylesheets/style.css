@@ -1,20 +1,45 @@
 @font-face {
-    font-family: 'TitleScreen';
-    src: url('./../fonts/titleScreen/TitleScreen.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-  }
+  font-family: 'TitleScreen';
+  src: url('./../fonts/titleScreen/TitleScreen.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PixelFont';
+  src: url('./../fonts/pixel/pixelFont.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('./../fonts/ubuntu/Ubuntu-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
 
 
 .canvas {
   /* image-rendering: pixelated; */
   width: calc(1vw + 1vh + 150vmin);
   height: calc(1vw + 1vh + 95vmin); 
-  background-color: rgb(0, 0, 0);
-  	
+  background-color: rgb(0, 0, 0);	
+  }
+
+  .canvas2 {
+    width: calc(1vw + 1vh + 30vmin);
+    height: calc(1vw + 1vh + 95vmin); 
+    background-color: rgb(255, 255, 255);	
+  }
+  .canvas3 {
+    width: 0px;
+    height: calc(1vw + 1vh + 95vmin); 
+    background-color: rgb(255, 255, 255);	
   }
 
 .outerDiv {
+  display: flex;
   position: absolute;
   left: 50%;
   top: 50%;

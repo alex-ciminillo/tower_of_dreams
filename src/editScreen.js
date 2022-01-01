@@ -3,10 +3,12 @@ import Component from "./component";
 
 export default class EditScreen {
 
-    constructor(canvas, ctx, dimensions, game) {
+    constructor(canvas, ctx, dimensions, game, canvas2, ctx2) {
         this.game = game;
         this.canvas = canvas;
+        this.canvas2 = canvas2;
         this.ctx = ctx;
+        this.ctx2 = ctx2;
         this.dimensions = dimensions;
         this.groupingImages = false;
         this.mousePos = new Component("7px", "Consolas", "white", 245, 5, this.ctx, "text");
@@ -43,7 +45,24 @@ export default class EditScreen {
         this.pathkeys = path.keys()
         return path.keys().map(path)
     }
-
+    loadAllImages() {
+            let images = this.images();
+            let imageArr = []
+            let imagex = 0
+            this.pathKeysHash = {};
+            for (let i = 0; i < images.length; i++) {
+                this.pathKeysHash[images[i]] = this.pathkeys[i];
+                imageArr.push(new Component(5, 15, images[i], imagex, this.firstImagePos, this.ctx2, "image"));
+                this.firstImagePos += this.canvas2.width/7;
+                if (this.firstImagePos > this.canvas2.height/4.5) {
+                    this.firstImagePos = 0;
+                    imagex += 5;
+                }
+                
+                    
+            }
+            return imageArr
+        }
     createMouseClick() {
         
         this.newClick = new Component("7px", "Consolas", this.colors[Math.floor(this.mouseClicksArr.length/3)], 245, (this.mouseClickPosIncrement + 6*this.mouseClicksArr.length), this.ctx, "text");
@@ -51,18 +70,7 @@ export default class EditScreen {
     }
 
 
-    loadAllImages() {
-        let images = this.images();
-        let imageArr = []
-        this.pathKeysHash = {};
-        for (let i = 0; i < images.length; i++) {
-            this.pathKeysHash[images[i]] = this.pathkeys[i];
-            imageArr.push(new Component(20, 5, images[i], 0, this.firstImagePos, this.ctx, "image"));
-            this.firstImagePos += 5;
-        }
-        console.log(this.pathKeysHash)
-        return imageArr
-    }
+    
 
 
     saveClicks(gx, gy, e) {
@@ -576,7 +584,7 @@ export default class EditScreen {
 
     imageSelectorClicked() {
         for (let i = 0; i < this.imagesArr.length; i++) {
-            if (this.imagesArr[i].clicked(this.gx, this.gy)) {
+            if (this.imagesArr[i].clicked(this.gx2, this.gy2)) {
                 this.imageSelection = this.imagesArr[i]
                 this.imageFound = true;
                 return true;
@@ -692,13 +700,48 @@ export default class EditScreen {
         };
     }
 
+    fixImportName(name) {
+        let newName = name.split('').slice(0,1)[0].toUpperCase() + name.split('').slice(1, -4).join('')
+        return newName
+    }
+
 
     printComponentsAndImports(){
+        let importString = ''
+        let newComponentArr = ''
+        let currentImports = []
         for (let i = 0; i < this.dummyImageArr.length; i++) {
             if (this.game.currentScreen === "Home") {
-                console.log(this.dummyImageArr[i].color)
-            } 
+                if(this.game.home.currentImports.indexOf(this.pathKeysHash[this.dummyImageArr[i].color]) < 0 && importString.includes(this.pathKeysHash[this.dummyImageArr[i].color].split('').slice(1).join('')) === false) {
+                    importString += `import ${this.fixImportName(this.pathKeysHash[this.dummyImageArr[i].color].slice(2))} from './../images/${this.pathKeysHash[this.dummyImageArr[i].color].slice(2)}'\n` 
+                }
+            }    
+            if (this.game.currentScreen === "Title") {
+                
+                if(this.game.title.currentImports.indexOf(this.pathKeysHash[this.dummyImageArr[i].color]) < 0 && importString.includes(this.pathKeysHash[this.dummyImageArr[i].color].split('').slice(1).join('')) === false) {
+                    importString += `import ${this.fixImportName(this.pathKeysHash[this.dummyImageArr[i].color].slice(2))} from './../images/${this.pathKeysHash[this.dummyImageArr[i].color].slice(2)}'\n` 
+                    currentImports.push(this.pathKeysHash[this.dummyImageArr[i].color])
+                }
+            }  
+            if (this.game.currentScreen === "Training") {
+                
+                if(this.game.training.currentImports.indexOf(this.pathKeysHash[this.dummyImageArr[i].color]) < 0 && importString.includes(this.pathKeysHash[this.dummyImageArr[i].color].split('').slice(1).join('')) === false) {
+                    importString += `import ${this.fixImportName(this.pathKeysHash[this.dummyImageArr[i].color].slice(2))} from './../images/${this.pathKeysHash[this.dummyImageArr[i].color].slice(2)}'\n` 
+                    currentImports.push(this.pathKeysHash[this.dummyImageArr[i].color])
+                }
+            }    
+                let color = this.fixImportName(this.pathKeysHash[this.dummyImageArr[i].color].slice(2))
+                newComponentArr += `new Component(${this.dummyImageArr[i].width}, ${this.dummyImageArr[i].height}, ${color}, ${this.dummyImageArr[i].x}, ${this.dummyImageArr[i].y}, this.ctx, "image"),\n`
+             
         }
+        if (this.game.currentScreen === "Home") { currentImports = currentImports.concat(this.game.home.currentImports) }
+        else if (this.game.currentScreen === "Title") { currentImports = currentImports.concat(this.game.title.currentImports) }
+        else if (this.game.currentScreen === "Training") { currentImports = currentImports.concat(this.game.training.currentImports) }
+        
+        console.log(importString)
+        console.log(newComponentArr)
+        console.log(currentImports)
+
     }
 
     showPrintButton() {
@@ -711,9 +754,13 @@ export default class EditScreen {
 
 
 
-    animate(gx, gy) {
+
+
+    animate(gx, gy, gx2, gy2) {
         this.gx = gx;
         this.gy = gy;
+        this.gx2 = gx2;
+        this.gy2 = gy2;
         if (this.drawDummy) { 
             this.drawDummyComponent(); 
             this.drawMouseClicksComponent();

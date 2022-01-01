@@ -16,7 +16,7 @@ import Cloud5 from './../images/cloud5.png'
 import Cloud6 from './../images/cloud6.png'
 import Cloud7 from './../images/cloud7.png'
 import Cloud8 from './../images/cloud8.png'
-import SoundButton from './../images/sound.png'
+import SoundButton from './../images/soundImage.png'
 import SoundMuteButton from './../images/sound-mute.png'
 import MusicButton from './../images/music.png'
 import MusicMuteButton from './../images/music_slash.png'
@@ -28,6 +28,7 @@ import TitleTheme from './../sounds/hope.mp3'
 export default class Title {
 
     constructor(canvas, ctx, dimensions) {
+        this.currentImports = ['./component', './sound','/background1.png','/background2.png','/background3.png']
         this.canvas = canvas;
         this.ctx = ctx;
         this.ctx.imageSmoothingEnabled = false;
@@ -140,10 +141,10 @@ export default class Title {
         if (e.type == "mouseup" && this.musicImage.clicked(this.gx, this.gy)) {
             if (this.musicImage.color === MusicButton ) {
                 this.musicImage.color = MusicMuteButton;
-                this.beginSound.stop();
+                this.beginTheme.stop();
             } else {
                 this.musicImage.color = MusicButton;
-                this.beginSound.play();
+                this.beginTheme.play();
             }
         }
     }
