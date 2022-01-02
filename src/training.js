@@ -20,13 +20,14 @@ import TrainingDummy from './trainingDummy'
 
 
 export default class Training {
-    constructor(ctx, level, word) {
+    constructor(ctx, level, word, canvas) {
         this.ctx = ctx;
+        this.canvas = canvas;
         this.currentImports =['./soundImage.png', './talkingBox.png', './TrainingWords.png', './TrainingDialogue.png', './trainingScreen.png', './component.js', './adventure.png', './trainingDummySpriteTransparent.png', './TrainingButtonsNewMove.png']
         this.wordCounter = word;
         this.levelCounter = level;
         this.quizCounter = 0;
-        this.quiz1 = false;
+        this.quiz1 = true;
         this.quiz2 = false;
         this.quiz3 = false;
         this.complete = false;
@@ -58,20 +59,21 @@ export default class Training {
         this.nextWordText.text = "Next"
         this.previousWordText = new Component("11px", "PixelFont", "Black", 26.62, 138.40, this.ctx, "text");
         this.previousWordText.text = "Previous"
-        this.questionText = new Component("9px", "Ubuntu", "Black", 98.18, 111.71, this.ctx, "text");
-        this.answer1Text = new Component("9px", "Ubuntu", "Black", 38.18, 90.71, this.ctx, "text");
-        this.answer2Text = new Component("9px", "Ubuntu", "Black", 190.18, 90.71, this.ctx, "text");
-        this.answer3Text = new Component("9px", "Ubuntu", "Black", 38.18, 111.71, this.ctx, "text");
-        this.answer4Text = new Component("9px", "Ubuntu", "Black", 190.18, 111.71, this.ctx, "text");
+        this.questionText = new Component("17px", "Ubuntu", "Black", 125.18, 113.21, this.ctx, "text");
+        this.answer1Text = new Component("10px", "Ubuntu", "Black", 53.18, 88.2, this.ctx, "text");
+        this.answer2Text = new Component("10px", "Ubuntu", "Black", 207.18, 88.2, this.ctx, "text");
+        this.answer3Text = new Component("10px", "Ubuntu", "Black", 53.18, 133.71, this.ctx, "text");
+        this.answer4Text = new Component("10px", "Ubuntu", "Black", 207.18, 133.71, this.ctx, "text");
+        
     }
 
     createImages() {
         this.initialComponentArr = []
-        this.quizCardImagesArr = [new Component(109.61755963000573, 22.177861726704904, TrainingButtonsNewMove, 171.59149672000663, 117.50781894412596, this.ctx, "image"),
-        new Component(107.50160157000525, 21.767861726704893, TrainingButtonsNewMove, 172.64824115499684, 72.32717036022932, this.ctx, "image"),
-        new Component(103.81958060000548, 21.35643621117481, TrainingButtonsNewMove, 19.817099607498704, 72.33073414905449, this.ctx, "image"),
-        new Component(104.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 20.8670996074987, 117.92282963977067, this.ctx, "image"),
-        new Component(151.25367496500422, 20.950000000000003, TrainingWords, 70.40342464249443, 95.74, this.ctx, "image")]
+        this.answer4 = new Component(109.61755963000573, 22.177861726704904, TrainingButtonsNewMove, 171.59149672000663, 117.50781894412596, this.ctx, "image")
+        this.answer2 = new Component(107.50160157000525, 21.767861726704893, TrainingButtonsNewMove, 172.64824115499684, 72.32717036022932, this.ctx, "image")
+        this.answer1 = new Component(103.81958060000548, 14.35643621117481, TrainingButtonsNewMove, 19.817099607498704, 77.33073414905449, this.ctx, "image")
+        this.answer3 = new Component(104.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 20.8670996074987, 117.92282963977067, this.ctx, "image")
+        this.question = new Component(151.25367496500422, 20.950000000000003, TrainingWords, 70.40342464249443, 95.74, this.ctx, "image")
         this.background = new Component(300, 150, TrainingScreen, 0, 0, this.ctx, "image")
         this.dialogueBox = new Component(295.52722245267773, 87.06392648914046, TrainingDialogue, 2.431964063489289, 61.252678918476605, this.ctx, "image")
         this.newWordBox = new Component(259.90, 68.04785297828089, TrainingWords, 21.710000000000008, 71.74678918476592, this.ctx, "image")
@@ -115,13 +117,7 @@ export default class Training {
         this.newWordEnglishSent.text = this.level1[this.levelCounter].words[this.wordCounter]["example_english"]
     }
 
-    changeQuizCardText() {
-        this.questionText.text = "Hello"
-        this.answer1Text.text = "Hello"
-        this.answer2Text.text = "Hello"
-        this.answer3Text.text = "Hello"
-        this.answer4Text.text = "Hello"
-    }
+    
 
     changeSound() {
         let nextWord = this.level1[this.levelCounter].words[this.wordCounter]["japanese"]
@@ -170,7 +166,6 @@ export default class Training {
     checkQuizStatus() {
         console.log(this.level1[this.levelCounter].words[this.wordCounter]["seen"])
         if (this.wordCounter === 4 && this.level1[this.levelCounter].words[this.wordCounter]["seen"] === "false") {
-            console.log("hello")
             this.quiz1 = true;
             this.level1[this.levelCounter].words[this.wordCounter]["seen"] = "true"
         }
@@ -205,10 +200,44 @@ export default class Training {
         this.adventureGuy.animate();
     }
 
+    changeQuizCardText() {
+        this.questionText.text = "Hello"
+        this.answer1Text.text = "Hello"
+        this.answer2Text.text = "Hello"
+        this.answer3Text.text = "Hello"
+        this.answer4Text.text = "Hello"
+    }
+
+    updateQuizCardComponentsSize() {
+        this.question.width = this.ctx.measureText(this.questionText.text).width + this.ctx.measureText(this.questionText.text).width/4 + 20
+        this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 1.65)
+        this.answer1.width = this.ctx.measureText(this.answer1Text.text).width + this.ctx.measureText(this.answer1Text.text).width/10 + 10
+        this.answer1.x = this.answer1Text.x - 8
+        this.answer2.width = this.ctx.measureText(this.answer2Text.text).width + this.ctx.measureText(this.answer2Text.text).width/10 + 10
+        this.answer2.x = this.answer2Text.x - 8
+        this.answer3.width = this.ctx.measureText(this.answer3Text.text).width + this.ctx.measureText(this.answer3Text.text).width/10 + 10
+        this.answer3.x = this.answer3Text.x - 8
+        this.answer4.width = this.ctx.measureText(this.answer4Text.text).width + this.ctx.measureText(this.answer4Text.text).width/10 + 10
+        this.answer4.x = this.answer4Text.x - 8
+       
+    }
+
+    updateQuizCardTextX() {
+        this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 1.65)
+        this.answer1Text.x = (300/3) - (this.ctx.measureText(this.answer1Text.text).width / 1.65)
+        this.answer2Text.x = (300) - (this.ctx.measureText(this.answer2Text.text).width / 1.65)
+        this.answer3Text.x = (300/4) - (this.ctx.measureText(this.answer3Text.text).width / 1.65)
+        this.answer4Text.x = (300) - (this.ctx.measureText(this.answer4Text.text).width / 1.65)
+    }
+
     updateQuizCardComponents() {
-        for (let i = 0; i < this.quizCardImagesArr.length; i++) {
-            this.quizCardImagesArr[i].update();
-        }
+        this.updateQuizCardTextX();
+        this.updateQuizCardComponentsSize();
+        this.question.update();
+        this.answer1.update();
+        this.answer2.update();
+        this.answer3.update();
+        this.answer4.update();
         this.questionText.update();
         this.answer1Text.update();
         this.answer2Text.update();

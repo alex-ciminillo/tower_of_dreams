@@ -30,7 +30,7 @@ export default class TowerOfDreams {
         this.gx = 0;
         this.editMode = false;
         this.showEditButton = false;
-        this.training = new Training(this.ctx, 0, 0)
+        this.training = new Training(this.ctx, 0, 0, this.canvas)
         
 
         this.registerEvents();
