@@ -129,6 +129,39 @@ export default class Component {
         this.playNum = playNum;
     }
 
+    startNewCustomAnime(newAnimeArr, nextAnime, speed) {
+        this.frame = 0;
+        this.customArr = newAnimeArr;
+        this.firstAnimation = true;
+        this.nextAnime = nextAnime;
+        this.speed = speed;
+        this.customAnimation = true;
+    }
+
+    customAnime(arr) {
+        this.customArr = arr
+        if (this.firstAnimation === true) { 
+            this.row = this.customArr[0][0];
+            this.column = this.customArr[0][1];
+            this.customArr = this.customArr.slice(1)
+            this.firstAnimation = false;
+        }
+        if (this.frame >= this.speed) {
+            if (this.customArr.length === 0) {
+                this.customAnimation = false;
+                this.anime = this.nextAnime;
+                this.frame = 0;
+                this.firstAnimation = true;
+                return;
+            }
+            this.row = this.customArr[0][0];
+            this.column = this.customArr[0][1];
+            this.customArr = this.customArr.slice(1)
+            this.frame = 0;
+              
+        }
+    }
+
     spriteAnimation(start, stop, speed, row, colDir) {
         if (this.firstAnimation === true) { 
             this.row = row;

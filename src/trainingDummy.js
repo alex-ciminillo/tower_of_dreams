@@ -9,6 +9,7 @@ export default class TrainingDummy extends Component {
         this.anime = anime
         this.frame = 0;
         this.columnLength = columnLength;
+        this.customAnimation = false;
     }
 
 

@@ -27,7 +27,7 @@ export default class Training {
         this.wordCounter = word;
         this.levelCounter = level;
         this.quizCounter = 0;
-        this.quiz1 = true;
+        this.quiz1 = false;
         this.quiz2 = false;
         this.quiz3 = false;
         this.complete = false;
@@ -59,21 +59,21 @@ export default class Training {
         this.nextWordText.text = "Next"
         this.previousWordText = new Component("11px", "PixelFont", "Black", 26.62, 138.40, this.ctx, "text");
         this.previousWordText.text = "Previous"
-        this.questionText = new Component("17px", "Ubuntu", "Black", 125.18, 113.21, this.ctx, "text");
-        this.answer1Text = new Component("10px", "Ubuntu", "Black", 53.18, 88.2, this.ctx, "text");
-        this.answer2Text = new Component("10px", "Ubuntu", "Black", 207.18, 88.2, this.ctx, "text");
-        this.answer3Text = new Component("10px", "Ubuntu", "Black", 53.18, 133.71, this.ctx, "text");
-        this.answer4Text = new Component("10px", "Ubuntu", "Black", 207.18, 133.71, this.ctx, "text");
+        this.questionText = new Component("17px", "Ubuntu", "Black", 125.18, 90.21, this.ctx, "text");
+        this.answer1Text = new Component("14px", "Ubuntu", "Black", 53.18, 111.2, this.ctx, "text");
+        this.answer2Text = new Component("14px", "Ubuntu", "Black", 207.18, 111.2, this.ctx, "text");
+        this.answer3Text = new Component("14px", "Ubuntu", "Black", 53.18, 133.71, this.ctx, "text");
+        this.answer4Text = new Component("14px", "Ubuntu", "Black", 207.18, 133.71, this.ctx, "text");
         
     }
 
     createImages() {
         this.initialComponentArr = []
-        this.answer4 = new Component(109.61755963000573, 22.177861726704904, TrainingButtonsNewMove, 171.59149672000663, 117.50781894412596, this.ctx, "image")
-        this.answer2 = new Component(107.50160157000525, 21.767861726704893, TrainingButtonsNewMove, 172.64824115499684, 72.32717036022932, this.ctx, "image")
-        this.answer1 = new Component(103.81958060000548, 14.35643621117481, TrainingButtonsNewMove, 19.817099607498704, 77.33073414905449, this.ctx, "image")
-        this.answer3 = new Component(104.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 20.8670996074987, 117.92282963977067, this.ctx, "image")
-        this.question = new Component(151.25367496500422, 20.950000000000003, TrainingWords, 70.40342464249443, 95.74, this.ctx, "image")
+        this.answer4 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 117.50781894412596, this.ctx, "image")
+        this.answer2 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 95.32717036022932, this.ctx, "image")
+        this.answer1 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 17.8670996074987, 95.32717036022932, this.ctx, "image")
+        this.answer3 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 17.8670996074987, 117.92282963977067, this.ctx, "image")
+        this.question = new Component(211.25367496500422, 20.950000000000003, TrainingWords, 45.40342464249443, 72.74, this.ctx, "image")
         this.background = new Component(300, 150, TrainingScreen, 0, 0, this.ctx, "image")
         this.dialogueBox = new Component(295.52722245267773, 87.06392648914046, TrainingDialogue, 2.431964063489289, 61.252678918476605, this.ctx, "image")
         this.newWordBox = new Component(259.90, 68.04785297828089, TrainingWords, 21.710000000000008, 71.74678918476592, this.ctx, "image")
@@ -81,12 +81,23 @@ export default class Training {
         this.nextWord = new Component(43.13, 13.54, TrainingButtonsNewMove, 238.59000833680702, 125.15168263494704, this.ctx, "image")
         this.previousWord = new Component(62.91, 13.54, TrainingButtonsNewMove, 18.939999999999998, 125.15168263494704, this.ctx, "image")
         this.wordSound = new Component(11.11, 9.72, SoundImage, 34.50685146588856, 82.23874760475795, this.ctx, "image")
-        this.sentSound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image")    
+        this.sentSound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image")  
+        this.answer1Sound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image") 
+        this.answer2Sound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image") 
+        this.answer3Sound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image") 
+        this.answer4Sound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image")
+        this.questionSound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image")    
+        this.testAll = new Component(83.13, 13.54, TrainingButtonsNewMove, 238.59000833680702, 125.15168263494704, this.ctx, "image")
     }
 
     createSounds() {
         this.soundWord = new Sound(this.pathKeysHash[this.level1[this.levelCounter].words[this.wordCounter]["japanese"]], 1)
         this.soundSent = new Sound(this.pathKeysHash[this.level1[this.levelCounter].words[this.wordCounter]["example_japanese"].slice(0,-1)], 1)
+        this.soundAnswer1 = new Sound(this.pathKeysHash["わたし"], 1)
+        this.soundAnswer2 = new Sound(this.pathKeysHash["わたし"], 1)
+        this.soundAnswer3 = new Sound(this.pathKeysHash["わたし"], 1)
+        this.soundAnswer4 = new Sound(this.pathKeysHash["わたし"], 1)
+        this.soundQuestion = new Sound(this.pathKeysHash["わたし"], 1)
     }
 
     createSprites() {
@@ -164,9 +175,14 @@ export default class Training {
     }
 
     checkQuizStatus() {
-        console.log(this.level1[this.levelCounter].words[this.wordCounter]["seen"])
-        if (this.wordCounter === 4 && this.level1[this.levelCounter].words[this.wordCounter]["seen"] === "false") {
+        if (this.wordCounter === 3 && this.level1[this.levelCounter].words[this.wordCounter]["seen"] === "false") {
             this.quiz1 = true;
+            this.level1[this.levelCounter].words[this.wordCounter]["seen"] = "true"
+        } else if (this.wordCounter === 6 && this.level1[this.levelCounter].words[this.wordCounter]["seen"] === "false") {
+            this.quiz2 = true;
+            this.level1[this.levelCounter].words[this.wordCounter]["seen"] = "true"
+        } else if (this.wordCounter === 10 && this.level1[this.levelCounter].words[this.wordCounter]["seen"] === "false") {
+            this.quiz3 = true;
             this.level1[this.levelCounter].words[this.wordCounter]["seen"] = "true"
         }
     }
@@ -183,11 +199,88 @@ export default class Training {
         this.changeSound();
     }
 
+    handleNextAndPreviousButtonClicks() {
+        let quizzing = false;
+        if (this.quiz1 || this.quiz2 || this.quiz3) { quizzing = true; }
+        if (this.nextWord.clicked(this.gx, this.gy) && this.wordCounter < this.level1[this.levelCounter].words.length - 1 && quizzing === false) { this.changeToNewCard(1) }
+        else if (this.previousWord.clicked(this.gx, this.gy) && this.wordCounter > 0 && quizzing === false) { this.changeToNewCard(-1) }
+    }
+
     handleMouseUpClicks() {
-        if (this.wordSound.clicked(this.gx, this.gy)) { this.soundWord.play() }
-        else if (this.sentSound.clicked(this.gx, this.gy)) { this.soundSent.play() }
-        else if (this.nextWord.clicked(this.gx, this.gy) && this.wordCounter < this.level1[this.levelCounter].words.length - 1) { this.changeToNewCard(1); } 
-        else if (this.previousWord.clicked(this.gx, this.gy) && this.wordCounter > 0) { this.changeToNewCard(-1); }
+        let quizzing = true
+        if (!this.quiz1 && !this.quiz2 && !this.quiz3) { quizzing = false; }
+        if (this.wordSound.clicked(this.gx, this.gy) && !quizzing) { this.soundWord.play() }
+        else if (this.sentSound.clicked(this.gx, this.gy) && !quizzing) { this.soundSent.play() }
+        else if (this.questionSound.clicked(this.gx, this.gy) && quizzing) { this.soundQuestion.play() }
+        else if (this.nextWord.clicked(this.gx, this.gy) && !quizzing || this.previousWord.clicked(this.gx, this.gy) && !quizzing) { this.handleNextAndPreviousButtonClicks(); } 
+        else if (this.answer1.clicked(this.gx, this.gy) && quizzing || this.answer2.clicked(this.gx, this.gy) && quizzing || this.answer3.clicked(this.gx, this.gy) && quizzing || this.answer4.clicked(this.gx, this.gy) && quizzing) { this.handleAnswerClicks(); }
+    }
+
+    handleAnswerClicks() {
+        let quizzing = true
+        if (!this.quiz1 && !this.quiz2 && !this.quiz3) {
+            quizzing = false;
+            console.log("hi")
+        }
+        if (this.questionSound.clicked(this.gx, this.gy) && quizzing) {
+            this.soundQuestion.play();
+            console.log("hello")
+        } else if (this.answer1Sound.clicked(this.gx, this.gy) && quizzing) {
+            this.soundAnswer1.play();
+        } else if (this.answer2Sound.clicked(this.gx, this.gy) && quizzing) {
+            this.soundAnswer2.play();
+        } else if (this.answer3Sound.clicked(this.gx, this.gy) && quizzing) {
+            this.soundAnswer3.play();
+        } else if (this.answer4Sound.clicked(this.gx, this.gy) && quizzing) {
+            this.soundAnswer4.play();
+        } else if (this.answer1.clicked(this.gx, this.gy) && this.answer1Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) {
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
+            this.handleNextQuizCard("correct");
+        } else if (this.answer1.clicked(this.gx, this.gy) && this.answer1Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
+            this.handleNextQuizCard("incorrect");
+        } else if (this.answer2.clicked(this.gx, this.gy) && this.answer2Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
+            this.handleNextQuizCard("correct");
+        } else if (this.answer2.clicked(this.gx, this.gy) && this.answer2Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
+            this.handleNextQuizCard("incorrect");
+        } else if (this.answer3.clicked(this.gx, this.gy) && this.answer3Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
+            this.handleNextQuizCard("correct");
+        } else if (this.answer3.clicked(this.gx, this.gy) && this.answer3Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
+            this.handleNextQuizCard("incorrect");
+        } else if (this.answer4.clicked(this.gx, this.gy) && this.answer4Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
+            this.handleNextQuizCard("correct");
+        } else if (this.answer4.clicked(this.gx, this.gy) && this.answer4Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
+            this.handleNextQuizCard("incorrect");
+        }
+    }
+
+    handleNextQuizCard(question) {
+
+        if (question === "correct") {
+            let attackArr = ["attack1Right", "attack2Right", "attack3Right", "attack4Right"]
+            this.adventureGuy.startNewAnime(attackArr[Math.floor(Math.random() * attackArr.length)], "idleRight", 1) 
+            this.trainingDummy.startNewAnime("takeHitLeft", "idleLeft", 2)
+        } else {
+            this.adventureGuy.startNewCustomAnime([[7,1],[6,9],[6,2],[6,3],[6,4],[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5]], "idleRight", 8) 
+        }
+
+        this.quizCounter += 1;
+
+        if (this.quiz1 === true && this.quizCounter > 2) {
+            this.quiz1 = false;
+        } else if (this.quiz2 === true && this.quizCounter > 5) {
+            this.quiz2 = false;
+        } else if (this.quiz3 === true && this.quizCounter > 8) {
+            this.quiz3 = false;
+        }
+
+        this.changeQuizCardText();
     }
 
 
@@ -200,39 +293,187 @@ export default class Training {
         this.adventureGuy.animate();
     }
 
-    changeQuizCardText() {
-        this.questionText.text = "Hello"
-        this.answer1Text.text = "Hello"
-        this.answer2Text.text = "Hello"
-        this.answer3Text.text = "Hello"
-        this.answer4Text.text = "Hello"
+    shuffleArr(array) {
+        let currentIndex = array.length,  randomIndex;
+        // While there remain elements to shuffle...
+        while (currentIndex != 0) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+        
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+        return array;
     }
 
-    updateQuizCardComponentsSize() {
-        this.question.width = this.ctx.measureText(this.questionText.text).width + this.ctx.measureText(this.questionText.text).width/4 + 20
-        this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 1.65)
-        this.answer1.width = this.ctx.measureText(this.answer1Text.text).width + this.ctx.measureText(this.answer1Text.text).width/10 + 10
-        this.answer1.x = this.answer1Text.x - 8
-        this.answer2.width = this.ctx.measureText(this.answer2Text.text).width + this.ctx.measureText(this.answer2Text.text).width/10 + 10
-        this.answer2.x = this.answer2Text.x - 8
-        this.answer3.width = this.ctx.measureText(this.answer3Text.text).width + this.ctx.measureText(this.answer3Text.text).width/10 + 10
-        this.answer3.x = this.answer3Text.x - 8
-        this.answer4.width = this.ctx.measureText(this.answer4Text.text).width + this.ctx.measureText(this.answer4Text.text).width/10 + 10
-        this.answer4.x = this.answer4Text.x - 8
+    getAnswerArr() {
+        let returnArr = [this.level1[this.levelCounter].questions[this.quizCounter]["answer"]];
+        if (this.level1[this.levelCounter].questions[this.quizCounter]["japanese"] === "true") {
+            let arr = this.level1[this.levelCounter].english
+            while (returnArr.length < 4) {
+                let el = arr[Math.floor(Math.random()*arr.length)]
+                if (!returnArr.includes(el)) {
+                    returnArr.push(el)
+                }
+            }
+        } else {
+            let arr = this.level1[this.levelCounter].japanese
+            while (returnArr.length < 4) {
+                let el = arr[Math.floor(Math.random()*arr.length)]
+                if (!returnArr.includes(el)) {
+                    returnArr.push(el)
+                }
+            }
+            
+        }
+        return this.shuffleArr(returnArr)
        
     }
 
-    updateQuizCardTextX() {
-        this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 1.65)
-        this.answer1Text.x = (300/3) - (this.ctx.measureText(this.answer1Text.text).width / 1.65)
-        this.answer2Text.x = (300) - (this.ctx.measureText(this.answer2Text.text).width / 1.65)
-        this.answer3Text.x = (300/4) - (this.ctx.measureText(this.answer3Text.text).width / 1.65)
-        this.answer4Text.x = (300) - (this.ctx.measureText(this.answer4Text.text).width / 1.65)
+    changeQuizCardText() {
+        this.questionText.text = this.level1[this.levelCounter].questions[this.quizCounter]["question"]
+        let arr = this.getAnswerArr();
+        this.answer1Text.text = arr[0]
+        this.answer2Text.text = arr[1]
+        this.answer3Text.text = arr[2]
+        this.answer4Text.text = arr[3]
+        for(let i = 0; i < arr.length; i++) {
+            if (arr[i].includes("~")) {
+                arr[i] = arr[i].split("~").join("_")
+            }
+        }
+        this.soundAnswer1.sound.src = this.pathKeysHash[arr[0]]
+        this.soundAnswer2.sound.src = this.pathKeysHash[arr[1]]
+        this.soundAnswer3.sound.src = this.pathKeysHash[arr[2]]
+        this.soundAnswer4.sound.src = this.pathKeysHash[arr[3]]
+        this.soundQuestion.sound.src = this.pathKeysHash[this.level1[this.levelCounter].questions[this.quizCounter]["question"]]
     }
 
+    updateQuizCardFontSize() {
+        this.questionText.width = Math.round(this.getFontSizeToFit(this.questionText.text, this.question.width - 20))
+        if (this.questionText.width > 17) {
+            this.questionText.width = "17px"
+        } else {
+            this.questionText.width = this.questionText.width + "px"
+        }
+
+        this.answer1Text.width = Math.round(this.getFontSizeToFit(this.answer1Text.text, this.answer1.width - 20))
+        if (this.answer1Text.width > 14) {
+            this.answer1Text.width = "14px"
+        } else {
+            this.answer1Text.width = this.answer1Text.width + "px"
+        }
+        this.answer2Text.width = Math.round(this.getFontSizeToFit(this.answer2Text.text, this.answer2.width - 20))
+        if (this.answer2Text.width > 14) {
+            this.answer2Text.width = "14px"
+        } else {
+            this.answer2Text.width = this.answer2Text.width + "px"
+        }
+        this.answer3Text.width = Math.round(this.getFontSizeToFit(this.answer3Text.text, this.answer3.width - 20))
+        if (this.answer3Text.width > 14) {
+            this.answer3Text.width = "14px"
+        } else {
+            this.answer3Text.width = this.answer3Text.width + "px"
+        }
+        this.answer4Text.width = Math.round(this.getFontSizeToFit(this.answer4Text.text, this.answer4.width - 20))
+        if (this.answer4Text.width > 14) {
+            this.answer4Text.width = "14px"
+        } else {
+            this.answer4Text.width = this.answer4Text.width + "px"
+        }
+        this.ctx.font = "14px Ubuntu"
+    }
+
+    updateQuizCardTextX() {
+        let textArrLeft = [this.answer1Text, this.answer3Text]
+        let textArrRight = [this.answer2Text, this.answer4Text]
+        if (Number(this.questionText.width.split('').slice(0,2).join('')) < 17.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 16.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 1.65)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 16.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 15.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 1.85)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 15.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 14.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 2)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 14.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 13.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 2)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 13.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 12.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 2.1)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 12.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 11.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 2.3)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 11.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 10.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 2.5)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 10.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 9.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 2.8)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 9.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 8.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 3)
+        } else if (Number(this.questionText.width.split('').slice(0,2).join('')) < 8.5 && Number(this.questionText.width.split('').slice(0,2).join('')) > 7.5) {
+            this.questionText.x = (300/2) - (this.ctx.measureText(this.questionText.text).width / 3.3)
+        } 
+
+
+        for (let i = 0; i < textArrRight.length; i++) {
+            if (textArrRight[i].width === "14px") {
+                textArrRight[i].x = (300/1.4) - (this.ctx.measureText(textArrRight[i].text).width / 2)
+            } else if (textArrRight[i].width === "13px") {
+                textArrRight[i].x = (300/1.4) - (this.ctx.measureText(textArrRight[i].text).width / 2.1)
+            } else if (textArrRight[i].width === "12px") {
+                textArrRight[i].x = (300/1.4) - (this.ctx.measureText(textArrRight[i].text).width / 2.3)
+            } else if (textArrRight[i].width === "11px") {
+                textArrRight[i].x = (300/1.4) - (this.ctx.measureText(textArrRight[i].text).width / 2.5)
+            } else if (textArrRight[i].width === "10px") {
+                textArrRight[i].x = (300/1.4) - (this.ctx.measureText(textArrRight[i].text).width / 2.8)
+            } else if (textArrRight[i].width === "9px") {
+                textArrRight[i].x = (300/1.4) - (this.ctx.measureText(textArrRight[i].text).width / 3)
+            } else if (textArrRight[i].width === "8px") {
+                textArrRight[i].x = (300/1.4) - (this.ctx.measureText(textArrRight[i].text).width / 3.3)
+            }
+        }
+
+        for (let i = 0; i < textArrLeft.length; i++) {
+            if (textArrLeft[i].width === "14px") {
+                textArrLeft[i].x = (300/3.5) - (this.ctx.measureText(textArrLeft[i].text).width / 2)
+            } else if (textArrLeft[i].width === "13px") {
+                textArrLeft[i].x = (300/3.5) - (this.ctx.measureText(textArrLeft[i].text).width / 2.1)
+            } else if (textArrLeft[i].width === "12px") {
+                textArrLeft[i].x = (300/3.5) - (this.ctx.measureText(textArrLeft[i].text).width / 2.3)
+            } else if (textArrLeft[i].width === "11px") {
+                textArrLeft[i].x = (300/3.5) - (this.ctx.measureText(textArrLeft[i].text).width / 2.5)
+            } else if (textArrLeft[i].width === "10px") {
+                textArrLeft[i].x = (300/3.5) - (this.ctx.measureText(textArrLeft[i].text).width / 2.8)
+            } else if (textArrLeft[i].width === "9px") {
+                textArrLeft[i].x = (300/3.5) - (this.ctx.measureText(textArrLeft[i].text).width / 3)
+            } else if (textArrLeft[i].width === "8px") {
+                textArrLeft[i].x = (300/3.5) - (this.ctx.measureText(textArrLeft[i].text).width / 3.3)
+            }
+        }
+
+    }
+
+    getFontSizeToFit(text, maxWidth) {
+        this.ctx.font = "1px Ubuntu"
+        return maxWidth / this.questionText.ctx.measureText(text).width;
+    }
+
+    updateSoundIconsX() {
+        this.questionSound.x = this.question.x + 8;
+        this.questionSound.y = this.question.y + 6;
+        this.answer1Sound.x = this.answer1.x + 5;
+        this.answer1Sound.y = this.answer1.y + 6;
+        this.answer2Sound.x = this.answer2.x + 5;
+        this.answer2Sound.y = this.answer2.y + 6;
+        this.answer3Sound.x = this.answer3.x + 5;
+        this.answer3Sound.y = this.answer3.y + 6;
+        this.answer4Sound.x = this.answer4.x + 5;
+        this.answer4Sound.y = this.answer4.y + 6;
+    }
+
+    
+
     updateQuizCardComponents() {
+        this.updateQuizCardFontSize();
         this.updateQuizCardTextX();
-        this.updateQuizCardComponentsSize();
+        this.updateSoundIconsX();
         this.question.update();
         this.answer1.update();
         this.answer2.update();
@@ -243,6 +484,15 @@ export default class Training {
         this.answer2Text.update();
         this.answer3Text.update();
         this.answer4Text.update();
+        if (this.level1[this.levelCounter].questions[this.quizCounter]["japanese"] === "true") {
+            this.questionSound.update();
+        } else {
+            this.answer1Sound.update();
+            this.answer2Sound.update();
+            this.answer3Sound.update();
+            this.answer4Sound.update();
+        }
+        
 
     }
 
@@ -252,9 +502,8 @@ export default class Training {
         this.background.update();
         this.spriteAnimation();
         this.updateInitialComponents();
-        if (this.quiz1 === true) { this.updateQuizCardComponents(); }
+        if (this.quiz1 === true || this.quiz2 || this.quiz3) { this.updateQuizCardComponents(); }
         else { this.updateNewCardComponents(); }
-        
 
     }
 

@@ -37,7 +37,7 @@ export let level_info = [
                 'japanese':'かっこいい',
                 'english':'cool',
                 'romanji':'kakkoii',
-                'example_japanese':'あなた は かっこいい です.',
+                'example_japanese':'わたし は かっこいい です.',
                 'example_romanji':'watashi wa kakkoii desu.',
                 'example_english':'I am cool.',
                 'seen':'false'
