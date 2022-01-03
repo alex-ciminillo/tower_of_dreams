@@ -1,6 +1,11 @@
 import TrainingScreen from './../images/trainingScreen.png'
 import Component from './component.js'
 import MainCharacter from './../images/adventure.png'
+import EvilBatSpritesheetReversed from './../images/evilBatSpritesheetReversed.png'
+import EvilSlugSpritesheetReversed from './../images/evilSlugSpritesheetReversed.png'
+import EvilPlantSpritesheetReversed from './../images/evilPlantSpritesheetReversed.png'
+import EvilBeakGuySpritesheetReversed from './../images/evilBeakGuySpritesheetReversed.png'
+import EvilSkullSnakeSpritesheetReversed from './../images/evilSkullSnakeSpritesheetReversed.png'
 import TrainingDummySpriteTransparent from './../images/trainingDummySpriteTransparent.png'
 import TrainingDialogue from './../images/TrainingDialogue.png'
 import TrainingWords from './../images/TrainingWords.png'
@@ -12,6 +17,7 @@ import TrainingButtonsNewMove from './../images/TrainingButtonsNewMove.png'
 import TrainingButtonsNewMoveGreen from './../images/TrainingButtonsNewMoveGreen.png'
 import TrainingButtonsNewMoveRed from './../images/TrainingButtonsNewMoveRed.png'
 import Avatar from './avatar'
+import EvilBat from './evilBat'
 import TrainingDummy from './trainingDummy'
 import HomeButton from './../images/homeButton.png'
 import TowerLevel1 from './../images/towerLevel1.png'
@@ -122,6 +128,8 @@ export default class Tower {
     createSprites() {
         this.adventureGuy = new Avatar(48, 28, MainCharacter, 81, 44, this.ctx, "sprite", 5, 3, 50, 37, "idleRight", 6);
         this.adventureGuy.startNewAnime("runRightFast", "idleRight", -9)
+        this.evilSlug = new (48, 28, MainCharacter, 81, 44, this.ctx, "sprite", 5, 3, 50, 37, "idleRight", 6);
+        
      }
 
     importSounds () {
@@ -148,7 +156,7 @@ export default class Tower {
     }
 
     sendEnemy() {
-        
+
     }
     
 
