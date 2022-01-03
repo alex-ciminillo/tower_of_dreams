@@ -106,7 +106,7 @@ export let level_info = [
                 'japanese': 'false'
             },
             {
-                'question':'is/am/are',
+                'question':'am/is/are',
                 'answer':'は~です',
                 'seen':'false',
                 'correct': 0,
@@ -128,14 +128,14 @@ export let level_info = [
             },
             {
                 'question':'は~です',
-                'answer':'is/am/are',
+                'answer':'am/is/are',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
             },
             {
                 'question':'あなた',
-                'answer':'You',
+                'answer':'you',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
@@ -184,49 +184,49 @@ export let level_info = [
             },
             {
                 'question':'かっこいい',
-                'answer':'Cool',
+                'answer':'cool',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
             },
             {
                 'question':'きれい',
-                'answer':'Pretty',
+                'answer':'pretty',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
             },
             {
                 'question':'ほん',
-                'answer':'Book',
+                'answer':'book',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
             },
             {
                 'question':'が~あります',
-                'answer':'Have',
+                'answer':'have',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
             },
             {
                 'question':'くるま',
-                'answer':'Car',
+                'answer':'car',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
             },
             {
                 'question':'これ',
-                'answer':'This',
+                'answer':'this',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'
             },
             {
                 'question':'それ',
-                'answer':'That',
+                'answer':'that',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'true'

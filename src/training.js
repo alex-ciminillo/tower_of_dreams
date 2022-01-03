@@ -9,8 +9,11 @@ import TalkingBox from './../images/talkingBox.png'
 import Sound from './sound'
 import SoundImage from './../images/soundImage.png'
 import TrainingButtonsNewMove from './../images/TrainingButtonsNewMove.png'
+import TrainingButtonsNewMoveGreen from './../images/TrainingButtonsNewMoveGreen.png'
+import TrainingButtonsNewMoveRed from './../images/TrainingButtonsNewMoveRed.png'
 import Avatar from './avatar'
 import TrainingDummy from './trainingDummy'
+import HomeButton from './../images/homeButton.png'
 
 
 
@@ -23,14 +26,19 @@ export default class Training {
     constructor(ctx, level, word, canvas) {
         this.ctx = ctx;
         this.canvas = canvas;
-        this.currentImports =['./soundImage.png', './talkingBox.png', './TrainingWords.png', './TrainingDialogue.png', './trainingScreen.png', './component.js', './adventure.png', './trainingDummySpriteTransparent.png', './TrainingButtonsNewMove.png']
+        this.currentImports =['./homeButton.png', './soundImage.png', './talkingBox.png', './TrainingWords.png', './TrainingDialogue.png', './trainingScreen.png', './component.js', './adventure.png', './trainingDummySpriteTransparent.png', './TrainingButtonsNewMove.png']
         this.wordCounter = word;
         this.levelCounter = level;
         this.quizCounter = 0;
+        this.goHome = false;
+        this.towerTime = false;
         this.quiz1 = false;
         this.quiz2 = false;
         this.quiz3 = false;
         this.complete = false;
+        this.playedSound = false;
+        this.playedQuizSound = false;
+        this.towerTime = false;
         this.questionsArr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
         this.createInitialComponents();
     }
@@ -49,6 +57,10 @@ export default class Training {
     createTexts() {
         this.newMoveText = new Component("9px", "PixelFont", "Black", 152.68, 16.54, this.ctx, "text");
         this.newMoveText.text = "New Move!"
+        this.letsPracticeText = new Component("9px", "PixelFont", "Black", 152.68, 16.54, this.ctx, "text");
+        this.letsPracticeText.text = "Let's Practice!"
+        this.imReadyText = new Component("9px", "PixelFont", "Black", 152.68, 16.54, this.ctx, "text");
+        this.imReadyText.text = "I'm Ready!"
         this.newWordJapanese = new Component("9px", "Ubuntu", "Black", 49.18, 90.71, this.ctx, "text");
         this.newWordRomanji = new Component("9px", "Ubuntu", "Black", 49.18, 105.63, this.ctx, "text");
         this.newWordEnglish = new Component("9px", "Ubuntu", "Black", 49.18, 121.60, this.ctx, "text");
@@ -57,6 +69,10 @@ export default class Training {
         this.newWordEnglishSent = new Component("9px", "Ubuntu", "Black", 136.32, 121.60, this.ctx, "text");
         this.nextWordText = new Component("11px", "PixelFont", "Black", 246.22, 138.40, this.ctx, "text");
         this.nextWordText.text = "Next"
+        this.testAllText = new Component("11px", "PixelFont", "Black", 228.22, 138.40, this.ctx, "text");
+        this.testAllText.text = "Test All"
+        this.toTheTowerText = new Component("11px", "PixelFont", "Black", 189.22, 138.40, this.ctx, "text");
+        this.toTheTowerText.text = "To the Tower!"
         this.previousWordText = new Component("11px", "PixelFont", "Black", 26.62, 138.40, this.ctx, "text");
         this.previousWordText.text = "Previous"
         this.questionText = new Component("17px", "Ubuntu", "Black", 125.18, 90.21, this.ctx, "text");
@@ -78,6 +94,8 @@ export default class Training {
         this.dialogueBox = new Component(295.52722245267773, 87.06392648914046, TrainingDialogue, 2.431964063489289, 61.252678918476605, this.ctx, "image")
         this.newWordBox = new Component(259.90, 68.04785297828089, TrainingWords, 21.710000000000008, 71.74678918476592, this.ctx, "image")
         this.newMoveTalkingBox = new Component(64.97, 16.374642163046813, TalkingBox, 145.69837303233416, 3.3146421630468135, this.ctx, "image")
+        this.letsPracticeTalkingBox = new Component(78.97, 16.374642163046813, TalkingBox, 145.69837303233416, 3.3146421630468135, this.ctx, "image")
+        this.imReadyTalkingBox = new Component(59.97, 16.374642163046813, TalkingBox, 145.69837303233416, 3.3146421630468135, this.ctx, "image")
         this.nextWord = new Component(43.13, 13.54, TrainingButtonsNewMove, 238.59000833680702, 125.15168263494704, this.ctx, "image")
         this.previousWord = new Component(62.91, 13.54, TrainingButtonsNewMove, 18.939999999999998, 125.15168263494704, this.ctx, "image")
         this.wordSound = new Component(11.11, 9.72, SoundImage, 34.50685146588856, 82.23874760475795, this.ctx, "image")
@@ -87,7 +105,11 @@ export default class Training {
         this.answer3Sound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image") 
         this.answer4Sound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image")
         this.questionSound = new Component(11.11, 9.72, SoundImage, 122.09685146588856, 82.23874760475795, this.ctx, "image")    
-        this.testAll = new Component(83.13, 13.54, TrainingButtonsNewMove, 238.59000833680702, 125.15168263494704, this.ctx, "image")
+        this.testAll = new Component(62.91, 13.54, TrainingButtonsNewMove, 218.59000833680702, 125.15168263494704, this.ctx, "image")
+        this.toTheTower = new Component(101.91, 13.54, TrainingButtonsNewMove, 179.59000833680702, 125.15168263494704, this.ctx, "image")
+        this.correctAnswer = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMoveGreen, 17.8670996074987, 95.32717036022932, this.ctx, "image")
+        this.incorrectAnswer = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMoveRed, 17.8670996074987, 95.32717036022932, this.ctx, "image")
+        this.homeButton = new Component(18.03, 14.30, HomeButton, 5.366953700419387, 3.8307801877630308, this.ctx, "image")
     }
 
     createSounds() {
@@ -137,6 +159,7 @@ export default class Training {
         }
         this.soundWord.sound.src = this.pathKeysHash[nextWord]
         this.soundSent.sound.src = this.pathKeysHash[this.level1[this.levelCounter].words[this.wordCounter]["example_japanese"].slice(0,-1)]
+        this.playedSound = false;
     }
 
     updateInitialComponents() {
@@ -144,12 +167,20 @@ export default class Training {
             this.initialComponentArr[i].update();
         }
         this.dialogueBox.update();
+        this.homeButton.update();
     }
 
     updateNewCardComponents() {
         this.newWordBox.update();
-        this.newMoveTalkingBox.update();
-        this.newMoveText.update();
+        if (this.level1[this.levelCounter].questions.length - 1 === this.quizCounter) {
+            this.imReadyTalkingBox.update();
+            this.imReadyText.update();
+        } else {
+            this.newMoveTalkingBox.update();
+            this.newMoveText.update();
+        }
+        
+        
         this.newWordEnglish.update();
         this.newWordJapanese.update();
         this.newWordRomanji.update();
@@ -161,11 +192,21 @@ export default class Training {
         if (this.wordCounter < this.level1[this.levelCounter].words.length - 1) {
             this.nextWord.update();
             this.nextWordText.update();
+        } else if (this.level1[this.levelCounter].questions.length - 1 === this.quizCounter) {
+            this.toTheTower.update();
+            this.toTheTowerText.update();
+        } else {
+            this.testAll.update();
+            this.testAllText.update();
         }
         
         if (this.wordCounter > 0) { 
             this.previousWord.update();
             this.previousWordText.update(); 
+        }
+        if (this.playedSound === false) {
+            this.soundWord.play();
+            this.playedSound = true;
         }
     }
 
@@ -181,9 +222,8 @@ export default class Training {
         } else if (this.wordCounter === 6 && this.level1[this.levelCounter].words[this.wordCounter]["seen"] === "false") {
             this.quiz2 = true;
             this.level1[this.levelCounter].words[this.wordCounter]["seen"] = "true"
-        } else if (this.wordCounter === 10 && this.level1[this.levelCounter].words[this.wordCounter]["seen"] === "false") {
+        } else if (this.wordCounter === 10) {
             this.quiz3 = true;
-            this.level1[this.levelCounter].words[this.wordCounter]["seen"] = "true"
         }
     }
 
@@ -202,8 +242,11 @@ export default class Training {
     handleNextAndPreviousButtonClicks() {
         let quizzing = false;
         if (this.quiz1 || this.quiz2 || this.quiz3) { quizzing = true; }
-        if (this.nextWord.clicked(this.gx, this.gy) && this.wordCounter < this.level1[this.levelCounter].words.length - 1 && quizzing === false) { this.changeToNewCard(1) }
+        if (this.nextWord.clicked(this.gx, this.gy) && this.wordCounter < this.level1[this.levelCounter].words.length - 1 && quizzing === false && this.level1[this.levelCounter].questions.length - 1 !== this.quizCounter) { this.changeToNewCard(1) }
         else if (this.previousWord.clicked(this.gx, this.gy) && this.wordCounter > 0 && quizzing === false) { this.changeToNewCard(-1) }
+        else if (this.testAll.clicked(this.gx, this.gy) && quizzing === false && this.level1[this.levelCounter].questions.length - 1 !== this.quizCounter) { this.changeToNewCard(1) }
+        else if (this.toTheTower.clicked(this.gx, this.gy) && this.level1[this.levelCounter].questions.length - 1 === this.quizCounter && this.wordCounter === this.level1[this.levelCounter].words.length - 1) { this.towerTime = true; }
+        else if (this.nextWord.clicked(this.gx, this.gy) && this.wordCounter < this.level1[this.levelCounter].words.length - 1) { this.changeToNewCard(1) }
     }
 
     handleMouseUpClicks() {
@@ -212,19 +255,18 @@ export default class Training {
         if (this.wordSound.clicked(this.gx, this.gy) && !quizzing) { this.soundWord.play() }
         else if (this.sentSound.clicked(this.gx, this.gy) && !quizzing) { this.soundSent.play() }
         else if (this.questionSound.clicked(this.gx, this.gy) && quizzing) { this.soundQuestion.play() }
-        else if (this.nextWord.clicked(this.gx, this.gy) && !quizzing || this.previousWord.clicked(this.gx, this.gy) && !quizzing) { this.handleNextAndPreviousButtonClicks(); } 
+        else if (this.nextWord.clicked(this.gx, this.gy) && !quizzing || this.previousWord.clicked(this.gx, this.gy) && !quizzing|| this.testAll.clicked(this.gx, this.gy) && !quizzing ) { this.handleNextAndPreviousButtonClicks(); } 
         else if (this.answer1.clicked(this.gx, this.gy) && quizzing || this.answer2.clicked(this.gx, this.gy) && quizzing || this.answer3.clicked(this.gx, this.gy) && quizzing || this.answer4.clicked(this.gx, this.gy) && quizzing) { this.handleAnswerClicks(); }
+        else if (this.homeButton.clicked(this.gx, this.gy)) { this.goHome = true; }
     }
 
     handleAnswerClicks() {
         let quizzing = true
         if (!this.quiz1 && !this.quiz2 && !this.quiz3) {
             quizzing = false;
-            console.log("hi")
         }
         if (this.questionSound.clicked(this.gx, this.gy) && quizzing) {
             this.soundQuestion.play();
-            console.log("hello")
         } else if (this.answer1Sound.clicked(this.gx, this.gy) && quizzing) {
             this.soundAnswer1.play();
         } else if (this.answer2Sound.clicked(this.gx, this.gy) && quizzing) {
@@ -234,53 +276,136 @@ export default class Training {
         } else if (this.answer4Sound.clicked(this.gx, this.gy) && quizzing) {
             this.soundAnswer4.play();
         } else if (this.answer1.clicked(this.gx, this.gy) && this.answer1Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) {
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
-            this.handleNextQuizCard("correct");
+            this.handleNextQuizCard("correct", 1);
         } else if (this.answer1.clicked(this.gx, this.gy) && this.answer1Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
-            this.handleNextQuizCard("incorrect");
+            this.handleNextQuizCard("incorrect", 1);
         } else if (this.answer2.clicked(this.gx, this.gy) && this.answer2Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
-            this.handleNextQuizCard("correct");
+            this.handleNextQuizCard("correct", 2);
         } else if (this.answer2.clicked(this.gx, this.gy) && this.answer2Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
-            this.handleNextQuizCard("incorrect");
+            this.handleNextQuizCard("incorrect", 2);
         } else if (this.answer3.clicked(this.gx, this.gy) && this.answer3Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
-            this.handleNextQuizCard("correct");
+            this.handleNextQuizCard("correct", 3);
         } else if (this.answer3.clicked(this.gx, this.gy) && this.answer3Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
-            this.handleNextQuizCard("incorrect");
+            this.handleNextQuizCard("incorrect", 3);
         } else if (this.answer4.clicked(this.gx, this.gy) && this.answer4Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
-            this.handleNextQuizCard("correct");
+            this.handleNextQuizCard("correct", 4);
         } else if (this.answer4.clicked(this.gx, this.gy) && this.answer4Text.text !== this.level1[this.levelCounter].questions[this.quizCounter]["answer"] && quizzing) { 
-            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] -= 1;
-            this.handleNextQuizCard("incorrect");
+            this.handleNextQuizCard("incorrect", 4);
         }
     }
 
-    handleNextQuizCard(question) {
+    getChoice(choice) {
+        if (choice === 1) {
+            return this.answer1
+        } else if (choice === 2) {
+            return this.answer2
+        } else if (choice === 3) {
+            return this.answer3
+        } else {
+            return this.answer4
+        }
+    }
 
+    playAnswerSound(answer) {
+        if (answer === this.answer1) {
+            this.soundPlaying = this.soundAnswer1
+            this.soundAnswer1.play();
+        } else if (answer === this.answer2) {
+            this.soundPlaying = this.soundAnswer2
+            this.soundAnswer2.play();
+        } else if (answer === this.answer3) {
+            this.soundPlaying = this.soundAnswer3
+            this.soundAnswer3.play();
+        } else if (answer === this.answer4) {
+            this.soundPlaying = this.soundAnswer4
+            this.soundAnswer4.play();
+        }
+    }
+
+    handleNextQuizCard(question, choice) {
+        if (this.level1[this.levelCounter].questions[this.quizCounter]["japanese"] === "true") {
+            this.soundQuestion.play();
+        }
+        choice = this.getChoice(choice)
+        this.showAnswer = true;
+        let timer = 1000;
         if (question === "correct") {
+            this.playAnswerSound(choice);
+            this.setCorrectIncorrectAnswerPos(choice, choice);
+            timer = 50;
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] += 1;
+            if (this.level1[this.levelCounter].questions[this.quizCounter]["correct"] < 1) {
+                // this.level1[this.levelCounter].questions.push(this.level1[this.levelCounter].questions[this.quizCounter])
+            }
             let attackArr = ["attack1Right", "attack2Right", "attack3Right", "attack4Right"]
             this.adventureGuy.startNewAnime(attackArr[Math.floor(Math.random() * attackArr.length)], "idleRight", 1) 
             this.trainingDummy.startNewAnime("takeHitLeft", "idleLeft", 2)
+            
         } else {
+            let answer = this.findCorrectAnswer();
+            this.playAnswerSound(answer);
+            this.setCorrectIncorrectAnswerPos(answer, choice);
+            timer = 2000;
+            this.level1[this.levelCounter].questions[this.quizCounter]["correct"] = -1;
+            // this.level1[this.levelCounter].questions.push(this.level1[this.levelCounter].questions[this.quizCounter])
             this.adventureGuy.startNewCustomAnime([[7,1],[6,9],[6,2],[6,3],[6,4],[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5]], "idleRight", 8) 
         }
 
-        this.quizCounter += 1;
+        this.pauseQuiz(timer);
 
-        if (this.quiz1 === true && this.quizCounter > 2) {
-            this.quiz1 = false;
-        } else if (this.quiz2 === true && this.quizCounter > 5) {
-            this.quiz2 = false;
-        } else if (this.quiz3 === true && this.quizCounter > 8) {
-            this.quiz3 = false;
+    }
+
+    pauseQuiz(timer) {
+
+        setTimeout(()=>{
+            // if (!this.soundQuestion.sound.paused || !this.soundPlaying.sound.paused) {
+            //     this.pauseQuiz(timer);
+            // } else {
+                this.showAnswer = false;
+                console.log(this.level1[this.levelCounter].questions.length)
+                console.log(this.quizCounter)
+                if (this.level1[this.levelCounter].questions.length - 1 === this.quizCounter) {
+                    this.quiz3 = false;
+                } else {
+                    this.quizCounter += 1;
+                }
+                
+                if (this.quiz1 === true && this.quizCounter > 2) {
+                    this.quiz1 = false;
+                } else if (this.quiz2 === true && this.quizCounter > 8) {
+                    this.quiz2 = false;
+                } 
+
+                this.changeQuizCardText();
+                this.playedQuizSound = false;
+            // }
+            
+        }, 1)
+
+    }
+
+    setCorrectIncorrectAnswerPos(answer, choice) {
+        this.correctAnswer.x = answer.x;
+        this.correctAnswer.y = answer.y;
+        this.correctAnswer.width = answer.width;
+        this.correctAnswer.height = answer.height;
+        this.incorrectAnswer.x = choice.x;
+        this.incorrectAnswer.y = choice.y;
+        this.incorrectAnswer.width = choice.width;
+        this.incorrectAnswer.height = choice.height;
+    }
+
+    findCorrectAnswer() {
+        if (this.answer1Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"]) {
+            return this.answer1
+        } else if (this.answer2Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"]) {
+            return this.answer2
+        } else if (this.answer3Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"]) {
+            return this.answer3
+        } else if (this.answer4Text.text === this.level1[this.levelCounter].questions[this.quizCounter]["answer"]) {
+            return this.answer4
         }
 
-        this.changeQuizCardText();
     }
 
 
@@ -348,7 +473,12 @@ export default class Training {
         this.soundAnswer2.sound.src = this.pathKeysHash[arr[1]]
         this.soundAnswer3.sound.src = this.pathKeysHash[arr[2]]
         this.soundAnswer4.sound.src = this.pathKeysHash[arr[3]]
-        this.soundQuestion.sound.src = this.pathKeysHash[this.level1[this.levelCounter].questions[this.quizCounter]["question"]]
+        if (this.level1[this.levelCounter].questions[this.quizCounter]["question"].includes("~")) {
+            this.soundQuestion.sound.src = this.pathKeysHash[this.level1[this.levelCounter].questions[this.quizCounter]["question"].split("~").join("_")]
+        } else {
+            this.soundQuestion.sound.src = this.pathKeysHash[this.level1[this.levelCounter].questions[this.quizCounter]["question"]]
+        }
+        
     }
 
     updateQuizCardFontSize() {
@@ -471,6 +601,10 @@ export default class Training {
     
 
     updateQuizCardComponents() {
+        if (this.playedQuizSound === false && this.level1[this.levelCounter].questions[this.quizCounter]["japanese"] === "true") {
+            this.soundQuestion.play();
+            this.playedQuizSound = true;
+        }
         this.updateQuizCardFontSize();
         this.updateQuizCardTextX();
         this.updateSoundIconsX();
@@ -479,6 +613,10 @@ export default class Training {
         this.answer2.update();
         this.answer3.update();
         this.answer4.update();
+        if (this.showAnswer === true) {
+            this.incorrectAnswer.update();
+            this.correctAnswer.update();
+        }
         this.questionText.update();
         this.answer1Text.update();
         this.answer2Text.update();
@@ -492,6 +630,8 @@ export default class Training {
             this.answer3Sound.update();
             this.answer4Sound.update();
         }
+        this.letsPracticeTalkingBox.update();
+        this.letsPracticeText.update();
         
 
     }

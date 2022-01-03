@@ -95,6 +95,8 @@ export default class TowerOfDreams {
 
     trainingClick(e) {
         this.training.click(e);
+        if (this.training.goHome === true) { this.currentScreen = "Home" }
+        else if (this.training.towerTime === true) { this.currentScreen = "Tower" }
     }
 
     trainingHover(e) {
