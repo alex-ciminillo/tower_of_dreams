@@ -21,18 +21,21 @@ export default class Component {
 
 
     update = (a) => {
-        if (this.type == "text") {
+        if (this.type === "text") {
             this.ctx.font = this.width + " " + this.height;
             this.ctx.fillStyle = this.color;
             this.ctx.fillText(this.text, this.x, this.y);
-        } else if (this.type == "image") {
+        } else if (this.type === "image" || this.type === "background") {
             this.image = new Image();
             this.image.src = this.color;
             this.ctx.drawImage(this.image,
                 this.x,
                 this.y,
                 this.width, this.height);
-        } else if (this.type == "sprite") {
+                if (this.type === "background") {
+                    this.ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
+                }
+        } else if (this.type === "sprite") {
             this.image = new Image();
             this.image.src = this.color;
             this.ctx.drawImage(this.image,
@@ -60,7 +63,12 @@ export default class Component {
 
     newPos = (a) => {
         this.x += this.speedX;
-        this.y += this.speedY;        
+        this.y += this.speedY;  
+        if (this.type === "background") {
+            if (this.x === -(this.width)) {
+                this.x = 0;
+            }
+        }      
     }  
 
     clicked = (gx, gy) => {

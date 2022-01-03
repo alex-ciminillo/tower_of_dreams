@@ -5,6 +5,7 @@ export let level_info = [
         'type': 'Vocab',
         'english':['I','am/is/are','you','cool','pretty','book','have','car','this','that'],
         'japanese':['わたし','は~です','あなた','かっこいい','きれい','ほん','が~あります','くるま','これ','それ'],
+        'japanese_sent':['わたし は さら です','わたし は さら です','あなた は とむ です','わたし は かっこいい です','あなた は きれい です','わたし は ほん が あります','あなた は くるま が あります','これ は ほん です','それ は くるま です','ほん です'],
         'words': [
             {
                 'japanese':'わたし',
@@ -234,6 +235,149 @@ export let level_info = [
             {
                 'question':'That',
                 'answer':'それ',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            
+        ],
+        'tower': [
+            {
+                'question':'That',
+                'answer':'それ',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'Have',
+                'answer':'が~あります',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'am/is/are',
+                'answer':'は~です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'I',
+                'answer':'わたし',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'You',
+                'answer':'あなた',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'Cool',
+                'answer':'かっこいい',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'Pretty',
+                'answer':'きれい',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'Book',
+                'answer':'ほん',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'Car',
+                'answer':'くるま',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'This',
+                'answer':'これ',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'You have a car',
+                'answer':'あなた は くるま が あります',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'This is a book',
+                'answer':'これ は ほん です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'I am Sara',
+                'answer':'わたし は さら です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'That is a car',
+                'answer':'それ は くるま です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'I have a book',
+                'answer':'わたし は ほん が あります',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'You are pretty',
+                'answer':'あなた は きれい です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'It is a book',
+                'answer':'ほん です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'I am cool',
+                'answer':'わたし は かっこいい です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'You are Tom',
+                'answer':'あなた は とむ です',
+                'seen':'false',
+                'correct': 0,
+                'japanese': 'false'
+            },
+            {
+                'question':'I am Sara',
+                'answer':'わたし は さら です',
                 'seen':'false',
                 'correct': 0,
                 'japanese': 'false'

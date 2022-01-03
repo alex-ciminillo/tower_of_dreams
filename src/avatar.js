@@ -29,6 +29,7 @@ export default class Avatar extends Component {
             else if (this.anime === "attack3Right") { this.spriteAnimation(5, 7, 8, 13, 1); }
             else if (this.anime === "attack4Right") { this.spriteAnimation(2, 4, 8, 14, 1); }
             else if (this.anime === "takeHitRight") { this.spriteAnimation(3, 12, 10, 8, 1); }
+            else if (this.anime === "runRightFast") { this.spriteAnimation(1, 6, 5, 1, 1); }
         } else {
             this.customAnime(this.customArr);
         }
