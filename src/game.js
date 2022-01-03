@@ -4,7 +4,7 @@ import Home from './home.js'
 import Component from "./component"
 import EditScreen from "./editScreen"
 import EventListener from './eventListener.js'
-
+import Tower from './tower.js'
 import Training from './training.js'
 
 
@@ -19,6 +19,7 @@ export default class TowerOfDreams {
         this.ctx.scale(4,4)
         this.ctx2 = canvas2.getContext("2d");
         this.ctx2.scale(4,4)
+        this.tower = new Tower(this.ctx, 0, 0, this.canvas)
         this.dimensions = { width: canvas.width, height: canvas.height };
         this.title = new Title(this.canvas, this.ctx, this.dimensions);
         this.blackScreen = new BlackScreen(this.canvas, this.ctx, this.dimensions);
@@ -41,9 +42,9 @@ export default class TowerOfDreams {
         
         this.fadeScreen = false;
         
-        //test code for training screen
-        this.currentScreen = "Training"
-        //end test code for training
+        //test code for tower screen
+        this.currentScreen = "Tower"
+        //end test code for tower
     }
 
     registerEvents() {
@@ -79,6 +80,7 @@ export default class TowerOfDreams {
         if (this.currentScreen === "Title") { this.titleHover(e) }
         else if (this.currentScreen === "Home") { this.homeHover(e) }
         else if (this.currentScreen === "Training") { this.trainingHover(e) }
+        else if (this.currentScreen === "Tower") { this.towerHover(e) }
     }
 
     click(e) {
@@ -88,15 +90,29 @@ export default class TowerOfDreams {
                 this.editScreen.saveClicks(this.gx, this.gy, e);
             } else {
                 if (this.currentScreen === "Title") { this.titleClick(e) }
-                if (this.currentScreen === "Home") { this.homeClick(e) }
-                if (this.currentScreen === "Training") { this.trainingClick(e) }
+                else if (this.currentScreen === "Home") { this.homeClick(e) }
+                else if (this.currentScreen === "Training") { this.trainingClick(e) }
+                else if (this.currentScreen === "Tower") { this.towerClick(e) }
             }
+    }
+
+    towerClick(e) {
+        this.tower.click(e)
+    }
+
+    towerHover(e) {
+        this.tower.hover(e);
     }
 
     trainingClick(e) {
         this.training.click(e);
-        if (this.training.goHome === true) { this.currentScreen = "Home" }
-        else if (this.training.towerTime === true) { this.currentScreen = "Tower" }
+        if (this.training.goHome === true) { 
+            this.currentScreen = "Home";
+            this.training.goHome = false;
+        } else if (this.training.towerTime === true) { 
+            this.currentScreen = "Tower" 
+            this.towerTime = false;
+        }
     }
 
     trainingHover(e) {
@@ -122,11 +138,17 @@ export default class TowerOfDreams {
 
     homeClick(e) {
         this.home.click(e)
-        if (this.home.beginTraining === true) { this.beginTraining(); }
+        if (this.home.beginTraining === true) { 
+            this.beginTraining(); 
+        } else if (this.home.beginTower === true) {
+            this.currentScreen = "Tower"
+            this.home.beginTower = false;
+        }
     }
 
     beginTraining() {
         this.currentScreen = "Training"
+        this.home.beginTraining = false;
     }
 
     beginGame() {
@@ -191,17 +213,16 @@ export default class TowerOfDreams {
         
         if (this.fadeScreen) { this.fadeOut() }
 
-        // // real code
-        // if (this.currentScreen === "Title") { this.title.animate(); } 
-        // else if (this.currentScreen === "Black Screen") { this.blackScreen.animate(); } 
-        // else if (this.currentScreen === "Home") { this.home.animate(); }
-        // else if (this.currentScreen === "Training") { this.training.animate(this.gx, this.gy); }
-        // this.ctx.globalAlpha = this.alpha;
-        // // real code end
+        // real code
+        if (this.currentScreen === "Title") { this.title.animate(); } 
+        else if (this.currentScreen === "Black Screen") { this.blackScreen.animate(); } 
+        else if (this.currentScreen === "Home") { this.home.animate(); }
+        else if (this.currentScreen === "Training") { this.training.animate(this.gx, this.gy); }
+        else if (this.currentScreen === "Tower") { this.tower.animate(this.gx, this.gy); }
 
-        // test code to show training
-        this.training.animate(this.gx, this.gy);
-        // test code end
+        this.ctx.globalAlpha = this.alpha;
+        // real code end
+
         if (this.showEditButton === true) { this.editButton.update(); }
         if (this.editMode === true) { this.editScreen.animate(this.gx, this.gy, this.gx2, this.gy2) }
         

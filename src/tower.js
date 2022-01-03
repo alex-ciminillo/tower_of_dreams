@@ -14,6 +14,7 @@ import TrainingButtonsNewMoveRed from './../images/TrainingButtonsNewMoveRed.png
 import Avatar from './avatar'
 import TrainingDummy from './trainingDummy'
 import HomeButton from './../images/homeButton.png'
+import TowerLevel1 from './../images/towerLevel1.png'
 
 
 
@@ -22,7 +23,7 @@ import HomeButton from './../images/homeButton.png'
 
 
 
-export default class Training {
+export default class Tower {
     constructor(ctx, level, word, canvas) {
         this.ctx = ctx;
         this.canvas = canvas;
@@ -32,7 +33,7 @@ export default class Training {
         this.quizCounter = 0;
         this.goHome = false;
         this.towerTime = false;
-        this.quiz1 = false;
+        this.quiz1 = true;
         this.quiz2 = false;
         this.quiz3 = false;
         this.complete = false;
@@ -55,12 +56,6 @@ export default class Training {
     }
 
     createTexts() {
-        this.newMoveText = new Component("9px", "PixelFont", "Black", 152.68, 16.54, this.ctx, "text");
-        this.newMoveText.text = "New Move!"
-        this.letsPracticeText = new Component("9px", "PixelFont", "Black", 152.68, 16.54, this.ctx, "text");
-        this.letsPracticeText.text = "Let's Practice!"
-        this.imReadyText = new Component("9px", "PixelFont", "Black", 152.68, 16.54, this.ctx, "text");
-        this.imReadyText.text = "I'm Ready!"
         this.newWordJapanese = new Component("9px", "Ubuntu", "Black", 49.18, 90.71, this.ctx, "text");
         this.newWordRomanji = new Component("9px", "Ubuntu", "Black", 49.18, 105.63, this.ctx, "text");
         this.newWordEnglish = new Component("9px", "Ubuntu", "Black", 49.18, 121.60, this.ctx, "text");
@@ -75,27 +70,22 @@ export default class Training {
         this.toTheTowerText.text = "To the Tower!"
         this.previousWordText = new Component("11px", "PixelFont", "Black", 26.62, 138.40, this.ctx, "text");
         this.previousWordText.text = "Previous"
-        this.questionText = new Component("17px", "Ubuntu", "Black", 125.18, 90.21, this.ctx, "text");
-        this.answer1Text = new Component("14px", "Ubuntu", "Black", 53.18, 111.2, this.ctx, "text");
-        this.answer2Text = new Component("14px", "Ubuntu", "Black", 207.18, 111.2, this.ctx, "text");
-        this.answer3Text = new Component("14px", "Ubuntu", "Black", 53.18, 133.71, this.ctx, "text");
-        this.answer4Text = new Component("14px", "Ubuntu", "Black", 207.18, 133.71, this.ctx, "text");
+        this.questionText = new Component("17px", "Ubuntu", "Black", 125.18, 100.21, this.ctx, "text");
+        this.answer1Text = new Component("14px", "Ubuntu", "Black", 53.18, 121.2, this.ctx, "text");
+        this.answer2Text = new Component("14px", "Ubuntu", "Black", 207.18, 121.2, this.ctx, "text");
+        this.answer3Text = new Component("14px", "Ubuntu", "Black", 53.18, 143.71, this.ctx, "text");
+        this.answer4Text = new Component("14px", "Ubuntu", "Black", 207.18, 143.71, this.ctx, "text");
         
     }
 
     createImages() {
         this.initialComponentArr = []
-        this.answer4 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 117.50781894412596, this.ctx, "image")
-        this.answer2 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 95.32717036022932, this.ctx, "image")
-        this.answer1 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 17.8670996074987, 95.32717036022932, this.ctx, "image")
-        this.answer3 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 17.8670996074987, 117.92282963977067, this.ctx, "image")
-        this.question = new Component(211.25367496500422, 20.950000000000003, TrainingWords, 45.40342464249443, 72.74, this.ctx, "image")
-        this.background = new Component(300, 150, TrainingScreen, 0, 0, this.ctx, "image")
-        this.dialogueBox = new Component(295.52722245267773, 87.06392648914046, TrainingDialogue, 2.431964063489289, 61.252678918476605, this.ctx, "image")
-        this.newWordBox = new Component(259.90, 68.04785297828089, TrainingWords, 21.710000000000008, 71.74678918476592, this.ctx, "image")
-        this.newMoveTalkingBox = new Component(64.97, 16.374642163046813, TalkingBox, 145.69837303233416, 3.3146421630468135, this.ctx, "image")
-        this.letsPracticeTalkingBox = new Component(78.97, 16.374642163046813, TalkingBox, 145.69837303233416, 3.3146421630468135, this.ctx, "image")
-        this.imReadyTalkingBox = new Component(59.97, 16.374642163046813, TalkingBox, 145.69837303233416, 3.3146421630468135, this.ctx, "image")
+        this.background = new Component(900, 100, TowerLevel1, 0, 0, this.ctx, "background")
+        this.answer4 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 127.50781894412596, this.ctx, "image")
+        this.answer2 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 105.32717036022932, this.ctx, "image")
+        this.answer1 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 17.8670996074987, 105.32717036022932, this.ctx, "image")
+        this.answer3 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 17.8670996074987, 127.92282963977067, this.ctx, "image")
+        this.question = new Component(211.25367496500422, 20.950000000000003, TrainingWords, 45.40342464249443, 82.74, this.ctx, "image")
         this.nextWord = new Component(43.13, 13.54, TrainingButtonsNewMove, 238.59000833680702, 125.15168263494704, this.ctx, "image")
         this.previousWord = new Component(62.91, 13.54, TrainingButtonsNewMove, 18.939999999999998, 125.15168263494704, this.ctx, "image")
         this.wordSound = new Component(11.11, 9.72, SoundImage, 34.50685146588856, 82.23874760475795, this.ctx, "image")
@@ -123,9 +113,9 @@ export default class Training {
     }
 
     createSprites() {
-        this.adventureGuy = new Avatar(115, 70, MainCharacter, 81, 5, this.ctx, "sprite", 5, 3, 50, 37, "idleRight", 6);
-        this.trainingDummy = new TrainingDummy(36.15, 47.3, TrainingDummySpriteTransparent, 174.23, 24.01, this.ctx, "sprite", 0, 0, 185, 235, "idleLeft", 2);
-    }
+        this.adventureGuy = new Avatar(50, 30, MainCharacter, 81, 23, this.ctx, "sprite", 5, 3, 50, 37, "idleRight", 6);
+        this.adventureGuy.startNewAnime("runRight", "idleRight", -9)
+     }
 
     importSounds () {
         const path = require.context("./../voices", false, /\.mp3$/)
@@ -166,7 +156,6 @@ export default class Training {
         for (let i = 0; i < this.initialComponentArr.length; i++) {
             this.initialComponentArr[i].update();
         }
-        this.dialogueBox.update();
         this.homeButton.update();
     }
 
@@ -212,8 +201,6 @@ export default class Training {
 
 
     click(e) {
-        this.clickGX = this.gx;
-        this.clickGY = this.gy;
         if (e.type === "mouseup") { this.handleMouseUpClicks(); }
     }
 
@@ -247,11 +234,7 @@ export default class Training {
         if (this.nextWord.clicked(this.gx, this.gy) && this.wordCounter < this.level1[this.levelCounter].words.length - 1 && quizzing === false && this.level1[this.levelCounter].questions.length - 1 !== this.quizCounter) { this.changeToNewCard(1) }
         else if (this.previousWord.clicked(this.gx, this.gy) && this.wordCounter > 0 && quizzing === false) { this.changeToNewCard(-1) }
         else if (this.testAll.clicked(this.gx, this.gy) && quizzing === false && this.level1[this.levelCounter].questions.length - 1 !== this.quizCounter) { this.changeToNewCard(1) }
-        else if (this.toTheTower.clicked(this.gx, this.gy) && this.level1[this.levelCounter].questions.length - 1 === this.quizCounter && this.wordCounter === this.level1[this.levelCounter].words.length - 1) { 
-            this.gx = 0;
-            this.gy = 0; 
-            this.towerTime = true; 
-        }
+        else if (this.toTheTower.clicked(this.gx, this.gy) && this.level1[this.levelCounter].questions.length - 1 === this.quizCounter && this.wordCounter === this.level1[this.levelCounter].words.length - 1) { this.towerTime = true; }
         else if (this.nextWord.clicked(this.gx, this.gy) && this.wordCounter < this.level1[this.levelCounter].words.length - 1) { this.changeToNewCard(1) }
     }
 
@@ -263,11 +246,7 @@ export default class Training {
         else if (this.questionSound.clicked(this.gx, this.gy) && quizzing) { this.soundQuestion.play() }
         else if (this.nextWord.clicked(this.gx, this.gy) && !quizzing || this.previousWord.clicked(this.gx, this.gy) && !quizzing|| this.testAll.clicked(this.gx, this.gy) && !quizzing ) { this.handleNextAndPreviousButtonClicks(); } 
         else if (this.answer1.clicked(this.gx, this.gy) && quizzing || this.answer2.clicked(this.gx, this.gy) && quizzing || this.answer3.clicked(this.gx, this.gy) && quizzing || this.answer4.clicked(this.gx, this.gy) && quizzing) { this.handleAnswerClicks(); }
-        else if (this.homeButton.clicked(this.gx, this.gy)) { 
-            this.gx = 0;
-            this.gy = 0; 
-            this.goHome = true;
-        }
+        else if (this.homeButton.clicked(this.gx, this.gy)) { this.goHome = true; }
     }
 
     handleAnswerClicks() {
@@ -372,6 +351,8 @@ export default class Training {
                 this.pauseQuiz(timer);
             } else {
                 this.showAnswer = false;
+                console.log(this.level1[this.levelCounter].questions.length)
+                console.log(this.quizCounter)
                 if (this.level1[this.levelCounter].questions.length - 1 === this.quizCounter) {
                     this.quiz3 = false;
                 } else {
@@ -422,7 +403,6 @@ export default class Training {
     }
 
     spriteAnimation() {
-        this.trainingDummy.animate();
         this.adventureGuy.animate();
     }
 
@@ -638,8 +618,6 @@ export default class Training {
             this.answer3Sound.update();
             this.answer4Sound.update();
         }
-        this.letsPracticeTalkingBox.update();
-        this.letsPracticeText.update();
         
 
     }

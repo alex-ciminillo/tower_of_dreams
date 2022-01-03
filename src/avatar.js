@@ -6,7 +6,7 @@ export default class Avatar extends Component {
 
     constructor(width, height, color, x, y, ctx, type, row, column, frameWidth, frameHeight, anime, columnLength) {
         super(width, height, color, x, y, ctx, type, row, column, frameWidth, frameHeight)
-        this.anime = anime
+        this.anime = anime;
         this.frame = 0;
         this.columnLength = columnLength;
         this.customAnimation = false;

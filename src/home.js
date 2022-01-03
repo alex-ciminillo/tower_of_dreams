@@ -30,8 +30,9 @@ export default class Home {
         this.myBackground = new Component(300, 150, "black", 0, 0, this.ctx, "other");
         this.myHouse = new Component(300, 150, House, 0, 0, this.ctx, "image");
         this.adventureGuy = new Component(55, 30, MainCharacter, 85, 60, this.ctx, "sprite", 5, 3, 50, 37);
-        this.myMap = new Component(20.7, 11.4, Map, 138.6, 59.6, this.ctx, "image");
-        this.myTraining = new Component(22, 15, "invisible", 88, 5, this.ctx, "other");
+        this.myMapImage = new Component(20.7, 11.4, Map, 138.6, 59.6, this.ctx, "image");
+        this.myMap = new Component(1, 1, "invisible", 147.2, 64, this.ctx, "Other");
+        this.myTraining = new Component(12, 15, "invisible", 75, 0, this.ctx, "other");
         this.move = true;
 
 
@@ -147,20 +148,36 @@ export default class Home {
         }
     }
 
-    checkIfStartTraining() {
-        if (this.yesInvisibleBox) {
+    checkIfStartTrainingOrTower(e) {
+        if (this.myMapImage.intersecting(this.adventureGuy) && this.myMapImage.clicked(this.clickGX, this.clickGY)) {
+            this.checkTowerYesNo = true;
+        } else if (this.myTraining.intersecting(this.adventureGuy)) {
             if (this.yesInvisibleBox.clicked(this.gx, this.gy)) {
                 this.beginTraining = true;
             } 
             if (this.noInvisibleBox.clicked(this.gx, this.gy)) {
                 
             }
+        } else {
+            this.checkTowerYesNo = false;
         }
+            
     }
 
+    checkTower() {
+        if (this.yesInvisibleBox.clicked(this.gx, this.gy)) {
+            this.beginTower = true;
+        } 
+    }
+
+
+
     click(e) {
-        this.checkIfStartTraining();
+        
         if (e.type === "mouseup") {
+            this.clickGX = this.gx;
+            this.clickGY = this.gy;
+            
             this.clickedSpotx = this.gx;
             this.clickedSpoty = this.gy; 
             
@@ -176,6 +193,10 @@ export default class Home {
             this.adventureGuy.moveToMouse(this.gx, this.gy, 0.8)
             this.checkSpeed();
             this.checkIfMovedToSpot();
+            if (this.checkTowerYesNo === true) { 
+                this.checkTower(); 
+            }
+            this.checkIfStartTrainingOrTower(e);
         }
         
     }
@@ -202,6 +223,26 @@ export default class Home {
             this.noInvisibleBox = new Component(39.38, 11.36, "invisible", 162.99, 84.69, this.ctx, "other")
             this.yesInvisibleBox = new Component(38.38, 11.36, "invisible", 115.99, 84.69, this.ctx, "other")
             
+        } else if (this.myMap.intersecting(this.adventureGuy) && this.myMapImage.clicked(this.clickGX, this.clickGY)) {
+            this.askIfTrainingBox = true;
+            this.trainingBoxImage = new Component(165.7680246284894, 82.58208163658705, SimpleYesNoHomeBox, 78.42360770334705, 32.66812245488062, this.ctx, "image")
+            this.startTrainingText = new Component("10px", "PixelFont", "Black", 105.42, 70.14, this.ctx, "text");
+            this.startTrainingTextShadow = new Component("10px", "PixelFont", "Gray", 105.92, 70.64, this.ctx, "text");
+            this.startTrainingTextShadow.text = "Challenge the Tower?"
+            this.startTrainingText.text = "Challenge the Tower?"
+
+            this.yesText = new Component("9px", "PixelFont", "Black", 120.18, 95.04, this.ctx, "text");
+            this.yesTextShadow = new Component("9px", "PixelFont", "Gray", 120.68, 95.54, this.ctx, "text");
+            this.yesText.text = "Yes"
+            this.yesTextShadow.text = "Yes"
+
+            this.noText = new Component("9px", "PixelFont", "Black", 187.18, 95.04, this.ctx, "text");
+            this.noTextShadow = new Component("9px", "PixelFont", "Gray", 187.68, 95.54, this.ctx, "text");
+            this.noText.text = "No"
+            this.noTextShadow.text = "No"
+
+            this.noInvisibleBox = new Component(39.38, 11.36, "invisible", 162.99, 84.69, this.ctx, "other")
+            this.yesInvisibleBox = new Component(38.38, 11.36, "invisible", 115.99, 84.69, this.ctx, "other")
         } else {
             this.askIfTrainingBox = false;
         }
@@ -217,7 +258,6 @@ export default class Home {
         this.noText.update();
         this.noInvisibleBox.update();
         this.yesInvisibleBox.update();
-        
     }
 
 
@@ -268,7 +308,7 @@ export default class Home {
         this.adventureGuy.checkIfStillMoving(this.clickedSpotx, this.clickedSpoty);
         this.myBackground.update();
         this.myHouse.update();
-        this.myMap.update();
+        this.myMapImage.update();
         this.myTraining.update();
         this.drawInstaElements();
         this.adventureGuy.newPos();
