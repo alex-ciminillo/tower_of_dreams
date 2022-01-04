@@ -129,21 +129,30 @@ export default class Component {
         
     }
 
-    startNewAnime(newAnime, nextAnime, playNum) {
+    startNewAnime(newAnime, nextAnime, playNum, cb) {
+        this.customAnimation = false;
         this.frame = 0;
         this.anime = newAnime;
         this.firstAnimation = true;
         this.nextAnime = nextAnime;
         this.playNum = playNum;
+        console.log(cb)
+        if (cb !== undefined) {
+            console.log("hello")
+            cb();
+        }
     }
 
-    startNewCustomAnime(newAnimeArr, nextAnime, speed) {
+    startNewCustomAnime(newAnimeArr, nextAnime, speed, cb) {
         this.frame = 0;
         this.customArr = newAnimeArr;
         this.firstAnimation = true;
         this.nextAnime = nextAnime;
         this.speed = speed;
         this.customAnimation = true;
+        if (cb !== undefined) {
+            cb();
+        }
     }
 
     customAnime(arr) {
@@ -153,21 +162,33 @@ export default class Component {
             this.column = this.customArr[0][1];
             this.customArr = this.customArr.slice(1)
             this.firstAnimation = false;
+            this.lastCustomFrame = this.customArr.slice(-1);
         }
         if (this.frame >= this.speed) {
             if (this.customArr.length === 0) {
-                this.customAnimation = false;
-                this.anime = this.nextAnime;
-                this.frame = 0;
-                this.firstAnimation = true;
-                return;
+                if (this.pause === true) {
+                    this.row = this.lastCustomFrame[0][0];
+                    this.column = this.lastCustomFrame[0][1];
+                } else {
+                    this.customAnimation = false;
+                    this.anime = this.nextAnime;
+                    this.frame = 0;
+                    this.firstAnimation = true;
+                    return;
+                }
             }
-            this.row = this.customArr[0][0];
-            this.column = this.customArr[0][1];
-            this.customArr = this.customArr.slice(1)
-            this.frame = 0;
-              
+            if (this.customArr[0] !== undefined) {
+                this.row = this.customArr[0][0];
+                this.column = this.customArr[0][1];
+                this.customArr = this.customArr.slice(1)
+            }
+            
+            this.frame = 0; 
         }
+    }
+
+    pauseAnime() {
+        this.pause = true;
     }
 
     spriteAnimation(start, stop, speed, row, colDir) {

@@ -7,6 +7,7 @@ import EvilPlantSpritesheetReversed from './../images/evilPlantSpritesheetRevers
 import EvilBeakGuySpritesheetReversed from './../images/evilBeakGuySpritesheetReversed.png'
 import EvilSkullSnakeSpritesheetReversed from './../images/evilSkullSnakeSpritesheetReversed.png'
 import EvilGolemSpritesheet from './../images/evilGolemSpritesheet.png'
+import TreasureChestSpritesheet from './../images/treasure chests.png'
 import TrainingDummySpriteTransparent from './../images/trainingDummySpriteTransparent.png'
 import TrainingDialogue from './../images/TrainingDialogue.png'
 import TrainingWords from './../images/TrainingWords.png'
@@ -28,8 +29,8 @@ import TrainingDummy from './trainingDummy'
 import HomeButton from './../images/homeButton.png'
 import TowerLevel1 from './../images/towerLevel1.png'
 import TowerLevel1Bottom from './../images/towerLevel1Bottom.png'
-
-
+import TreasureChest from './treasureChest'
+import SimpleYesNoHomeBox from './../images/simpleYesNoHomeBox.png'
 
 
 
@@ -148,7 +149,9 @@ export default class Tower {
         this.evilBeakGuy = new EvilBeakGuy(40, 40, EvilBeakGuySpritesheetReversed, 350, this.adventureGuy.y - 13, this.ctx, "sprite", 0, 17, 64, 64, "idleLeft", 27);
         this.evilSkullSnake = new EvilSkullSnake(45, 45, EvilSkullSnakeSpritesheetReversed, 350, this.adventureGuy.y -18, this.ctx, "sprite", 0, 14, 64, 64, "idleLeft", 23);
         this.evilGolem = new EvilGolem(45, 85, EvilGolemSpritesheet, 36, -400, this.ctx, "sprite", 0, 37, 160, 160, "idleLeft", 57);
-     }
+        this.treasureChest = new TreasureChest(24, 15, TreasureChestSpritesheet, 350, this.adventureGuy.y + 14, this.ctx, "sprite",0,1,32,32,"closed",4)
+        this.treasureChest.startNewCustomAnime([[4,2],[4,2]], "open", 60, this.treasureChest.pauseAnime.bind(this.treasureChest))
+        }
 
     importSounds () {
         const path = require.context("./../voices", false, /\.mp3$/)
@@ -191,6 +194,18 @@ export default class Tower {
             this.initialComponentArr[i].update();
         }
         this.homeButton.update();
+    }
+
+    reset() {
+        this.goHome = false;
+        this.quizCounter = 0;
+        this.bossBattle = false;
+        this.createInitialComponents();
+        this.evilGolem.y = -400
+        this.askIfTrainingBox = false;
+        this.canAttack = true;
+        this.gx = -900;
+        this.gy = -900;
     }
 
     updateNewCardComponents() {
@@ -273,6 +288,9 @@ export default class Tower {
     }
 
     handleMouseUpClicks() {
+        if (this.askIfTrainingBox === true && this.yesInvisibleBox.clicked(this.gx, this.gy) === false) {
+            this.askIfTrainingBox = false;
+        } else if (this.askIfTrainingBox === true && this.yesInvisibleBox.clicked(this.gx, this.gy) === true) { this.goHome = true; }
         let quizzing = true
         if (!this.quiz1 && !this.quiz2 && !this.quiz3) { quizzing = false; }
         if (this.wordSound.clicked(this.gx, this.gy) && !quizzing) { this.soundWord.play() }
@@ -281,7 +299,38 @@ export default class Tower {
         else if (this.nextWord.clicked(this.gx, this.gy) && !quizzing || this.previousWord.clicked(this.gx, this.gy) && !quizzing|| this.testAll.clicked(this.gx, this.gy) && !quizzing ) { this.handleNextAndPreviousButtonClicks(); } 
         else if (this.canAttack === true) {
             if (this.answer1.clicked(this.gx, this.gy) && quizzing || this.answer2.clicked(this.gx, this.gy) && quizzing || this.answer3.clicked(this.gx, this.gy) && quizzing || this.answer4.clicked(this.gx, this.gy) && quizzing) { this.handleAnswerClicks(); }
-        } else if (this.homeButton.clicked(this.gx, this.gy)) { this.goHome = true; }
+        }
+        if (this.homeButton.clicked(this.gx, this.gy)) { this.warningBeforeLeaving(); }
+    }
+
+
+    warningBeforeLeaving() {
+
+        this.canAttack = false;
+        this.askIfTrainingBox = true;
+        this.trainingBoxImage = new Component(121.7680246284894, 82.58208163658705, SimpleYesNoHomeBox, 98.42360770334705, 32.66812245488062, this.ctx, "image")
+        this.startTrainingText = new Component("10px", "PixelFont", "Black", 124.42, 70.14, this.ctx, "text");
+        this.startTrainingTextShadow = new Component("10px", "PixelFont", "Gray", 124.92, 70.64, this.ctx, "text");
+        this.startTrainingTextShadow.text = "Return Home?"
+        this.startTrainingText.text = "Return Home?"
+        this.warningText = new Component("4px", "PixelFont", "Black", 119.42, 75.14, this.ctx, "text");
+        this.warningText.text = "WARNING: All Progress Will Be Lost!"
+        this.warningTextShadow = new Component("4px", "PixelFont", "Gray", 119.92, 75.64, this.ctx, "text");
+        this.warningTextShadow.text = "WARNING: All Progress Will Be Lost!"
+        this.yesText = new Component("9px", "PixelFont", "Black", 126.18, 95.04, this.ctx, "text");
+        this.yesTextShadow = new Component("9px", "PixelFont", "Gray", 126.68, 95.54, this.ctx, "text");
+        this.yesText.text = "Yes"
+        this.yesTextShadow.text = "Yes"
+
+        this.noText = new Component("9px", "PixelFont", "Black", 175.18, 95.04, this.ctx, "text");
+        this.noTextShadow = new Component("9px", "PixelFont", "Gray", 175.68, 95.54, this.ctx, "text");
+        this.noText.text = "No"
+        this.noTextShadow.text = "No"
+
+        this.noInvisibleBox = new Component(39.38, 11.36, "invisible", 162.99, 84.69, this.ctx, "other")
+        this.yesInvisibleBox = new Component(38.38, 11.36, "invisible", 115.99, 84.69, this.ctx, "other")
+
+
     }
 
     handleAnswerClicks() {
@@ -426,9 +475,40 @@ export default class Tower {
 
     defeatTheBoss() {
         this.canAttack = false;
-        this.evilGolem.pause = true;
-        this.evilGolem.startNewAnime("dieLeft", "dieLeft", 1);
-        
+        this.evilGolem.startNewAnime("dieLeft", "dieLeft", 1, this.evilGolem.pauseAnime.bind(this.evilGolem));
+        this.checkForAnimeOver();
+    }
+
+    checkForAnimeOver() {
+        setTimeout(() => {
+            if (this.evilGolem.stop === true) {
+                this.walkToChest();
+            } else {
+                this.checkForAnimeOver();
+            }
+        }, 100);
+    }
+
+    walkToChest() {
+        this.background.speedX = -1;
+        this.evilGolem.speedY = 1;
+        this.adventureGuy.startNewAnime("runRight", "runRight", 1)
+        this.treasureChest.speedX = -1;
+        this.checkForAtChest();
+    }
+
+    checkForAtChest(){
+        setTimeout(()=>{
+            if (this.adventureGuy.x + this.adventureGuy.width > this.treasureChest.x) {
+                this.adventureGuy.startNewAnime("idleRight", "idleRight", 1)
+                this.background.speedX = 0;
+                this.treasureChest.speedX = 0;
+                this.evilGolem.speedY = 0;
+                this.treasureChest.startNewCustomAnime([[4,2],[5,2]], "open", 60, this.treasureChest.pauseAnime.bind(this.treasureChest))
+            } else {
+                this.checkForAtChest();
+            }
+        }, 100)
     }
 
     handleNextQuizCard(question, choice) {
@@ -606,13 +686,16 @@ export default class Tower {
     }
 
     spriteAnimation() {
-        this.adventureGuy.animate();
+        this.rotateGolem();
         this.evilPlant.animate();
         this.evilSlug.animate();
         this.evilBat.animate();
         this.evilBeakGuy.animate();
         this.evilSkullSnake.animate();
-        this.rotateGolem();
+        this.treasureChest.animate();
+        this.adventureGuy.animate();
+        
+        
         
     }
 
@@ -960,6 +1043,19 @@ export default class Tower {
     }
 
 
+    askIfTraining() {
+        this.trainingBoxImage.update();
+        this.startTrainingTextShadow.update();
+        this.startTrainingText.update();
+        this.yesTextShadow.update();
+        this.yesText.update();
+        this.noTextShadow.update();
+        this.noText.update();
+        this.noInvisibleBox.update();
+        this.yesInvisibleBox.update();
+        this.warningText.update();
+        
+    }
 
 
     animate(gx, gy) {
@@ -986,7 +1082,7 @@ export default class Tower {
         }
         this.checkIfAttacking();
         if (this.shakeScreen === true) { this.postShake(); }
-
+        if (this.askIfTrainingBox === true) { this.askIfTraining(); }
     }
 
 

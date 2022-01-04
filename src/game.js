@@ -98,6 +98,10 @@ export default class TowerOfDreams {
 
     towerClick(e) {
         this.tower.click(e)
+        if (this.tower.goHome === true) { 
+            this.currentScreen = "Home" 
+            this.tower.reset();
+        }
     }
 
     towerHover(e) {
@@ -209,6 +213,7 @@ export default class TowerOfDreams {
     }
 
     animate() {
+        
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         if (this.fadeScreen) { this.fadeOut() }
@@ -225,8 +230,8 @@ export default class TowerOfDreams {
 
         if (this.showEditButton === true) { this.editButton.update(); }
         if (this.editMode === true) { this.editScreen.animate(this.gx, this.gy, this.gx2, this.gy2) }
-        
         requestAnimationFrame(this.animate.bind(this));
+        
     }
 
 
