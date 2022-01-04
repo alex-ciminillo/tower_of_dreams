@@ -31,6 +31,8 @@ import TowerLevel1 from './../images/towerLevel1.png'
 import TowerLevel1Bottom from './../images/towerLevel1Bottom.png'
 import TreasureChest from './treasureChest'
 import SimpleYesNoHomeBox from './../images/simpleYesNoHomeBox.png'
+import Pixel_heart from './../images/pixel_heart.png'
+
 
 
 
@@ -44,11 +46,10 @@ export default class Tower {
         this.currentImports =['./homeButton.png', './soundImage.png', './talkingBox.png', './TrainingWords.png', './TrainingDialogue.png', './trainingScreen.png', './component.js', './adventure.png', './trainingDummySpriteTransparent.png', './TrainingButtonsNewMove.png']
         this.wordCounter = word;
         this.levelCounter = level;
-        this.quizCounter = 18;
+        this.quizCounter = 0;
         this.goHome = false;
         this.towerTime = false;
-        this.bossBattle = true;
-        
+        this.bossBattle = false;
         this.quiz1 = true;
         this.quiz2 = false;
         this.quiz3 = false;
@@ -62,8 +63,10 @@ export default class Tower {
         this.check = 0;
         this.questionsArr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
         this.attackOrder = [];
+        this.hitCounter = 0;
         this.createInitialComponents();
-        this.startBossBattle();
+        this.heartArr = [this.pixelHeart1, this.pixelHeart2, this.pixelHeart3]
+        // this.startBossBattle();
     }
 
     createInitialComponents() {
@@ -128,6 +131,9 @@ export default class Tower {
         this.correctAnswer = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMoveGreen, 17.8670996074987, 95.32717036022932, this.ctx, "image")
         this.incorrectAnswer = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMoveRed, 17.8670996074987, 95.32717036022932, this.ctx, "image")
         this.homeButton = new Component(18.03, 14.30, HomeButton, 5.366953700419387, 3.8307801877630308, this.ctx, "image")
+        this.pixelHeart1 = new Component(19.87, 16.17, Pixel_heart, 28.07, 3.369393439240767, this.ctx, "image")
+        this.pixelHeart2 = new Component(21.14, 17.16, Pixel_heart, 49.205089728063406, 3.36909015886115, this.ctx, "image")
+        this.pixelHeart3 = new Component(21.14, 17.16, Pixel_heart, 70.35125068809865, 3.3691912523210235, this.ctx, "image")
     }
 
     createSounds() {
@@ -194,6 +200,12 @@ export default class Tower {
             this.initialComponentArr[i].update();
         }
         this.homeButton.update();
+        for (let i = 0; i < this.heartArr.length; i++) {
+            if (this.heartArr[i] !== undefined) {
+                console.log(this.heartArr[i])
+                this.heartArr[i].update();
+            }
+        }
     }
 
     reset() {
@@ -288,9 +300,13 @@ export default class Tower {
     }
 
     handleMouseUpClicks() {
+        this.skipToBoss(this.gx, this.gy) 
         if (this.askIfTrainingBox === true && this.yesInvisibleBox.clicked(this.gx, this.gy) === false) {
             this.askIfTrainingBox = false;
-        } else if (this.askIfTrainingBox === true && this.yesInvisibleBox.clicked(this.gx, this.gy) === true) { this.goHome = true; }
+            this.canAttack = true;
+        } else if (this.askIfTrainingBox === true && this.yesInvisibleBox.clicked(this.gx, this.gy) === true) { 
+            this.goHome = true; 
+        }
         let quizzing = true
         if (!this.quiz1 && !this.quiz2 && !this.quiz3) { quizzing = false; }
         if (this.wordSound.clicked(this.gx, this.gy) && !quizzing) { this.soundWord.play() }
@@ -301,6 +317,24 @@ export default class Tower {
             if (this.answer1.clicked(this.gx, this.gy) && quizzing || this.answer2.clicked(this.gx, this.gy) && quizzing || this.answer3.clicked(this.gx, this.gy) && quizzing || this.answer4.clicked(this.gx, this.gy) && quizzing) { this.handleAnswerClicks(); }
         }
         if (this.homeButton.clicked(this.gx, this.gy)) { this.warningBeforeLeaving(); }
+    }
+
+
+    skipToBoss(gx, gy) {
+        setTimeout(()=>{
+            if (gx - this.gx < -250 * 4 && gy - this.gy < -100 * 4) {
+                let gx = this.gx;
+                let gy = this.gy;
+                console.log("true")
+                setTimeout(()=>{
+                    if (this.gx - gx < -250 * 4 && this.gy - gy < -100 * 4) {
+                        this.bossBattle = true;
+                        this.quizCounter = 18;
+                        this.startBossBattle();
+                    }
+                }, 5000)
+            }
+        }, 1000)
     }
 
 
@@ -992,6 +1026,28 @@ export default class Tower {
         }, 100)
     }
 
+    loseAHeart(heart) {
+        this.heartArr.slice(0, -1)
+        setTimeout(()=>{
+            this.heartArr.push(heart)
+            setTimeout(()=>{
+                this.heartArr.slice(0, -1)
+                setTimeout(()=>{
+                    this.heartArr.push(heart)
+                    setTimeout(()=>{
+                        this.heartArr.slice(0, -1)
+                        setTimeout(()=>{
+                            this.heartArr.push(heart)
+                            setTimeout(()=>{
+                                this.heartArr.slice(0, -1)
+                            }, 100)
+                        }, 100)
+                    }, 250)
+                }, 250)
+            }, 500)
+        }, 500)
+    }
+
 
     checkIfAttacking() {
         let enemyArr = [this.evilBat, this.evilSlug, this.evilSkullSnake, this.evilBeakGuy, this.evilPlant];
@@ -1011,6 +1067,7 @@ export default class Tower {
                         this.resetEnemy(enemyArr[i]);
                     } else {
                         // this.startFlash("red");
+                        this.loseAHeart(this.heartArr.slice(-1))
                         this.attackOrder = this.attackOrder.slice(1)
                         this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "runRightFast", 8)
                         enemyArr[i].startNewAnime("attackLeft", "idleLeft", 1)

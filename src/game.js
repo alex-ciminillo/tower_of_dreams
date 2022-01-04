@@ -75,6 +75,7 @@ export default class TowerOfDreams {
 
 
     hover(e) {
+        this.e = e
         this.updateGxGy(e)
         this.updateGxGy2(e)
         if (this.currentScreen === "Title") { this.titleHover(e) }
@@ -221,7 +222,7 @@ export default class TowerOfDreams {
         // real code
         if (this.currentScreen === "Title") { this.title.animate(); } 
         else if (this.currentScreen === "Black Screen") { this.blackScreen.animate(); } 
-        else if (this.currentScreen === "Home") { this.home.animate(); }
+        else if (this.currentScreen === "Home") { this.home.animate(this.e); }
         else if (this.currentScreen === "Training") { this.training.animate(this.gx, this.gy); }
         else if (this.currentScreen === "Tower") { this.tower.animate(this.gx, this.gy); }
 

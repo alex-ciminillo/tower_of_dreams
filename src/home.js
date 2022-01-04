@@ -34,8 +34,9 @@ export default class Home {
         this.myMap = new Component(1, 1, "invisible", 147.2, 64, this.ctx, "Other");
         this.myTraining = new Component(12, 15, "invisible", 75, 0, this.ctx, "other");
         this.move = true;
-
-
+        this.yesInvisibleBox = new Component(38.38, 11.36, "invisible", 115.99, 84.69, this.ctx, "other")
+        this.noInvisibleBox = new Component(38.38, 11.36, "invisible", 115.99, 84.69, this.ctx, "other")
+        
         // test code section
 
 
@@ -196,7 +197,7 @@ export default class Home {
             if (this.checkTowerYesNo === true) { 
                 this.checkTower(); 
             }
-            this.checkIfStartTrainingOrTower(e);
+            
         }
         
     }
@@ -301,7 +302,7 @@ export default class Home {
     }
 
 
-    animate() {
+    animate(e) {
         this.boundaries();
         this.checkSpeed();
         this.checkIfMovedToSpot();
@@ -324,7 +325,7 @@ export default class Home {
              else if (this.anime === "idleLeft") { this.idleCharacter(3, 0, 13, 5, -1); }
              else if (this.anime === "runRight") { this.idleCharacter(1, 6, 8, 1, 1); }
          } 
-
+         this.checkIfStartTrainingOrTower(e);
     }
 
 }
