@@ -19,10 +19,11 @@ export default class EvilBeakGuy extends Component {
 
     animate() {
         this.update();
+        this.newPos();
         if (this.customAnimation === false) {
-            if (this.anime === "attackLeft") { this.spriteAnimation(27, 21, 8, 0, -1); }
+            if (this.anime === "attackLeft") { this.spriteAnimation(26, 21, 8, 0, -1); }
             else if (this.anime === "hitLeft") { this.spriteAnimation(20, 18, 8, 0, -1); }
-            else if (this.anime === "idleLeft") { this.spriteAnimation(17, 11, 8, 0, -1); }
+            else if (this.anime === "idleLeft") { this.spriteAnimation(17, 11, 6, 0, -1); }
             else if (this.anime === "walkLeft") { this.spriteAnimation(5, 0, 8, 0, -1); }
             
             

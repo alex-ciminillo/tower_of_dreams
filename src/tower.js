@@ -18,6 +18,10 @@ import TrainingButtonsNewMoveGreen from './../images/TrainingButtonsNewMoveGreen
 import TrainingButtonsNewMoveRed from './../images/TrainingButtonsNewMoveRed.png'
 import Avatar from './avatar'
 import EvilBat from './evilBat'
+import EvilSlug from './evilSlug'
+import EvilBeakGuy from './evilBeakGuy'
+import EvilPlant from './evilPlant'
+import EvilSkullSnake from './evilSkullSnake'
 import TrainingDummy from './trainingDummy'
 import HomeButton from './../images/homeButton.png'
 import TowerLevel1 from './../images/towerLevel1.png'
@@ -37,10 +41,10 @@ export default class Tower {
         this.currentImports =['./homeButton.png', './soundImage.png', './talkingBox.png', './TrainingWords.png', './TrainingDialogue.png', './trainingScreen.png', './component.js', './adventure.png', './trainingDummySpriteTransparent.png', './TrainingButtonsNewMove.png']
         this.wordCounter = word;
         this.levelCounter = level;
-        this.quizCounter = 10;
+        this.quizCounter = 9;
         this.goHome = false;
         this.towerTime = false;
-        this.bossBattle = true;
+        this.bossBattle = false;
         this.quiz1 = true;
         this.quiz2 = false;
         this.quiz3 = false;
@@ -48,7 +52,10 @@ export default class Tower {
         this.playedSound = false;
         this.playedQuizSound = false;
         this.towerTime = false;
-        this.questionsArr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+        this.shakeScreen = false;
+        this.check = 0;
+        this.questionsArr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+        this.attackOrder = [];
         this.createInitialComponents();
     }
 
@@ -93,6 +100,7 @@ export default class Tower {
     createImages() {
         this.initialComponentArr = []
         this.background = new Component(1200, 135, TowerLevel1, 0, -25, this.ctx, "background")
+        this.background.speedX = -2;
         this.backgroundBottom = new Component(this.background.width, this.background.height, TowerLevel1Bottom, this.background.x, this.background.y + this.background.height, this.ctx, "background")
         this.answer4 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 127.50781894412596, this.ctx, "image")
         this.answer2 = new Component(130.34688990750145, 20.939999999999998, TrainingButtonsNewMove, 150.59149672000663, 105.32717036022932, this.ctx, "image")
@@ -128,8 +136,12 @@ export default class Tower {
     createSprites() {
         this.adventureGuy = new Avatar(48, 28, MainCharacter, 81, 44, this.ctx, "sprite", 5, 3, 50, 37, "idleRight", 6);
         this.adventureGuy.startNewAnime("runRightFast", "idleRight", -9)
-        this.evilSlug = new (48, 28, MainCharacter, 81, 44, this.ctx, "sprite", 5, 3, 50, 37, "idleRight", 6);
-        
+        this.evilSlug = new EvilSlug(30, 30, EvilSlugSpritesheetReversed, 350, this.adventureGuy.y - 3, this.ctx, "sprite", 0, 18, 32, 32, "idleLeft", 29);
+        this.evilPlant = new EvilPlant(40, 40, EvilPlantSpritesheetReversed, 350, this.adventureGuy.y - 13, this.ctx, "sprite", 0, 7, 64, 64, "idleLeft", 26);
+        this.evilBat = new EvilBat(20, 20, EvilBatSpritesheetReversed, 350, this.adventureGuy.y + 5, this.ctx, "sprite", 0, 9, 32, 32, "flyLeft", 19);
+        this.evilBeakGuy = new EvilBeakGuy(40, 40, EvilBeakGuySpritesheetReversed, 350, this.adventureGuy.y - 13, this.ctx, "sprite", 0, 17, 64, 64, "idleLeft", 27);
+        this.evilSkullSnake = new EvilSkullSnake(45, 45, EvilSkullSnakeSpritesheetReversed, 350, this.adventureGuy.y -18, this.ctx, "sprite", 0, 14, 64, 64, "idleLeft", 23);
+    
      }
 
     importSounds () {
@@ -155,9 +167,7 @@ export default class Tower {
         this.newWordEnglishSent.text = this.level1[this.levelCounter].words[this.wordCounter]["example_english"]
     }
 
-    sendEnemy() {
-
-    }
+    
     
 
     changeSound() {
@@ -329,7 +339,21 @@ export default class Tower {
         }
     }
 
+    sendEnemy() {
+        let enemyArr = [this.evilBat, this.evilSlug, this.evilSkullSnake, this.evilBeakGuy, this.evilPlant];
+        let enemyChoice = enemyArr[Math.floor(Math.random()*enemyArr.length)];
+        while (this.lastEnemy === enemyChoice) {
+            enemyChoice = enemyArr[Math.floor(Math.random()*enemyArr.length)];
+        }
+        this.lastEnemy = enemyChoice;
+        enemyChoice.x = 300;
+        enemyChoice.speedX = -2
+    }
+
+
+
     handleNextQuizCard(question, choice) {
+        this.sendEnemy();
         if (this.level1[this.levelCounter].tower[this.quizCounter]["japanese"] === "true") {
             this.soundQuestion.play();
         }
@@ -344,8 +368,9 @@ export default class Tower {
             if (this.level1[this.levelCounter].tower[this.quizCounter]["correct"] < 1) {
                 // this.level1[this.levelCounter].tower.push(this.level1[this.levelCounter].tower[this.quizCounter])
             }
-            let attackArr = ["attack1Right", "attack2Right", "attack3Right", "attack4Right"]
-            this.adventureGuy.startNewAnime(attackArr[Math.floor(Math.random() * attackArr.length)], "runRightFast", 1) 
+            this.attackOrder.push("correct");
+            // let attackArr = ["attack1Right", "attack2Right", "attack3Right", "attack4Right"]
+            // this.adventureGuy.startNewAnime(attackArr[Math.floor(Math.random() * attackArr.length)], "runRightFast", 1) 
             
         } else {
             let answer = this.findCorrectAnswer();
@@ -353,8 +378,9 @@ export default class Tower {
             this.setCorrectIncorrectAnswerPos(answer, choice);
             timer = 2000;
             this.level1[this.levelCounter].tower[this.quizCounter]["correct"] = -1;
+            this.attackOrder.push("incorrect")
             // this.level1[this.levelCounter].tower.push(this.level1[this.levelCounter].tower[this.quizCounter])
-            this.adventureGuy.startNewCustomAnime([[7,1],[6,9],[6,2],[6,3],[6,4],[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5]], "runRightFast", 8) 
+            // this.adventureGuy.startNewCustomAnime([[7,1],[6,9],[6,2],[6,3],[6,4],[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5]], "runRightFast", 8) 
         }
 
         this.pauseQuiz(timer);
@@ -368,8 +394,6 @@ export default class Tower {
                 this.pauseQuiz(timer);
             } else {
                 this.showAnswer = false;
-                console.log(this.level1[this.levelCounter].tower.length)
-                console.log(this.quizCounter)
                 if (this.level1[this.levelCounter].tower.length - 1 === this.quizCounter) {
                     this.quiz3 = false;
                 } else {
@@ -377,7 +401,9 @@ export default class Tower {
                 }
                 
                 if (this.quiz1 === true && this.quizCounter > 9) {
-                    this.bossBattle = true;
+                    setTimeout(()=>{
+                        this.startBossBattle();
+                    }, 3000)
                 } 
 
                 this.changeQuizCardText();
@@ -385,6 +411,37 @@ export default class Tower {
             }
             
         }, timer)
+
+    }
+
+    startBossBattle() {
+        this.bossBattle = true;
+        this.adventureGuy.startNewAnime("idleRight", "idleRight", 1);
+        this.background.speedX = 0;
+        this.bossSteps = 0;
+        this.bossEntering();
+
+    }
+
+    bossEntering() {
+        this.bossSteps += 1
+        this.shakeScreen = true;
+        setTimeout(()=>{
+            this.shakeScreen = false;
+            setTimeout(()=>{
+                if (this.bossSteps < 3) {
+                    this.bossEntering();
+                } else {
+                    this.enterTheBoss();
+                }
+                
+            },500)
+        }, 500)
+    }
+
+    enterTheBoss() {
+
+        
 
     }
 
@@ -419,6 +476,11 @@ export default class Tower {
 
     spriteAnimation() {
         this.adventureGuy.animate();
+        this.evilPlant.animate();
+        this.evilSlug.animate();
+        this.evilBat.animate();
+        this.evilBeakGuy.animate();
+        this.evilSkullSnake.animate();
     }
 
     shuffleArr(array) {
@@ -676,23 +738,93 @@ export default class Tower {
             this.answer3Sound.update();
             this.answer4Sound.update();
         }
-        
-
+    
     }
+
+    screenFlashEffect() {
+        console.log(this.alphaClone)
+        if (this.alphaClone >= 1) { this.alphaDir = -0.15; }
+        this.alphaClone += this.alphaDir;
+        this.ctx.globalAlpha =  this.alphaClone;
+        if (this.alphaClone <= 0) { 
+            this.screenFlash = false; 
+        } else {
+            this.flashBox.update();
+        }
+        this.ctx.globalAlpha = 1;
+    }
+
+    startFlash(color) {
+        this.flashBox = new Component(300, 150, color, 0, 0, this.ctx, "other")
+        this.screenFlash = true;
+        this.alphaDir = 0.6
+        this.alphaClone = 0;
+    }
+
+    checkIfAttacking() {
+        let enemyArr = [this.evilBat, this.evilSlug, this.evilSkullSnake, this.evilBeakGuy, this.evilPlant];
+        let attackArr = ["attack1Right", "attack2Right", "attack3Right", "attack4Right"]
+        for (let i = 0; i < enemyArr.length; i++) {
+            if (this.adventureGuy.intersecting(enemyArr[i])) {
+                if (this.check > 200) {
+                    console.log("belly of the whale!")
+                    this.check = 0;
+                    if (this.attackOrder[0] === "correct") {
+                        this.startFlash("white");
+                        this.attackOrder = this.attackOrder.slice(1)
+                        this.adventureGuy.startNewAnime(attackArr[Math.floor(Math.random() * attackArr.length)], "runRightFast", 1)
+                        enemyArr[i].startNewAnime("hitLeft", "idleLeft", 10)
+                    } else {
+                        this.startFlash("red");
+                        this.attackOrder = this.attackOrder.slice(1)
+                        this.adventureGuy.startNewCustomAnime([[7,1],[6,9],[6,2],[6,3],[6,4],[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5]], "runRightFast", 8)
+                        enemyArr[i].startNewAnime("attackLeft", "idleLeft", 1)
+                    }
+                }
+            } else {
+                this.check += 1;
+            }
+        }
+    }
+
+
+    preShake() {
+        let shakeList = [this.adventureGuy, this.background, this.backgroundBottom]
+        this.dx = Math.random()*5;
+        this.dy = Math.random()*5;
+        for (let i = 0; i < shakeList.length; i++) {
+            shakeList[i].x += this.dx;
+            shakeList[i].y += this.dy;
+        }
+      }
+
+    postShake() {
+        let shakeList = [this.adventureGuy, this.background, this.backgroundBottom]
+        for (let i = 0; i < shakeList.length; i++) {
+            shakeList[i].x -= this.dx;
+            shakeList[i].y -= this.dy;
+        }
+    }
+
+
+
 
     animate(gx, gy) {
         this.gx = gx;
         this.gy = gy;
-        this.background.speedX = -2;
+        if (this.shakeScreen === true) { this.preShake(); }
         this.background.newPos(); 
         this.background.update();
         this.backgroundBottom.speedX = this.background.speedX;
         this.backgroundBottom.newPos();
         this.backgroundBottom.update();
         this.spriteAnimation();
+        if (this.screenFlash === true) { this.screenFlashEffect(); }
         this.updateInitialComponents();
         if (this.quiz1 === true || this.quiz2 || this.quiz3) { this.updateQuizCardComponents(); }
         else { this.updateNewCardComponents(); }
+        this.checkIfAttacking();
+        if (this.shakeScreen === true) { this.postShake(); }
 
     }
 

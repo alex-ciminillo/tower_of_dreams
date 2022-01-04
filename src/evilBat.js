@@ -19,9 +19,10 @@ export default class EvilBat extends Component {
 
     animate() {
         this.update();
+        this.newPos();
         if (this.customAnimation === false) {
-            if (this.anime === "attackLeft") { this.spriteAnimation(19, 10, 8, 0, -1); }
-            else if (this.anime === "flyLeft") { this.spriteAnimation(9, 3, 8, 0, -1); }
+            if (this.anime === "attackLeft") { this.spriteAnimation(16, 10, 8, 0, -1); }
+            else if (this.anime === "flyLeft") { this.spriteAnimation(9, 3, 6, 0, -1); }
             else if (this.anime === "hitLeft") { this.spriteAnimation(2, 0, 8, 0, -1); }
             
         } else {

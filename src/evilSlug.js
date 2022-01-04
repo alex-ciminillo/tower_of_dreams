@@ -19,10 +19,11 @@ export default class EvilSlug extends Component {
 
     animate() {
         this.update();
+        this.newPos();
         if (this.customAnimation === false) {
-            if (this.anime === "attackLeft") { this.spriteAnimation(29, 22, 8, 0, -1); }
+            if (this.anime === "attackLeft") { this.spriteAnimation(28, 22, 8, 0, -1); }
             else if (this.anime === "hitLeft") { this.spriteAnimation(21, 19, 8, 0, -1); }
-            else if (this.anime === "idleLeft") { this.spriteAnimation(18, 8, 8, 0, -1); }
+            else if (this.anime === "idleLeft") { this.spriteAnimation(18, 8, 6, 0, -1); }
             else if (this.anime === "walkLeft") { this.spriteAnimation(7, 0, 8, 0, -1); }
             
             

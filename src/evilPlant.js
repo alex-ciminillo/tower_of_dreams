@@ -19,11 +19,12 @@ export default class EvilPlant extends Component {
 
     animate() {
         this.update();
+        this.newPos();
         if (this.customAnimation === false) {
-            if (this.anime === "attackLeft") { this.spriteAnimation(26, 19, 8, 0, -1); }
+            if (this.anime === "attackLeft") { this.spriteAnimation(25, 19, 6, 0, -1); }
             else if (this.anime === "attackRight") { this.spriteAnimation(18, 11, 8, 0, -1); }
             else if (this.anime === "hitLeft") { this.spriteAnimation(10, 8, 8, 0, -1); }
-            else if (this.anime === "idleLeft") { this.spriteAnimation(7, 0, 8, 0, -1); }
+            else if (this.anime === "idleLeft") { this.spriteAnimation(7, 0, 10, 0, -1); }
             
             
         } else {

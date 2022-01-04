@@ -177,7 +177,7 @@ export default class Component {
             this.firstAnimation = false;
         }
         if (this.frame >= speed) {
-            if (this.column === stop - 1 + colDir && this.row === row) {
+            if (this.column === stop - colDir + colDir && this.row === row) {
                 this.playNum -= 1;
                 if (this.playNum === 0) {
                     this.playNum -= 1;
@@ -186,10 +186,10 @@ export default class Component {
                     this.frame = 0;
                     return;
                 }
-                this.column = start - 1;
+                this.column = start - colDir;
                 this.row = row;
             } else if (this.row > row) {
-                if (this.column === stop - 1 - this.columnLength) {
+                if (this.column === stop - colDir - this.columnLength) {
                     this.playNum -= 1;
                     if (this.playNum === 0) {
                         this.playNum -= 1;
@@ -198,7 +198,7 @@ export default class Component {
                         this.frame = 0;
                         return;
                     }
-                    this.column = start - 1;
+                    this.column = start - colDir;
                     this.row = row;
                 }
             } else if (this.column === this.columnLength) {
