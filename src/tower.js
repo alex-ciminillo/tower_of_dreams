@@ -55,6 +55,8 @@ export default class Tower {
         this.playedQuizSound = false;
         this.towerTime = false;
         this.shakeScreen = false;
+        this.hasGrown = false;
+        this.canAttack = true;
         this.check = 0;
         this.questionsArr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
         this.attackOrder = [];
@@ -275,8 +277,9 @@ export default class Tower {
         else if (this.sentSound.clicked(this.gx, this.gy) && !quizzing) { this.soundSent.play() }
         else if (this.questionSound.clicked(this.gx, this.gy) && quizzing) { this.soundQuestion.play() }
         else if (this.nextWord.clicked(this.gx, this.gy) && !quizzing || this.previousWord.clicked(this.gx, this.gy) && !quizzing|| this.testAll.clicked(this.gx, this.gy) && !quizzing ) { this.handleNextAndPreviousButtonClicks(); } 
-        else if (this.answer1.clicked(this.gx, this.gy) && quizzing || this.answer2.clicked(this.gx, this.gy) && quizzing || this.answer3.clicked(this.gx, this.gy) && quizzing || this.answer4.clicked(this.gx, this.gy) && quizzing) { this.handleAnswerClicks(); }
-        else if (this.homeButton.clicked(this.gx, this.gy)) { this.goHome = true; }
+        else if (this.canAttack === true) {
+            if (this.answer1.clicked(this.gx, this.gy) && quizzing || this.answer2.clicked(this.gx, this.gy) && quizzing || this.answer3.clicked(this.gx, this.gy) && quizzing || this.answer4.clicked(this.gx, this.gy) && quizzing) { this.handleAnswerClicks(); }
+        } else if (this.homeButton.clicked(this.gx, this.gy)) { this.goHome = true; }
     }
 
     handleAnswerClicks() {
@@ -352,10 +355,76 @@ export default class Tower {
         enemyChoice.speedX = -2
     }
 
+    handleBossBattleAttacks(answer) {
+        if (answer === "correct") {
+            let x = this.adventureGuy.x;
+            this.adventureGuy.x = -this.evilGolem.y - this.evilGolem.width - this.adventureGuy.width;
+            let attackArr = this.shuffleArr(["attack1Right", "attack2Right", "attack3Right", "attack4Right"])
+            this.attackTheBoss(0, attackArr, x)
+        } else {
+            let y = this.evilGolem.y;
+            this.evilGolem.y = -this.adventureGuy.x - this.adventureGuy.width - this.evilGolem.width
+            this.attackTheAdventurer(0, y)
+        }
+    }
 
+    attackTheAdventurer(counter, y) {
+        setTimeout(()=>{
+            if (this.evilGolem.anime === "idleLeft") {
+                if (counter < 1) {
+                    this.startFlash("red")
+                    this.evilGolem.startNewAnime("attack1Left", "idleLeft", 1);
+                    setTimeout(()=>{
+                        this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "idleRight", 8)
+                        this.startFlash("red")
+                    }, 500)
+                     counter += 1
+                    this.attackTheAdventurer(counter, y)
+                } else if (counter === 1) {
+                    this.startFlash("red")
+                    this.evilGolem.y = y;
+                } else {
+                    this.attackTheAdventurer(counter, y)
+                }
+                
+            } else {
+                this.attackTheAdventurer(counter, y)
+            }
+        }, 10)
+    }
+
+    attackTheBoss(counter, attackArr, x) {
+        setTimeout(()=>{
+            if (this.adventureGuy.anime === "idleRight") {
+                if (counter <= 3) {
+                    this.startFlash("white")
+                    this.adventureGuy.startNewAnime(attackArr[counter], "idleRight",1)
+                    this.evilGolem.startNewAnime("hitLeft", "idleLeft", 1)
+                    counter += 1;
+                    this.attackTheBoss(counter, attackArr, x)
+                } else if (counter > 3 && this.adventureGuy.anime === "idleRight") {
+                    this.startFlash("white")
+                    this.adventureGuy.x = x;
+                    console.log(this.quizCounter)
+                    console.log(this.level1[this.levelCounter].tower.length)
+                    if (this.quizCounter > this.level1[this.levelCounter].tower.length - 5 && this.hasGrown === false) {
+                        console.log("hi")
+                        this.growTheBoss();
+                    }
+                } else {
+                    this.attackTheBoss(counter, attackArr, x)
+                }
+            } else {
+                this.attackTheBoss(counter, attackArr, x)
+            }
+        }, 10)
+    }
 
     handleNextQuizCard(question, choice) {
-        this.sendEnemy();
+        if (this.bossBattle === false) {
+            this.sendEnemy();
+        }
+        
         if (this.level1[this.levelCounter].tower[this.quizCounter]["japanese"] === "true") {
             this.soundQuestion.play();
         }
@@ -368,22 +437,28 @@ export default class Tower {
             timer = 50;
             this.level1[this.levelCounter].tower[this.quizCounter]["correct"] += 1;
             if (this.level1[this.levelCounter].tower[this.quizCounter]["correct"] < 1) {
-                // this.level1[this.levelCounter].tower.push(this.level1[this.levelCounter].tower[this.quizCounter])
             }
-            this.attackOrder.push("correct");
-            // let attackArr = ["attack1Right", "attack2Right", "attack3Right", "attack4Right"]
-            // this.adventureGuy.startNewAnime(attackArr[Math.floor(Math.random() * attackArr.length)], "runRightFast", 1) 
-            
-        } else {
+            if (this.bossBattle === true) {
+                this.handleBossBattleAttacks("correct")
+            } else {
+                this.attackOrder.push("correct");
+            }
+           } else {
             let answer = this.findCorrectAnswer();
             this.playAnswerSound(answer);
             this.setCorrectIncorrectAnswerPos(answer, choice);
             timer = 2000;
             this.level1[this.levelCounter].tower[this.quizCounter]["correct"] = -1;
-            this.attackOrder.push("incorrect")
-            // this.level1[this.levelCounter].tower.push(this.level1[this.levelCounter].tower[this.quizCounter])
-            // this.adventureGuy.startNewCustomAnime([[7,1],[6,9],[6,2],[6,3],[6,4],[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5]], "runRightFast", 8) 
+            if (this.bossBattle === true) {
+                this.level1[this.levelCounter].tower.push(this.level1[this.levelCounter].tower[this.quizCounter])
+                this.handleBossBattleAttacks("incorrect")
+            } else {
+                this.attackOrder.push("incorrect");
+            }
+            
         }
+
+        
 
         this.pauseQuiz(timer);
 
@@ -402,11 +477,13 @@ export default class Tower {
                     this.quizCounter += 1;
                 }
                 
-                if (this.quiz1 === true && this.quizCounter > 9) {
+                if (this.quiz1 === true && this.quizCounter > 9 && this.bossBattle === false) {
                     setTimeout(()=>{
                         this.startBossBattle();
                     }, 3000)
                 } 
+
+
 
                 this.changeQuizCardText();
                 this.playedQuizSound = false;
@@ -417,6 +494,7 @@ export default class Tower {
     }
 
     startBossBattle() {
+        this.canAttack = false;
         this.bossBattle = true;
         this.adventureGuy.startNewAnime("idleRight", "idleRight", 1);
         this.background.speedX = 0;
@@ -427,9 +505,12 @@ export default class Tower {
 
     bossEntering() {
         this.bossSteps += 1
+        this.shakeList = [this.adventureGuy, this.background, this.backgroundBottom]
         this.shakeScreen = true;
         setTimeout(()=>{
             this.shakeScreen = false;
+            this.dx = undefined;
+            this.dy = undefined;
             setTimeout(()=>{
                 if (this.bossSteps < 3) {
                     this.bossEntering();
@@ -450,7 +531,7 @@ export default class Tower {
                 this.enterTheBoss();
             } else {
                 this.evilGolem.startNewAnime("idleLeft", "idleLeft", 1)
-                this.growTheBoss();
+                this.canAttack = true;
             }
         }, 10)
 
@@ -458,6 +539,7 @@ export default class Tower {
 
 
     growTheBoss() {
+        this.hasGrown = true;
         this.evilGolem.height += 0.5;
         this.evilGolem.width += 0.5;
         this.evilGolem.x += -0.4
@@ -465,6 +547,13 @@ export default class Tower {
         setTimeout(()=>{
             if (this.evilGolem.width < 100) {
                 this.growTheBoss();
+                this.shakeScreen = true;
+                this.shakeList = [this.adventureGuy, this.background, this.backgroundBottom]
+                if (this.evilGolem.anime === "idleLeft") {
+                    this.evilGolem.startNewAnime("hitLeft","idleLeft", 1)
+                }
+            } else {
+                this.shakeScreen = false;
             }
         }, 10)
     }
@@ -776,8 +865,7 @@ export default class Tower {
     }
 
     screenFlashEffect() {
-        console.log(this.alphaClone)
-        if (this.alphaClone >= 1) { this.alphaDir = -0.15; }
+        if (this.alphaClone >= 0.2) { this.alphaDir = -0.15; }
         this.alphaClone += this.alphaDir;
         this.ctx.globalAlpha =  this.alphaClone;
         if (this.alphaClone <= 0) { 
@@ -791,25 +879,45 @@ export default class Tower {
     startFlash(color) {
         this.flashBox = new Component(300, 150, color, 0, 0, this.ctx, "other")
         this.screenFlash = true;
-        this.alphaDir = 0.6
+        this.alphaDir = 0.1
         this.alphaClone = 0;
     }
+
+
+    resetEnemy(enemy) {
+        setTimeout(()=>{
+            if (enemy.x <= 50) {
+                enemy.speedX = 0;
+                enemy.x = 350;
+                this.shakeScreen = false;
+                this.dx = undefined;
+                this.dy = undefined;
+            } else {
+                this.resetEnemy(enemy)
+                
+            }
+        }, 100)
+    }
+
 
     checkIfAttacking() {
         let enemyArr = [this.evilBat, this.evilSlug, this.evilSkullSnake, this.evilBeakGuy, this.evilPlant];
         let attackArr = ["attack1Right", "attack2Right", "attack3Right", "attack4Right"]
         for (let i = 0; i < enemyArr.length; i++) {
-            if (this.adventureGuy.intersecting(enemyArr[i])) {
+            if (this.adventureGuy.intersecting(enemyArr[i]) && this.shakeScreen === false) {
+                
                 if (this.check > 200) {
-                    console.log("belly of the whale!")
                     this.check = 0;
                     if (this.attackOrder[0] === "correct") {
                         this.startFlash("white");
                         this.attackOrder = this.attackOrder.slice(1)
                         this.adventureGuy.startNewAnime(attackArr[Math.floor(Math.random() * attackArr.length)], "runRightFast", 1)
+                        this.shakeList = [enemyArr[i]];
+                        this.shakeScreen = true;
                         enemyArr[i].startNewAnime("hitLeft", "idleLeft", 10)
+                        this.resetEnemy(enemyArr[i]);
                     } else {
-                        this.startFlash("red");
+                        // this.startFlash("red");
                         this.attackOrder = this.attackOrder.slice(1)
                         this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "runRightFast", 8)
                         enemyArr[i].startNewAnime("attackLeft", "idleLeft", 1)
@@ -823,21 +931,22 @@ export default class Tower {
 
 
     preShake() {
-        let shakeList = [this.adventureGuy, this.background, this.backgroundBottom]
         this.dx = Math.random()*5;
         this.dy = Math.random()*5;
-        for (let i = 0; i < shakeList.length; i++) {
-            shakeList[i].x += this.dx;
-            shakeList[i].y += this.dy;
+        for (let i = 0; i < this.shakeList.length; i++) {
+            this.shakeList[i].x += this.dx;
+            this.shakeList[i].y += this.dy;
         }
       }
 
     postShake() {
-        let shakeList = [this.adventureGuy, this.background, this.backgroundBottom]
-        for (let i = 0; i < shakeList.length; i++) {
-            shakeList[i].x -= this.dx;
-            shakeList[i].y -= this.dy;
+        if (this.dx !== undefined || this.dy !== undefined) {
+            for (let i = 0; i < this.shakeList.length; i++) {
+                this.shakeList[i].x -= this.dx;
+                this.shakeList[i].y -= this.dy;
+            }
         }
+        
     }
 
 
