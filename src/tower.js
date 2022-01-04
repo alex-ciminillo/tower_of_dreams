@@ -6,6 +6,7 @@ import EvilSlugSpritesheetReversed from './../images/evilSlugSpritesheetReversed
 import EvilPlantSpritesheetReversed from './../images/evilPlantSpritesheetReversed.png'
 import EvilBeakGuySpritesheetReversed from './../images/evilBeakGuySpritesheetReversed.png'
 import EvilSkullSnakeSpritesheetReversed from './../images/evilSkullSnakeSpritesheetReversed.png'
+import EvilGolemSpritesheet from './../images/evilGolemSpritesheet.png'
 import TrainingDummySpriteTransparent from './../images/trainingDummySpriteTransparent.png'
 import TrainingDialogue from './../images/TrainingDialogue.png'
 import TrainingWords from './../images/TrainingWords.png'
@@ -22,6 +23,7 @@ import EvilSlug from './evilSlug'
 import EvilBeakGuy from './evilBeakGuy'
 import EvilPlant from './evilPlant'
 import EvilSkullSnake from './evilSkullSnake'
+import EvilGolem from './evilGolem'
 import TrainingDummy from './trainingDummy'
 import HomeButton from './../images/homeButton.png'
 import TowerLevel1 from './../images/towerLevel1.png'
@@ -141,7 +143,7 @@ export default class Tower {
         this.evilBat = new EvilBat(20, 20, EvilBatSpritesheetReversed, 350, this.adventureGuy.y + 5, this.ctx, "sprite", 0, 9, 32, 32, "flyLeft", 19);
         this.evilBeakGuy = new EvilBeakGuy(40, 40, EvilBeakGuySpritesheetReversed, 350, this.adventureGuy.y - 13, this.ctx, "sprite", 0, 17, 64, 64, "idleLeft", 27);
         this.evilSkullSnake = new EvilSkullSnake(45, 45, EvilSkullSnakeSpritesheetReversed, 350, this.adventureGuy.y -18, this.ctx, "sprite", 0, 14, 64, 64, "idleLeft", 23);
-    
+        this.evilGolem = new EvilGolem(45, 85, EvilGolemSpritesheet, 36, -400, this.ctx, "sprite", 0, 37, 160, 160, "idleLeft", 57);
      }
 
     importSounds () {
@@ -432,6 +434,7 @@ export default class Tower {
                 if (this.bossSteps < 3) {
                     this.bossEntering();
                 } else {
+                    this.evilGolem.startNewAnime("walkLeft", "walkLeft", 1)
                     this.enterTheBoss();
                 }
                 
@@ -441,9 +444,32 @@ export default class Tower {
 
     enterTheBoss() {
 
-        
+        this.evilGolem.y += 0.5;
+        setTimeout(()=>{
+            if (this.evilGolem.y < -250) {
+                this.enterTheBoss();
+            } else {
+                this.evilGolem.startNewAnime("idleLeft", "idleLeft", 1)
+                this.growTheBoss();
+            }
+        }, 10)
 
     }
+
+
+    growTheBoss() {
+        this.evilGolem.height += 0.5;
+        this.evilGolem.width += 0.5;
+        this.evilGolem.x += -0.4
+        this.evilGolem.y -= 0.35
+        setTimeout(()=>{
+            if (this.evilGolem.width < 100) {
+                this.growTheBoss();
+            }
+        }, 10)
+    }
+
+
 
     setCorrectIncorrectAnswerPos(answer, choice) {
         this.correctAnswer.x = answer.x;
@@ -474,6 +500,12 @@ export default class Tower {
         
     }
 
+    rotateGolem() {
+        this.ctx.rotate(90 * Math.PI / 180);
+        this.evilGolem.animate();
+        this.ctx.rotate(-90 * Math.PI / 180);
+    }
+
     spriteAnimation() {
         this.adventureGuy.animate();
         this.evilPlant.animate();
@@ -481,6 +513,8 @@ export default class Tower {
         this.evilBat.animate();
         this.evilBeakGuy.animate();
         this.evilSkullSnake.animate();
+        this.rotateGolem();
+        
     }
 
     shuffleArr(array) {
@@ -510,7 +544,7 @@ export default class Tower {
             }
         } else {
             let arr = []
-            if (this.bossBattle === true) {
+            if (this.quizCounter > 9) {
                 arr = this.level1[this.levelCounter].japanese_sent
             } else {
                 arr = this.level1[this.levelCounter].japanese
@@ -777,7 +811,7 @@ export default class Tower {
                     } else {
                         this.startFlash("red");
                         this.attackOrder = this.attackOrder.slice(1)
-                        this.adventureGuy.startNewCustomAnime([[7,1],[6,9],[6,2],[6,3],[6,4],[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5]], "runRightFast", 8)
+                        this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "runRightFast", 8)
                         enemyArr[i].startNewAnime("attackLeft", "idleLeft", 1)
                     }
                 }
