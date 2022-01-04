@@ -43,10 +43,11 @@ export default class Tower {
         this.currentImports =['./homeButton.png', './soundImage.png', './talkingBox.png', './TrainingWords.png', './TrainingDialogue.png', './trainingScreen.png', './component.js', './adventure.png', './trainingDummySpriteTransparent.png', './TrainingButtonsNewMove.png']
         this.wordCounter = word;
         this.levelCounter = level;
-        this.quizCounter = 9;
+        this.quizCounter = 18;
         this.goHome = false;
         this.towerTime = false;
-        this.bossBattle = false;
+        this.bossBattle = true;
+        
         this.quiz1 = true;
         this.quiz2 = false;
         this.quiz3 = false;
@@ -61,6 +62,7 @@ export default class Tower {
         this.questionsArr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
         this.attackOrder = [];
         this.createInitialComponents();
+        this.startBossBattle();
     }
 
     createInitialComponents() {
@@ -410,6 +412,8 @@ export default class Tower {
                     if (this.quizCounter > this.level1[this.levelCounter].tower.length - 5 && this.hasGrown === false) {
                         console.log("hi")
                         this.growTheBoss();
+                    } else if (this.level1[this.levelCounter].tower.length - 1 === this.quizCounter) {
+                        this.defeatTheBoss();
                     }
                 } else {
                     this.attackTheBoss(counter, attackArr, x)
@@ -418,6 +422,13 @@ export default class Tower {
                 this.attackTheBoss(counter, attackArr, x)
             }
         }, 10)
+    }
+
+    defeatTheBoss() {
+        this.canAttack = false;
+        this.evilGolem.pause = true;
+        this.evilGolem.startNewAnime("dieLeft", "dieLeft", 1);
+        
     }
 
     handleNextQuizCard(question, choice) {
@@ -481,11 +492,9 @@ export default class Tower {
                     setTimeout(()=>{
                         this.startBossBattle();
                     }, 3000)
-                } 
-
-
-
-                this.changeQuizCardText();
+                } else {
+                    this.changeQuizCardText();
+                }
                 this.playedQuizSound = false;
             }
             
@@ -532,6 +541,7 @@ export default class Tower {
             } else {
                 this.evilGolem.startNewAnime("idleLeft", "idleLeft", 1)
                 this.canAttack = true;
+                this.changeQuizCardText();
             }
         }, 10)
 
@@ -964,8 +974,16 @@ export default class Tower {
         this.spriteAnimation();
         if (this.screenFlash === true) { this.screenFlashEffect(); }
         this.updateInitialComponents();
-        if (this.quiz1 === true || this.quiz2 || this.quiz3) { this.updateQuizCardComponents(); }
-        else { this.updateNewCardComponents(); }
+        if (this.quiz1 === true || this.quiz2 || this.quiz3) { 
+            if (this.canAttack === true) {
+                this.updateQuizCardComponents();
+            }
+        }
+        else { 
+            if (this.canAttack === true) {
+                this.updateNewCardComponents(); 
+            }
+        }
         this.checkIfAttacking();
         if (this.shakeScreen === true) { this.postShake(); }
 

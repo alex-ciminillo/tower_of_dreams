@@ -179,18 +179,7 @@ export default class Component {
         if (this.frame >= speed) {
             if (this.column === stop - colDir + colDir && this.row === row) {
                 this.playNum -= 1;
-                if (this.playNum === 0) {
-                    this.playNum -= 1;
-                    this.anime = this.nextAnime;
-                    this.firstAnimation = true;
-                    this.frame = 0;
-                    return;
-                }
-                this.column = start - colDir;
-                this.row = row;
-            } else if (this.row > row) {
-                if (this.column === stop - colDir - this.columnLength) {
-                    this.playNum -= 1;
+                if (this.pause !== true) {
                     if (this.playNum === 0) {
                         this.playNum -= 1;
                         this.anime = this.nextAnime;
@@ -198,8 +187,33 @@ export default class Component {
                         this.frame = 0;
                         return;
                     }
-                    this.column = start - colDir;
-                    this.row = row;
+                    
+                        this.column = start - colDir;
+                        this.row = row;
+                } else {
+                    this.stop = true;
+                    return;
+                }
+                
+            } else if (this.row > row) {
+                if (this.column === stop - colDir - this.columnLength) {
+                    this.playNum -= 1;
+                    if (this.pause !== true) {
+                        if (this.playNum === 0) {
+                            this.playNum -= 1;
+                            this.anime = this.nextAnime;
+                            this.firstAnimation = true;
+                            this.frame = 0;
+                            return;
+                        }
+                        
+                            this.column = start - colDir;
+                            this.row = row;
+                    } else {
+                        this.stop = true;
+                        return;
+                    }
+                    
                 }
             } else if (this.column === this.columnLength) {
                 this.row += 1;
