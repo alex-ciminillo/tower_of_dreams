@@ -37,16 +37,15 @@ export default class TowerOfDreams {
 
         this.registerEvents();
         this.animate();
-        // //real code
-        // this.currentScreen = "Title"
-        // // //end real code
+        //real code
+        this.currentScreen = "Title"
+        // //end real code
         
         this.fadeScreen = false;
         
-        //test code for tower screen
-        this.currentScreen = "Home"
-        //end test code for tower
+        
         if (this.checkCookie("reward") === "yes") { this.home.getTheItem = true; }
+        if (this.checkCookie("start") === "true") { this.currentScreen = "Home" }
     }
 
     registerEvents() {

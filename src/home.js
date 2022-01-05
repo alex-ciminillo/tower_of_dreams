@@ -315,10 +315,11 @@ export default class Home {
         this.myMapImage.update();
         this.myTraining.update();
         this.drawInstaElements();
+        if (this.getTheItem === true) { this.goldSushi.update(); }
         this.adventureGuy.newPos();
         this.adventureGuy.update();
         if (this.askIfTrainingBox === true) { this.askIfTraining(); }
-        if (this.getTheItem === true) { this.goldSushi.update(); }
+        
         
         
         this.frame++

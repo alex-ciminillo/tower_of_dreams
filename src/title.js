@@ -40,10 +40,10 @@ export default class Title {
         this.myBackground1 = new Component(300, 150, Background1, 0, 0, this.ctx, "image");
         this.myBackground2 = new Component(300, 150, Background2, 0, 0, this.ctx, "image");
         this.myCliff = new Component(100, 100, Cliff, 0,75, this.ctx, "image")
-        this.myCastle = new Component(45, 160, Tower, 245,0, this.ctx, "image")
+        this.myCastle = new Component(65, 160, Tower, 235,0, this.ctx, "image")
         this.adventureGuy = new Component(95, 70, MainCharacter, 25, 60, this.ctx, "sprite", 5, 3, 50, 37);
-        this.soundImage = new Component(10, 10, SoundButton, 5, 138, this.ctx, "image");
-        this.musicImage = new Component(10, 10, MusicButton, 20, 138, this.ctx, "image");
+        this.soundImage = new Component(10, 10, SoundButton, 270, 138, this.ctx, "image");
+        this.musicImage = new Component(10, 10, MusicMuteButton, 285, 138, this.ctx, "image");
         this.titleWords = new Component("16px", "TitleScreen", "black", 10, 15, this.ctx, "text");
         this.titleWords2 = new Component("16px", "TitleScreen", "black", 10, 30, this.ctx, "text");
         this.titleScreen = true;
@@ -115,12 +115,12 @@ export default class Title {
 
     titleClick(e) {
         if (this.themeMusic === false) {
-            this.beginTheme.play()
+            // this.beginTheme.play()
             this.themeMusic = true;
         }
         if (e.type == "mousedown" && this.btn.clicked(this.gx, this.gy)) {
             this.mouseState = "down"
-            this.btn.color = StartButtonPressed
+            // this.btn.color = StartButtonPressed
         } else if (e.type == "mouseup" && this.btn.clicked(this.gx, this.gy)) {
             this.btn.color = StartButton
             this.mouseState = "up"
@@ -154,11 +154,12 @@ export default class Title {
         this.move = false;
         this.initMove(5, 1, "runLeft")
         this.adventureGuy.speedX = -2
+        document.cookie = "start=true"
     }
 
     titleHover(e) {
         if (this.btn.clicked(this.gx, this.gy) && this.mouseState !== "down") {
-            this.btn.color = StartButtonPressed
+            // this.btn.color = StartButtonPressed
             if (this.mouseOnBegin === false) { 
                 if (this.allSounds === true) { this.beginSound.play(); }
                 this.mouseOnBegin = true;
@@ -171,7 +172,7 @@ export default class Title {
             }
         }
         if (this.btn.clicked(this.gx, this.gy) && this.mouseState === "down") {
-            this.btn.color = StartButtonPressed
+            // this.btn.color = StartButtonPressed
         } 
     }
 
