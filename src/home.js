@@ -19,12 +19,12 @@ import Cloud2 from './../images/cloud2.png'
 import CliffTitle from './../images/cliffTitle.png'
 import AdventurerSingle from './../images/adventurerSingle.png'
 import AvatarSwordRight from './../images/AvatarSwordRight.png'
+import GoldSushi from './../images/goldSushi.png'
 
 
 
 export default class Home {
     constructor(canvas, ctx, dimensions) {
-        
         this.canvas = canvas;
         this.ctx = ctx;
         this.dimensions = dimensions;
@@ -38,13 +38,12 @@ export default class Home {
         this.move = true;
         this.yesInvisibleBox = new Component(38.38, 11.36, "invisible", 115.99, 84.69, this.ctx, "other")
         this.noInvisibleBox = new Component(38.38, 11.36, "invisible", 115.99, 84.69, this.ctx, "other")
-        
+        this.goldSushi = new Component(17.180000000000007, 7.8984210526315834, GoldSushi, 232.71455210911583, 32.76578947368421, this.ctx, "image")
+    
         // test code section
 
 
         //test code section end
-
-
 
 
         this.askIfTrainingBox = false;
@@ -104,6 +103,8 @@ export default class Home {
             this.instaElements[i].update();
         }
     }
+
+    
 
     initMove(start, row, anime) {
         
@@ -317,7 +318,7 @@ export default class Home {
         this.adventureGuy.newPos();
         this.adventureGuy.update();
         if (this.askIfTrainingBox === true) { this.askIfTraining(); }
-        
+        if (this.getTheItem === true) { this.goldSushi.update(); }
         
         
         this.frame++

@@ -46,6 +46,7 @@ export default class TowerOfDreams {
         //test code for tower screen
         this.currentScreen = "Home"
         //end test code for tower
+        if (this.checkCookie("reward") === "yes") { this.home.getTheItem = true; }
     }
 
     registerEvents() {
@@ -236,12 +237,29 @@ export default class TowerOfDreams {
         this.ctx.globalAlpha = 1;
     }
 
+    checkCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length)
+            }
+        }
+    }
+
     fadeScreenToWhite() {
         if (this.alphaClone2 >= .8) { 
+            if (this.getTheItem === true) { this.home.getTheItem = true; }
             this.fadeBoxArr = [];
             this.screenFade = false; 
             this.alphaDir2 = -0.01
             this.currentScreen = "Home"
+            if (this.checkCookie("reward") === "yes") { this.home.getTheItem = true; }
             this.tower.reset();
         }
         this.alphaClone2 += this.alphaDir2;
@@ -262,6 +280,7 @@ export default class TowerOfDreams {
         this.screenFade2 = true;
         this.alphaDir2 = dir
         this.alphaClone2 = start;
+        this.tower.goHome = false;
     }
 
     startFade(color, dir, start) {
@@ -296,6 +315,7 @@ export default class TowerOfDreams {
         if (this.showEditButton === true) { this.editButton.update(); }
         if (this.editMode === true) { this.editScreen.animate(this.gx, this.gy, this.gx2, this.gy2) }
         if (this.tower.fadeTheScreen === true) { this.startFade("black", 0.005, 0) }
+        if (this.tower.goHome === true) { this.startFade2("white", 0.05, 0); }
         requestAnimationFrame(this.animate.bind(this));
         
     }

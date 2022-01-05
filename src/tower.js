@@ -32,6 +32,7 @@ import TowerLevel1Bottom from './../images/towerLevel1Bottom.png'
 import TreasureChest from './treasureChest'
 import SimpleYesNoHomeBox from './../images/simpleYesNoHomeBox.png'
 import Pixel_heart from './../images/pixel_heart.png'
+import GoldSushi from './../images/goldSushi.png'
 
 
 
@@ -136,6 +137,7 @@ export default class Tower {
         this.pixelHeart1 = new Component(19.87, 16.17, Pixel_heart, 28.07, 3.369393439240767, this.ctx, "image")
         this.pixelHeart2 = new Component(21.14, 17.16, Pixel_heart, 49.205089728063406, 3.36909015886115, this.ctx, "image")
         this.pixelHeart3 = new Component(21.14, 17.16, Pixel_heart, 70.35125068809865, 3.3691912523210235, this.ctx, "image")
+        this.goldSushi = new Component(14.66, 9.47, GoldSushi, 131.60, 46.58, this.ctx, "image")
     }
 
     createSounds() {
@@ -217,6 +219,7 @@ export default class Tower {
         this.evilGolem.y = -400
         this.askIfTrainingBox = false;
         this.canAttack = true;
+        this.getTheItem = false;
         this.gx = -900;
         this.gy = -900;
     }
@@ -537,6 +540,14 @@ export default class Tower {
                 this.treasureChest.speedX = 0;
                 this.evilGolem.speedY = 0;
                 this.treasureChest.startNewCustomAnime([[4,2],[5,2]], "open", 60, this.treasureChest.pauseAnime.bind(this.treasureChest))
+                setTimeout(()=>{
+                    document.cookie = "reward=yes"
+                    this.getTheItem = true;
+                    setTimeout(()=>{
+                        this.goHome = true;
+                    }, 1500)
+                }, 1500)
+                
             } else {
                 this.checkForAtChest();
             }
@@ -1052,6 +1063,10 @@ export default class Tower {
         }, 500)
     }
 
+    gainItem() {
+        this.goldSushi.update();
+    }
+
     gameOver() {
         this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "die", 8, this.adventureGuy.pauseAnime.bind(this.adventureGuy))
         this.background.speedX = 0;
@@ -1157,8 +1172,10 @@ export default class Tower {
             }
         }
         this.checkIfAttacking();
+        if (this.getTheItem === true) { this.gainItem(); }
         if (this.shakeScreen === true) { this.postShake(); }
         if (this.askIfTrainingBox === true) { this.askIfTraining(); }
+        
     }
 
 
