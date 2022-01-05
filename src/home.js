@@ -18,6 +18,7 @@ import Cloud6 from './../images/cloud6.png'
 import Cloud2 from './../images/cloud2.png'
 import CliffTitle from './../images/cliffTitle.png'
 import AdventurerSingle from './../images/adventurerSingle.png'
+import AvatarSwordRight from './../images/AvatarSwordRight.png'
 
 
 
@@ -30,6 +31,7 @@ export default class Home {
         this.myBackground = new Component(300, 150, "black", 0, 0, this.ctx, "other");
         this.myHouse = new Component(300, 150, House, 0, 0, this.ctx, "image");
         this.adventureGuy = new Component(55, 30, MainCharacter, 85, 60, this.ctx, "sprite", 5, 3, 50, 37);
+        
         this.myMapImage = new Component(20.7, 11.4, Map, 138.6, 59.6, this.ctx, "image");
         this.myMap = new Component(1, 1, "invisible", 147.2, 64, this.ctx, "Other");
         this.myTraining = new Component(12, 15, "invisible", 75, 0, this.ctx, "other");

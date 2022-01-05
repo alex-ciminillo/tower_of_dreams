@@ -32,7 +32,8 @@ export default class TowerOfDreams {
         this.editMode = false;
         this.showEditButton = false;
         this.training = new Training(this.ctx, 0, 0, this.canvas)
-        
+        this.fadeBoxArr = [];
+        this.fadeBoxArr2 = [];
 
         this.registerEvents();
         this.animate();
@@ -43,7 +44,7 @@ export default class TowerOfDreams {
         this.fadeScreen = false;
         
         //test code for tower screen
-        this.currentScreen = "Tower"
+        this.currentScreen = "Home"
         //end test code for tower
     }
 
@@ -102,7 +103,7 @@ export default class TowerOfDreams {
         if (this.tower.goHome === true) { 
             this.currentScreen = "Home" 
             this.tower.reset();
-        }
+        } 
     }
 
     towerHover(e) {
@@ -154,6 +155,8 @@ export default class TowerOfDreams {
     beginTraining() {
         this.currentScreen = "Training"
         this.home.beginTraining = false;
+        this.home.gx = 0;
+        this.home.gy = 0;
     }
 
     beginGame() {
@@ -198,6 +201,8 @@ export default class TowerOfDreams {
 
     }
 
+    
+
 
     enableEditMode(e) {
         if (this.editButton.clicked(this.gx, this.gy) && e.type === "mousedown") {
@@ -213,6 +218,60 @@ export default class TowerOfDreams {
         }
     }
 
+
+    fadeScreenToBlack() {
+        if (this.alphaClone >= 1) { 
+            this.startFade2("white", 0.05, 0);
+            this.alphaClone = .99
+            this.alphaDir = 0
+        }
+        this.alphaClone += this.alphaDir;
+        this.ctx.globalAlpha =  this.alphaClone;
+        if (this.alphaClone <= 0) { 
+            
+        } else {
+            this.fadeBoxArr[0].update();
+            this.fadeBoxArr[1].update();
+        }
+        this.ctx.globalAlpha = 1;
+    }
+
+    fadeScreenToWhite() {
+        if (this.alphaClone2 >= .8) { 
+            this.fadeBoxArr = [];
+            this.screenFade = false; 
+            this.alphaDir2 = -0.01
+            this.currentScreen = "Home"
+            this.tower.reset();
+        }
+        this.alphaClone2 += this.alphaDir2;
+        this.ctx.globalAlpha =  this.alphaClone2;
+        if (this.alphaClone2 <= 0) { 
+            
+            this.screenFade2 = false;
+        } else {
+            this.fadeBoxArr2[0].update();
+            this.fadeBoxArr2[1].update();
+        }
+        this.ctx.globalAlpha = 1;
+    }
+
+    startFade2(color, dir, start) {
+        this.fadeBoxArr2.push(new Component(300, 150, color, 0, 0, this.ctx, "other"));
+        this.fadeBoxArr2.push(new Component(300, 150, color, 0, 0, this.ctx, "other"));
+        this.screenFade2 = true;
+        this.alphaDir2 = dir
+        this.alphaClone2 = start;
+    }
+
+    startFade(color, dir, start) {
+        this.fadeBoxArr.push(new Component(300, 150, color, 0, 0, this.ctx, "other"));
+        this.fadeBoxArr.push(new Component(300, 150, color, 0, 0, this.ctx, "other"));
+        this.screenFade = true;
+        this.alphaDir = dir
+        this.alphaClone = start;
+    }
+
     animate() {
         
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -225,12 +284,18 @@ export default class TowerOfDreams {
         else if (this.currentScreen === "Home") { this.home.animate(this.e); }
         else if (this.currentScreen === "Training") { this.training.animate(this.gx, this.gy); }
         else if (this.currentScreen === "Tower") { this.tower.animate(this.gx, this.gy); }
-
+        if (this.screenFade === true) { 
+            this.fadeScreenToBlack(); 
+        }
+        if (this.screenFade2 === true) {
+            this.fadeScreenToWhite();
+        }
         this.ctx.globalAlpha = this.alpha;
         // real code end
 
         if (this.showEditButton === true) { this.editButton.update(); }
         if (this.editMode === true) { this.editScreen.animate(this.gx, this.gy, this.gx2, this.gy2) }
+        if (this.tower.fadeTheScreen === true) { this.startFade("black", 0.005, 0) }
         requestAnimationFrame(this.animate.bind(this));
         
     }

@@ -80,6 +80,8 @@ export default class Tower {
         this.changeQuizCardText();
     }
 
+    
+
     createTexts() {
         this.newWordJapanese = new Component("9px", "Ubuntu", "Black", 49.18, 90.71, this.ctx, "text");
         this.newWordRomanji = new Component("9px", "Ubuntu", "Black", 49.18, 105.63, this.ctx, "text");
@@ -202,7 +204,6 @@ export default class Tower {
         this.homeButton.update();
         for (let i = 0; i < this.heartArr.length; i++) {
             if (this.heartArr[i] !== undefined) {
-                console.log(this.heartArr[i])
                 this.heartArr[i].update();
             }
         }
@@ -325,7 +326,6 @@ export default class Tower {
             if (gx - this.gx < -250 * 4 && gy - this.gy < -100 * 4) {
                 let gx = this.gx;
                 let gy = this.gy;
-                console.log("true")
                 setTimeout(()=>{
                     if (this.gx - gx < -250 * 4 && this.gy - gy < -100 * 4) {
                         this.bossBattle = true;
@@ -490,10 +490,8 @@ export default class Tower {
                 } else if (counter > 3 && this.adventureGuy.anime === "idleRight") {
                     this.startFlash("white")
                     this.adventureGuy.x = x;
-                    console.log(this.quizCounter)
-                    console.log(this.level1[this.levelCounter].tower.length)
                     if (this.quizCounter > this.level1[this.levelCounter].tower.length - 5 && this.hasGrown === false) {
-                        console.log("hi")
+                     
                         this.growTheBoss();
                     } else if (this.level1[this.levelCounter].tower.length - 1 === this.quizCounter) {
                         this.defeatTheBoss();
@@ -1027,19 +1025,25 @@ export default class Tower {
     }
 
     loseAHeart(heart) {
-        this.heartArr.slice(0, -1)
+        this.heartArr = this.heartArr.slice(0, -1)
         setTimeout(()=>{
             this.heartArr.push(heart)
             setTimeout(()=>{
-                this.heartArr.slice(0, -1)
+                this.heartArr = this.heartArr.slice(0, -1)
                 setTimeout(()=>{
                     this.heartArr.push(heart)
                     setTimeout(()=>{
-                        this.heartArr.slice(0, -1)
+                        this.heartArr = this.heartArr.slice(0, -1)
                         setTimeout(()=>{
                             this.heartArr.push(heart)
                             setTimeout(()=>{
-                                this.heartArr.slice(0, -1)
+                                this.heartArr = this.heartArr.slice(0, -1)
+                                if (this.heartArr.length === 0) { 
+                                    this.fadeTheScreen = true; 
+                                    setTimeout(()=>{
+                                        this.fadeTheScreen = false;
+                                    }, 100)
+                                }
                             }, 100)
                         }, 100)
                     }, 250)
@@ -1047,6 +1051,16 @@ export default class Tower {
             }, 500)
         }, 500)
     }
+
+    gameOver() {
+        this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "die", 8, this.adventureGuy.pauseAnime.bind(this.adventureGuy))
+        this.background.speedX = 0;
+        setTimeout(()=>{
+            this.canAttack = false;
+        }, 2000)
+    }
+
+    
 
 
     checkIfAttacking() {
@@ -1067,9 +1081,14 @@ export default class Tower {
                         this.resetEnemy(enemyArr[i]);
                     } else {
                         // this.startFlash("red");
-                        this.loseAHeart(this.heartArr.slice(-1))
+                        this.loseAHeart(this.heartArr.slice(-1)[0])
+                        this.hitCounter += 1;
                         this.attackOrder = this.attackOrder.slice(1)
-                        this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "runRightFast", 8)
+                        if (this.hitCounter < 3) {
+                            this.adventureGuy.startNewCustomAnime([[6,9],[9,3],[6,9],[9,4],[6,9],[9,5],[6,9],[9,4],[6,9],[9,5],[9,4],[6,9],[9,5]], "runRightFast", 8)
+                        } else {
+                            this.gameOver();
+                        }
                         enemyArr[i].startNewAnime("attackLeft", "idleLeft", 1)
                     }
                 }

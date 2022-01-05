@@ -127,6 +127,11 @@ export default class Training {
         this.trainingDummy = new TrainingDummy(36.15, 47.3, TrainingDummySpriteTransparent, 174.23, 24.01, this.ctx, "sprite", 0, 0, 185, 235, "idleLeft", 2);
     }
 
+    reset(){
+        this.gx = 0;
+        this.gy = 0;
+    }
+
     importSounds () {
         const path = require.context("./../voices", false, /\.mp3$/)
         this.pathkeys = path.keys()
