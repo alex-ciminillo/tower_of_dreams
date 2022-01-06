@@ -40,12 +40,33 @@ export default class TowerOfDreams {
         //real code
         this.currentScreen = "Title"
         // //end real code
-        
         this.fadeScreen = false;
-        
         
         if (this.checkCookie("reward") === "yes") { this.home.getTheItem = true; }
         if (this.checkCookie("start") === "true") { this.currentScreen = "Home" }
+    }
+
+    deleteCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    }
+
+    restartGame() {
+        this.deleteCookie("reward")
+        this.deleteCookie("start")
+    }
+
+
+    checkResetGame(){
+        if (this.reset !== undefined) { clearTimeout(this.reset); }
+        if (this.resetCounter === undefined) { this.resetCounter = 0}
+        this.resetCounter += 1;
+        if (this.resetCounter > 140) {
+            this.restartGame();
+        }
+        this.reset = setTimeout(()=>{
+            this.resetCounter = 0
+        }, 500)
+        
     }
 
     registerEvents() {
@@ -86,6 +107,7 @@ export default class TowerOfDreams {
     }
 
     click(e) {
+            this.checkResetGame();
             this.checkForEditModeEnabling(e);
             if (this.showEditButton === true) { this.enableEditMode(e)  }
             if (this.editMode === true) {

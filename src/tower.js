@@ -452,7 +452,13 @@ export default class Tower {
         } else {
             let y = this.evilGolem.y;
             this.evilGolem.y = -this.adventureGuy.x - this.adventureGuy.width - this.evilGolem.width
-            this.attackTheAdventurer(0, y)
+            this.loseAHeart(this.heartArr.slice(-1)[0])
+            this.hitCounter += 1;
+            if (this.hitCounter < 3) {
+                this.attackTheAdventurer(0, y)
+            } else {
+                this.gameOver();
+            }
         }
     }
 

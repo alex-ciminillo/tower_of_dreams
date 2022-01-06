@@ -42,7 +42,7 @@ export default class Title {
         this.myCliff = new Component(100, 100, Cliff, 0,75, this.ctx, "image")
         this.myCastle = new Component(65, 160, Tower, 235,0, this.ctx, "image")
         this.adventureGuy = new Component(95, 70, MainCharacter, 25, 60, this.ctx, "sprite", 5, 3, 50, 37);
-        this.soundImage = new Component(10, 10, SoundButton, 270, 138, this.ctx, "image");
+        this.soundImage = new Component(10, 10, SoundMuteButton, 270, 138, this.ctx, "image");
         this.musicImage = new Component(10, 10, MusicMuteButton, 285, 138, this.ctx, "image");
         this.titleWords = new Component("16px", "TitleScreen", "black", 10, 15, this.ctx, "text");
         this.titleWords2 = new Component("16px", "TitleScreen", "black", 10, 30, this.ctx, "text");
@@ -58,7 +58,7 @@ export default class Title {
         this.beginTheme = new Sound(TitleTheme, 0.2);
         this.themeMusic = false;
         
-        this.allSounds = true;
+        this.allSounds = false;
         
     }
 
