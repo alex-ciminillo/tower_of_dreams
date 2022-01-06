@@ -1,13 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require("webpack");
-console.warn = () => {};
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: {
       index: './src/index.js',
-      hot: 'webpack/hot/dev-server.js',
-      client: 'webpack-dev-server/client/index.js?hot=true&live-reload=true',
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -24,7 +21,6 @@ module.exports = {
     ],
   output: {
     filename: '[name].bundle.js',
-    publicPath: "/tower_of_dreams/",
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },

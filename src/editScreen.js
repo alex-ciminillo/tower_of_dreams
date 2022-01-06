@@ -46,23 +46,24 @@ export default class EditScreen {
         return path.keys().map(path)
     }
     loadAllImages() {
-            let images = this.images();
-            let imageArr = []
-            let imagex = 0
-            this.pathKeysHash = {};
-            for (let i = 0; i < images.length; i++) {
-                this.pathKeysHash[images[i]] = this.pathkeys[i];
-                imageArr.push(new Component(5, 15, images[i], imagex, this.firstImagePos, this.ctx2, "image"));
-                this.firstImagePos += this.canvas2.width/7;
-                if (this.firstImagePos > this.canvas2.height/4.5) {
-                    this.firstImagePos = 0;
-                    imagex += 5;
-                }
-                
-                    
+        let images = this.images();
+        let imageArr = []
+        let imagex = 0
+        this.pathKeysHash = {};
+        for (let i = 0; i < images.length; i++) {
+            this.pathKeysHash[images[i]] = this.pathkeys[i];
+            imageArr.push(new Component(5, 15, images[i], imagex, this.firstImagePos, this.ctx2, "image"));
+            this.firstImagePos += this.canvas2.width/7;
+            if (this.firstImagePos > this.canvas2.height/4.5) {
+                this.firstImagePos = 0;
+                imagex += 5;
             }
-            return imageArr
+            
+                
         }
+        return imageArr
+    }
+
     createMouseClick() {
         
         this.newClick = new Component("7px", "Consolas", this.colors[Math.floor(this.mouseClicksArr.length/3)], 245, (this.mouseClickPosIncrement + 6*this.mouseClicksArr.length), this.ctx, "text");
