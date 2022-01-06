@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require("webpack");
 console.warn = () => {};
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
       index: './src/index.js',
       hot: 'webpack/hot/dev-server.js',
