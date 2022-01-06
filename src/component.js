@@ -136,7 +136,6 @@ export default class Component {
         this.firstAnimation = true;
         this.nextAnime = nextAnime;
         this.playNum = playNum;
-        console.log(cb)
         if (cb !== undefined) {
             console.log("hello")
             cb();

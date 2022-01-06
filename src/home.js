@@ -45,6 +45,7 @@ export default class Home {
 
         //test code section end
 
+        
 
         this.askIfTrainingBox = false;
         this.anime = "idleRight";
@@ -98,9 +99,7 @@ export default class Home {
         new Component(4.434993932739943, 3.0744917776726446, CliffTitle, 172.1428108924363, 21.290610496882707, this.ctx, "image"),
         new Component(2.761798336334279, 2.5339735478090827, AdventurerSingle, 173.87352759595677, 20.568120553468336, this.ctx, "image"),
         new Component(2.2196382494308304, 0.7865038509643902, Cloud3, 176.55856311662026, 23.096503192679883, this.ctx, "image"),
-        new Component(17.03, 15.80, Pixel_heart, 111.10, 44.18, this.ctx, "image"),
-        new Component(15.82, 16.04, Pixel_heart, 155.51, 54.09, this.ctx, "image"),
-        new Component(11.56, 10.85, Pixel_heart, 128.13, 71.54, this.ctx, "image")];
+       ];
         
     }
 
@@ -311,6 +310,33 @@ export default class Home {
     }
 
 
+    pulsingGlow() {
+        if (this.alphaClone >= 0.2) { this.alphaDir = -0.002; }
+        this.alphaClone += this.alphaDir;
+        this.ctx.globalAlpha =  this.alphaClone;
+        this.flashBox.update();
+        this.ctx.globalAlpha = 1;
+        if (this.alphaClone <= 0.002) { 
+            this.alphaDir = 0.002; 
+            this.alphaClone = 0.003
+        }
+    }
+
+    startPulsingGlow() {
+        this.flashBox = new Component(22.22, 14.47, "white", 89.10, 17.13, this.ctx, "circle")
+        this.trainingPulse = true;
+        this.alphaDir = 0.002
+        this.alphaClone = 0;
+    }
+
+    startPulsingGlow2() {
+        this.flashBox = new Component(24.74, 10.55, "white", 137.07, 60.55, this.ctx, "circle")
+        this.trainingPulse = true;
+        this.alphaDir = 0.002
+        this.alphaClone = 0;
+    }
+
+
     animate(e) {
         this.boundaries();
         this.checkSpeed();
@@ -318,7 +344,9 @@ export default class Home {
         this.adventureGuy.checkIfStillMoving(this.clickedSpotx, this.clickedSpoty);
         this.myBackground.update();
         this.myHouse.update();
+        
         this.myMapImage.update();
+        if (this.trainingPulse === true) { this.pulsingGlow(); }
         this.myTraining.update();
         this.drawInstaElements();
         if (this.getTheItem === true) { this.goldSushi.update(); }

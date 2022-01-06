@@ -43,7 +43,12 @@ export default class TowerOfDreams {
         this.fadeScreen = false;
         
         if (this.checkCookie("reward") === "yes") { this.home.getTheItem = true; }
-        if (this.checkCookie("start") === "true") { this.currentScreen = "Home" }
+        if (this.checkCookie("start") === "true") { 
+            this.currentScreen = "Home" 
+        } else {
+            this.home.startPulsingGlow();
+        }
+
     }
 
     deleteCookie(name) {
@@ -137,6 +142,8 @@ export default class TowerOfDreams {
         if (this.training.goHome === true) { 
             this.currentScreen = "Home";
             this.training.goHome = false;
+            this.home.adventureGuy.y += 25
+            if (this.checkCookie("triedTower") !== "true") { this.home.startPulsingGlow2(); }
         } else if (this.training.towerTime === true) { 
             this.currentScreen = "Tower" 
             this.towerTime = false;
@@ -171,6 +178,8 @@ export default class TowerOfDreams {
         } else if (this.home.beginTower === true) {
             this.currentScreen = "Tower"
             this.home.beginTower = false;
+            document.cookie = "triedTower=true"
+            this.home.trainingPulse = false;
         }
     }
 
