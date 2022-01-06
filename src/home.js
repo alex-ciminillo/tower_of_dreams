@@ -20,7 +20,7 @@ import CliffTitle from './../images/cliffTitle.png'
 import AdventurerSingle from './../images/adventurerSingle.png'
 import AvatarSwordRight from './../images/AvatarSwordRight.png'
 import GoldSushi from './../images/goldSushi.png'
-
+import Pixel_heart from './../images/pixel_heart.png'
 
 
 export default class Home {
@@ -97,7 +97,11 @@ export default class Home {
         new Component(4.341192632356012, 2.5573205454980474, CliffTitle, 172.14335747375117, 21.392222491582295, this.ctx, "image"),
         new Component(4.434993932739943, 3.0744917776726446, CliffTitle, 172.1428108924363, 21.290610496882707, this.ctx, "image"),
         new Component(2.761798336334279, 2.5339735478090827, AdventurerSingle, 173.87352759595677, 20.568120553468336, this.ctx, "image"),
-        new Component(2.2196382494308304, 0.7865038509643902, Cloud3, 176.55856311662026, 23.096503192679883, this.ctx, "image")];
+        new Component(2.2196382494308304, 0.7865038509643902, Cloud3, 176.55856311662026, 23.096503192679883, this.ctx, "image"),
+        new Component(17.03, 15.80, Pixel_heart, 111.10, 44.18, this.ctx, "image"),
+        new Component(15.82, 16.04, Pixel_heart, 155.51, 54.09, this.ctx, "image"),
+        new Component(11.56, 10.85, Pixel_heart, 128.13, 71.54, this.ctx, "image")];
+        
     }
 
     drawInstaElements() {

@@ -16,12 +16,13 @@ module.exports = {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: 'Development',
+        title: 'Tower of Dreams',
       }),
       new webpack.HotModuleReplacementPlugin(),
     ],
   output: {
     filename: '[name].bundle.js',
+    publicPath: "/tower_of_dreams/",
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
