@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require("webpack");
+console.warn = () => {};
 module.exports = {
   mode: 'development',
   entry: {
@@ -16,6 +17,7 @@ module.exports = {
     },
     plugins: [
       new HtmlWebpackPlugin({
+        favicon: `./src/favicon.ico`,
         title: 'Tower of Dreams',
       }),
       new webpack.HotModuleReplacementPlugin(),
@@ -33,7 +35,7 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
         type: 'asset/resource',
       },
       {

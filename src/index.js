@@ -2,6 +2,7 @@ import _ from 'lodash';
 import './../stylesheets/style.css';
 import TowerOfDreams from './game.js'
 import Git from './../images/github_icon.png'
+import Fav from './../images/favicon.ico'
 
 function createFooter() {
   const footer = document.createElement('footer')
@@ -38,9 +39,17 @@ function component() {
     canvas2.classList.add('canvas3');
     outerDiv.appendChild(canvas2);
     outerDiv.appendChild(canvas);
+
+    const head = document.getElementsByTagName("head")[0]
+    const link = document.createElement('link');
+    link.setAttribute('rel', 'icon')
+    link.setAttribute('type', 'image/x-icon')
+    link.setAttribute('href', Fav)
+    head.appendChild(link)
     
     return [outerDiv, canvas, canvas2];
   }
+  console.warn = () => {};
   let arr = component()
   let foot = createFooter()
   document.body.appendChild(arr[0]);
