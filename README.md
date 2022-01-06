@@ -2,6 +2,8 @@
 
 Fight waves of enemies and defeat floor bosses to make it to the top of the tower! The one that makes it to the top will have their greatest desire fulfilled! But how can someone become strong enough to make it to the top? By learning japanese! Each enemy, obstacle, and floor tests your japanese vocab and grammar to make sure you are strong enough to move forward!
 
+[Live Demo](https://alex-ciminillo.github.io/tower_of_dreams/)
+
 ## Functionality & MVPs
 
 With the Tower of Dreams, users will be able to: 
@@ -14,12 +16,11 @@ With the Tower of Dreams, users will be able to:
 
 * Test their Japanese by fighting enemies
 
-* Buy equipment for their avatar with in game money from beating enemies
+* Earn trophies for defeating levels
 
 
 In Addition, this project will include:
 
-* An **about** modal describing the background and rules of the game
 * A production README
 
 ## Wireframe
@@ -78,7 +79,13 @@ Once you have trained enough at home, you can try to take on the next floor in t
 
 ### Loot
 
-From defeating enemies and floor bosses, you will earn money and special items. 
+Earn trophies to display in your house!
+
+## Future Plans
+
+### Money
+
+Gain money after defeating each enemy! 
 
 ### Shop
 
