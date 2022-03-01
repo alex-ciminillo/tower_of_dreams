@@ -2,6 +2,7 @@ import _ from 'lodash';
 import './../stylesheets/style.css';
 import TowerOfDreams from './game.js'
 import Git from './../images/github_icon.png'
+import LinkIn from './../images/linkedinicon.png'
 import Fav from './../images/favicon.ico'
 
 function createFooter() {
@@ -18,10 +19,22 @@ function createFooter() {
   a1.setAttribute('href', 'https://github.com/alex-ciminillo/tower_of_dreams')
   const img1 = document.createElement('img')
   img1.setAttribute('src', Git)
-
   a1.appendChild(img1)
   span2.appendChild(a1)
   footer.appendChild(span2)
+
+  const span3 = document.createElement('span')
+  span3.classList.add('git')
+  const a2 = document.createElement('a')
+  a2.setAttribute('target', '_blank')
+  a2.setAttribute('href', 'https://www.linkedin.com/in/alexzander-ciminillo/')
+  const img2 = document.createElement('img')
+  img2.setAttribute('src', LinkIn)
+  a2.appendChild(img2)
+  span3.appendChild(a2)
+  footer.appendChild(span3)
+
+
   return footer
 
 }
