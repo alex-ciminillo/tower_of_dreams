@@ -4,6 +4,8 @@ Fight waves of enemies and defeat floor bosses to make it to the top of the towe
 
 [Live Demo](https://alex-ciminillo.github.io/tower_of_dreams/)
 
+![](https://github.com/alex-ciminillo/tower_of_dreams/blob/master/images/titlegif.gif)
+
 ## Functionality & MVPs
 
 With the Tower of Dreams, users will be able to: 
@@ -73,9 +75,13 @@ Tower of Dreams was built on HTML5 canvas and uses spaced repition and rewards t
 
 At "Home", your avatar can "Train". This lets you learn new vocab and grammar before taking on the next floor of the dungeon. 
 
+![](https://github.com/alex-ciminillo/tower_of_dreams/blob/master/images/training.gif)
+
 ### Testing
 
 Once you have trained enough at home, you can try to take on the next floor in the tower. This will test all of the vocab and grammar you have learned with penatlies if you get a questions wrong. Answer too many incorrectly, and you have to go back home and recover (study) before you can try again.
+
+![](https://github.com/alex-ciminillo/tower_of_dreams/blob/master/images/testing.gif)
 
 ### Loot
 
